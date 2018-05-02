@@ -1,5 +1,7 @@
 <resources>
+
     <string name="app_name">Rolling</string>
+    <string name="search">Search…</string>
 
     <!-- MAIN ACTIVITY -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -11,8 +13,9 @@
     <string name="navigation_logout">Log out</string>
     <string name="navigation_login">Log in</string>
 
-    <!-- TRIPS FRAGMENT -->
+    <!-- TRIPs LIST FRAGMENT -->
     <string name="navigation_recent">Recent Posts</string>
     <string name="navigation_marked">My Trips</string>
+    <string name="menu_search">Search trip…</string>
 
 </resources>
