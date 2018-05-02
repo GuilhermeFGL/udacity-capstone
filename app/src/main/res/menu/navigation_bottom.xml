@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/navigation_recent"
+        android:title="@string/navigation_recent"
+        android:icon="@drawable/ic_recent"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/navigation_marked"
+        android:title="@string/navigation_marked"
+        android:icon="@drawable/ic_marked"
+        app:showAsAction="ifRoom" />
+
+</menu>
