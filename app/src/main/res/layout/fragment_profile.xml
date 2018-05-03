@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".view.profile.ProfileFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <ImageView
+                android:id="@+id/profile_avatar"
+                android:layout_width="128dp"
+                android:layout_height="128dp"
+                android:layout_margin="48dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:background="@color/primary_light"
+                android:foreground="@drawable/shape_round"
+                android:contentDescription="@string/profile_avatar_description" />
+
+            <TextView
+                android:id="@+id/profile_name_placeholder"
+                android:layout_below="@+id/profile_avatar"
+                android:labelFor="@+id/profile_name_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:textColor="@color/secondary_text"
+                android:text="@string/profile_name_placeholder" />
+
+            <EditText
+                android:id="@+id/profile_name_input"
+                android:layout_below="@+id/profile_name_placeholder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName" />
+
+            <TextView
+                android:id="@+id/profile_email_placeholder"
+                android:layout_below="@+id/profile_name_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:textColor="@color/secondary_text"
+                android:text="@string/profile_email_placeholder" />
+
+            <TextView
+                android:id="@+id/profile_email"
+                android:layout_below="@+id/profile_email_placeholder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="4dp"
+                android:textSize="16sp"
+                android:textColor="@color/secondary_text" />
+
+            <TextView
+                android:id="@+id/profile_password_placeholder"
+                android:layout_below="@+id/profile_email"
+                android:labelFor="@+id/profile_password_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/secondary_text"
+                android:text="@string/profile_password_placeholder" />
+
+            <EditText
+                android:id="@+id/profile_password_input"
+                android:layout_below="@+id/profile_password_placeholder"
+                android:layout_toStartOf="@+id/profile_password_action"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:inputType="textPassword"
+                android:layout_alignParentStart="true" />
+
+            <Button
+                android:id="@+id/profile_password_action"
+                android:layout_below="@+id/profile_password_placeholder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:text="@string/profile_password_action" />
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+</layout>

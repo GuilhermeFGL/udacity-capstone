@@ -15,6 +15,7 @@ import com.guilhermefgl.rolling.R;
 import com.guilhermefgl.rolling.databinding.ActivityMainBinding;
 import com.guilhermefgl.rolling.view.BaseActivity;
 import com.guilhermefgl.rolling.view.BaseFragment;
+import com.guilhermefgl.rolling.view.profile.ProfileFragment;
 import com.guilhermefgl.rolling.view.triplist.TripListFragment;
 
 public class MainActivity extends BaseActivity
@@ -82,7 +83,7 @@ public class MainActivity extends BaseActivity
             case R.id.navigation_trip_current:
                 return null;
             case R.id.navigation_profile:
-                return null;
+                return ProfileFragment.newInstance();
             case R.id.navigation_login:
                 return null;
             case R.id.navigation_logout:

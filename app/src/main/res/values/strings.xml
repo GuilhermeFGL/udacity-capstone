@@ -17,5 +17,14 @@
     <string name="navigation_marked">My Trips</string>
     <string name="menu_search">Search trip…</string>
     <string name="trip_item_image_description">trip placeholder image</string>
+    <string name="trip_item_description">%s \n %s</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="profile_name_placeholder">Name</string>
+    <string name="profile_email_placeholder">E-mail</string>
+    <string name="profile_password_placeholder">Password</string>
+    <string name="profile_password_action">CHANGE PASSWORD</string>
+    <string name="profile_avatar_description">profile avatar</string>
 
 </resources>
