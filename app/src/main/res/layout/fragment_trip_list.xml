@@ -9,7 +9,7 @@
         android:layout_height="match_parent">
 
         <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/trip_list_reflesh"
+            android:id="@+id/trip_list_refresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -25,7 +25,6 @@
             android:layout_gravity="bottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/primary"
             app:itemBackground="@color/primary"
             app:itemIconTint="@color/icons"
             app:itemTextColor="@color/icons"

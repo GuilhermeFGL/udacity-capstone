@@ -28,6 +28,7 @@ public class TripListFragment extends BaseFragment implements
 
     public TripListFragment() { }
 
+    @NonNull
     public static TripListFragment newInstance() {
         return new TripListFragment();
     }
@@ -51,7 +52,7 @@ public class TripListFragment extends BaseFragment implements
         super.onActivityCreated(savedInstanceState);
 
         mBinding.tripListNavigation.setOnNavigationItemSelectedListener(this);
-        mBinding.tripListReflesh.setOnRefreshListener(this);
+        mBinding.tripListRefresh.setOnRefreshListener(this);
     }
 
     @Override
@@ -102,6 +103,6 @@ public class TripListFragment extends BaseFragment implements
 
     @Override
     public void onRefresh() {
-        mBinding.tripListReflesh.setRefreshing(false);
+        mBinding.tripListRefresh.setRefreshing(false);
     }
 }

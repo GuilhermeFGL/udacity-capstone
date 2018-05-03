@@ -1,5 +1,6 @@
 package com.guilhermefgl.rolling.view.main;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,6 +22,12 @@ public class MainActivity extends BaseActivity
 
     private ActivityMainBinding mBinding;
     private FragmentManager mFragmentManager;
+
+    public static void startActivity(BaseActivity activity) {
+        activity.startActivity(
+                new Intent(activity, MainActivity.class)
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
