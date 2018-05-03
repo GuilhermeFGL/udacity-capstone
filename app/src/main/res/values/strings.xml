@@ -5,7 +5,7 @@
     <!-- MAIN ACTIVITY -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="navigation_header_desc">Navigation header</string>
+    <string name="navigation_header_description">Navigation header</string>
     <string name="navigation_trip_list">Road Trip</string>
     <string name="navigation_trip_current">Current Trip</string>
     <string name="navigation_profile">My Profile</string>
@@ -16,5 +16,6 @@
     <string name="navigation_recent">Recent Posts</string>
     <string name="navigation_marked">My Trips</string>
     <string name="menu_search">Search trip…</string>
+    <string name="trip_item_image_description">trip placeholder image</string>
 
 </resources>

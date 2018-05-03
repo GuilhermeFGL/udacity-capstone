@@ -69,7 +69,7 @@ public class MainActivity extends BaseActivity
         mFragmentManager.beginTransaction()
                 .replace(R.id.main_content, fragment, tag)
                 .commit();
-
+        setTitle(item.getTitle());
         mBinding.drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
