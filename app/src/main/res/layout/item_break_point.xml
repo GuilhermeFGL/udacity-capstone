@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <TextView
+        android:id="@+id/item_break_point_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:textSize="16sp"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:drawableEnd="@drawable/ic_place"
+        tools:text="Break Point Location, KM 700"/>
+
+</layout>

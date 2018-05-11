@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:drawablePadding="8dp"
+            android:textSize="16sp"
+            android:textColor="@color/secondary_text"
+            android:text="@string/trip_item_break_point_create"
+            android:drawableStart="@drawable/ic_add" />
+
+    </RelativeLayout>
+
+</layout>
