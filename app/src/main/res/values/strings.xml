@@ -18,13 +18,20 @@
     <string name="menu_search">Search trip…</string>
     <string name="trip_item_image_description">trip placeholder image</string>
     <string name="trip_item_description">%s \n %s</string>
+    <string name="trip_item_create">Create a new Trip</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- PROFILE FRAGMENT -->
     <string name="profile_name_placeholder">Name</string>
     <string name="profile_email_placeholder">E-mail</string>
     <string name="profile_password_placeholder">Password</string>
     <string name="profile_password_action">CHANGE PASSWORD</string>
     <string name="profile_avatar_description">profile avatar</string>
+
+    <!-- TRIP FRAGMENT -->
+    <string name="trip_action_add_image">add a trip banner</string>
+    <string name="trip_title_placeholder">Trip Title</string>
+    <string name="trip_hint_start">Starter point</string>
+    <string name="trip_hint_destination">Destination</string>
+    <string name="trip_break_point_label">Break Points</string>
 
 </resources>
