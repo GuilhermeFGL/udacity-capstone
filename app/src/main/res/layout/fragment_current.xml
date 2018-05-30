@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".view.trip.TripFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".view.current.CurrentFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -20,31 +20,25 @@
                 android:contentDescription="@string/trip_action_add_image"
                 app:srcCompat="@drawable/ic_picture"/>
 
+            <TextView
+                android:id="@id/trip_title"
+                android:layout_alignBottom="@+id/trip_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:textSize="18sp"
+                android:background="@color/background_transparent"
+                tools:text="Trip Title" />
+
             <RelativeLayout
-                android:id="@+id/trip_editable_content"
+                android:id="@+id/trip_read_content"
                 android:layout_below="@+id/trip_image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="16dp">
 
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/trip_title_placeholder"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <android.support.design.widget.TextInputEditText
-                        android:id="@+id/trip_title"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="18sp"
-                        android:hint="@string/trip_title_placeholder"
-                        android:inputType="textCapWords" />
-
-                </android.support.design.widget.TextInputLayout>
-
                 <TextView
                     android:id="@+id/trip_start"
-                    android:layout_below="@+id/trip_title_placeholder"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -53,11 +47,9 @@
                     android:drawablePadding="8dp"
                     android:maxLines="1"
                     android:ellipsize="end"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:hint="@string/trip_hint_start"
                     android:drawableEnd="@drawable/ic_map"
-                    android:background="?android:selectableItemBackground" />
+                    android:background="?android:selectableItemBackground"
+                    tools:text="Start Point" />
 
                 <TextView
                     android:id="@+id/trip_destination"
@@ -70,17 +62,15 @@
                     android:drawablePadding="8dp"
                     android:maxLines="1"
                     android:ellipsize="end"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:hint="@string/trip_hint_destination"
                     android:drawableEnd="@drawable/ic_map"
-                    android:background="?android:selectableItemBackground" />
+                    android:background="?android:selectableItemBackground"
+                    tools:text="Destination Point" />
 
             </RelativeLayout>
 
             <View
                 android:id="@+id/trip_divider"
-                android:layout_below="@+id/trip_editable_content"
+                android:layout_below="@+id/trip_read_content"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:background="@color/divider" />
