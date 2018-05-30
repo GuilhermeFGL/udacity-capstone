@@ -30,67 +30,12 @@
                 android:background="@color/background_transparent"
                 tools:text="Trip Title" />
 
-            <RelativeLayout
-                android:id="@+id/trip_read_content"
+            <include
+                android:id="@+id/include_navigation"
                 android:layout_below="@+id/trip_image"
-                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp">
-
-                <TextView
-                    android:id="@+id/trip_start"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    android:drawablePadding="8dp"
-                    android:maxLines="1"
-                    android:ellipsize="end"
-                    android:drawableEnd="@drawable/ic_map"
-                    android:background="?android:selectableItemBackground"
-                    tools:text="Start Point" />
-
-                <TextView
-                    android:id="@+id/trip_destination"
-                    android:layout_below="@+id/trip_start"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    android:drawablePadding="8dp"
-                    android:maxLines="1"
-                    android:ellipsize="end"
-                    android:drawableEnd="@drawable/ic_map"
-                    android:background="?android:selectableItemBackground"
-                    tools:text="Destination Point" />
-
-            </RelativeLayout>
-
-            <View
-                android:id="@+id/trip_divider"
-                android:layout_below="@+id/trip_read_content"
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:background="@color/divider" />
-
-            <TextView
-                android:id="@+id/trip_break_points_label"
-                android:layout_below="@+id/trip_divider"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:textColor="@color/secondary_text"
-                android:text="@string/trip_break_point_label" />
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/trip_list_break_points"
-                android:layout_below="@+id/trip_break_points_label"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:minHeight="250dp"
-                tools:listitem="@layout/item_break_point" />
+                android:layout_width="wrap_content"
+                layout="@layout/include_trip_navigation" />
 
         </RelativeLayout>
 

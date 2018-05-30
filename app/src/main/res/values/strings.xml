@@ -36,7 +36,8 @@
     <string name="trip_break_point_remove_action">remove break point</string>
     <string name="trip_item_break_point_create">Add a Break Point</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- TRIP DETAILS -->
+    <string name="details_banner">trip banner</string>
+    <string name="details_item_person_avatar">person avatar</string>
 
 </resources>
