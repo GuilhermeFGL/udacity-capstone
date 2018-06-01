@@ -1,11 +1,11 @@
 package com.guilhermefgl.rolling.view.trip;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.guilhermefgl.rolling.R;
+import com.guilhermefgl.rolling.view.BaseActivity;
 
-public class TripActivity extends AppCompatActivity {
+public class TripActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

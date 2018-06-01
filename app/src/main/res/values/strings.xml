@@ -35,6 +35,7 @@
     <string name="trip_break_point_label">Break Points</string>
     <string name="trip_break_point_remove_action">remove break point</string>
     <string name="trip_item_break_point_create">Add a Break Point</string>
+    <string name="menu_save">save</string>
 
     <!-- TRIP DETAILS -->
     <string name="details_banner">trip banner</string>

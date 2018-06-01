@@ -4,15 +4,15 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.guilhermefgl.rolling.R;
 import com.guilhermefgl.rolling.databinding.FragmentCurrentBinding;
+import com.guilhermefgl.rolling.view.BaseFragment;
 
-public class CurrentFragment extends Fragment {
+public class CurrentFragment extends BaseFragment {
 
     private FragmentCurrentBinding mBinding;
 
