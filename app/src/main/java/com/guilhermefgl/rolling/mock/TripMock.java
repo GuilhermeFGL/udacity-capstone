@@ -7,13 +7,13 @@ import java.util.ArrayList;
 
 public class TripMock {
 
-    private Place startPlace = new Place() {{
+    private static Place startPlace = new Place() {{
         setPlaceName("Start Place");
     }};
-    private Place endPlace = new Place() {{
+    private static Place endPlace = new Place() {{
         setPlaceName("End Place");
     }};
-    private ArrayList<Place> places = new ArrayList<Place>() {{
+    private static ArrayList<Place> places = new ArrayList<Place>() {{
         add(new Place() {{
             setPlaceName("Break Point 1");
         }});
@@ -25,25 +25,25 @@ public class TripMock {
         }});
     }};
 
-    public ArrayList<Trip> getTripList() {
+    public static ArrayList<Trip> getTripList() {
         return new ArrayList<Trip>() {{
             add(new Trip(){{
-                setTripName("Trip 1");
-                setTripBannerUrl("");
+                setTripName("Atacama Desert");
+                setTripBannerUrl("http://departmentofwandering.com/wp-content/uploads/2017/11/atacama.jpg");
                 setPlaceStart(startPlace);
                 setPlaceEnd(endPlace);
                 setPlacesPoints(places);
             }});
             add(new Trip(){{
-                setTripName("Trip 2");
-                setTripBannerUrl("");
+                setTripName("Route 66");
+                setTripBannerUrl("https://www.mygrandcanyonpark.com/.image/c_limit%2Ccs_srgb%2Cq_auto:good%2Cw_860/MTUwNjU1NDA2NDM0MTY2MTM2/route-66-sunset_adobe_940.webp");
                 setPlaceStart(startPlace);
                 setPlaceEnd(endPlace);
                 setPlacesPoints(places);
             }});
             add(new Trip(){{
-                setTripName("Trip 3");
-                setTripBannerUrl("");
+                setTripName("South Island Circuit");
+                setTripBannerUrl("https://i.pinimg.com/originals/46/90/35/469035b340f59ae1765caf1b169b2649.jpg");
                 setPlaceStart(startPlace);
                 setPlaceEnd(endPlace);
                 setPlacesPoints(places);
@@ -51,18 +51,18 @@ public class TripMock {
         }};
     }
 
-    public ArrayList<Trip> getMyTripList() {
+    public static ArrayList<Trip> getMyTripList() {
         return new ArrayList<Trip>() {{
             add(new Trip(){{
-                setTripName("My Trip 1");
-                setTripBannerUrl("");
+                setTripName("Atacama Desert");
+                setTripBannerUrl("http://departmentofwandering.com/wp-content/uploads/2017/11/atacama.jpg");
                 setPlaceStart(startPlace);
                 setPlaceEnd(endPlace);
                 setPlacesPoints(places);
             }});
             add(new Trip(){{
-                setTripName("My Trip 2");
-                setTripBannerUrl("");
+                setTripName("South Island Circuit");
+                setTripBannerUrl("https://i.pinimg.com/originals/46/90/35/469035b340f59ae1765caf1b169b2649.jpg");
                 setPlaceStart(startPlace);
                 setPlaceEnd(endPlace);
                 setPlacesPoints(places);
@@ -70,10 +70,10 @@ public class TripMock {
         }};
     }
 
-    public Trip getMyCurrentTrip() {
+    public static Trip getMyCurrentTrip() {
         return new Trip(){{
-            setTripName("My Trip 1");
-            setTripBannerUrl("");
+            setTripName("Atacama Desert");
+            setTripBannerUrl("http://departmentofwandering.com/wp-content/uploads/2017/11/atacama.jpg");
             setPlaceStart(startPlace);
             setPlaceEnd(endPlace);
             setPlacesPoints(places);
