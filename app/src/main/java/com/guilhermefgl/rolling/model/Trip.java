@@ -7,6 +7,7 @@ public class Trip {
     private Long tripId;
     private String tripName;
     private String tripBannerUrl;
+    private User userOwner;
     private Place placeStart;
     private Place placeEnd;
     private List<Place> placesPoints;
@@ -33,6 +34,14 @@ public class Trip {
 
     public void setTripBannerUrl(String tripBannerUrl) {
         this.tripBannerUrl = tripBannerUrl;
+    }
+
+    public User getUserOwner() {
+        return userOwner;
+    }
+
+    public void setUserOwner(User userOwner) {
+        this.userOwner = userOwner;
     }
 
     public Place getPlaceStart() {
