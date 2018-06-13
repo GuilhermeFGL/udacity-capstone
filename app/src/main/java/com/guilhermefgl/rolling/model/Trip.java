@@ -7,6 +7,9 @@ public class Trip {
     private Long tripId;
     private String tripName;
     private String tripBannerUrl;
+
+    private String tripDistance;
+    private String tripDuration;
     private User userOwner;
     private Place placeStart;
     private Place placeEnd;
@@ -34,6 +37,22 @@ public class Trip {
 
     public void setTripBannerUrl(String tripBannerUrl) {
         this.tripBannerUrl = tripBannerUrl;
+    }
+
+    public String getTripDistance() {
+        return tripDistance;
+    }
+
+    public void setTripDistance(String tripDistance) {
+        this.tripDistance = tripDistance;
+    }
+
+    public String getTripDuration() {
+        return tripDuration;
+    }
+
+    public void setTripDuration(String tripDuration) {
+        this.tripDuration = tripDuration;
     }
 
     public User getUserOwner() {

@@ -6,8 +6,40 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <LinearLayout
+            android:id="@+id/trip_resume_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:background="@color/background_transparent">
+
+            <TextView
+                android:id="@+id/trip_distance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="4dp"
+                android:drawableStart="@drawable/ic_distance"
+                android:textColor="@color/icons"
+                tools:text="3500 Km" />
+
+            <TextView
+                android:id="@+id/trip_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:drawablePadding="4dp"
+                android:drawableStart="@drawable/ic_time"
+                android:textColor="@color/icons"
+                tools:text="8 days" />
+
+        </LinearLayout>
+
         <RelativeLayout
             android:id="@+id/trip_read_content"
+            android:layout_below="@+id/trip_resume_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp">

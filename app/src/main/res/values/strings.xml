@@ -37,6 +37,9 @@
     <string name="trip_item_break_point_create">Add a Break Point</string>
     <string name="menu_save">save</string>
 
+    <!-- CURRENT TRIP FRAGMENT -->
+    <string name="menu_current_remove">Remove as Current</string>
+
     <!-- TRIP DETAILS -->
     <string name="details_banner">trip banner</string>
     <string name="details_item_person_avatar">person avatar</string>
