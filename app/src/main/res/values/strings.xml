@@ -26,6 +26,7 @@
     <string name="profile_password_placeholder">Password</string>
     <string name="profile_password_action">CHANGE PASSWORD</string>
     <string name="profile_avatar_description">profile avatar</string>
+    <string name="menu_profile_save">SAVE</string>
 
     <!-- TRIP FRAGMENT -->
     <string name="trip_action_add_image">add a trip banner</string>
