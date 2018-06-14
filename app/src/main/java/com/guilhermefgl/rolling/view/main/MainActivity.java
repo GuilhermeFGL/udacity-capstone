@@ -11,9 +11,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.guilhermefgl.rolling.R;
 import com.guilhermefgl.rolling.databinding.ActivityMainBinding;
+import com.guilhermefgl.rolling.helper.PicassoHelper;
+import com.guilhermefgl.rolling.mock.UserMock;
+import com.guilhermefgl.rolling.model.User;
 import com.guilhermefgl.rolling.view.BaseActivity;
 import com.guilhermefgl.rolling.view.BaseFragment;
 import com.guilhermefgl.rolling.view.current.CurrentFragment;
@@ -22,6 +27,9 @@ import com.guilhermefgl.rolling.view.triplist.TripListFragment;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    // TODO remove mock data
+    User mockLoggedUser = UserMock.getLogeedUser();
 
     private ActivityMainBinding mBinding;
     private FragmentManager mFragmentManager;
@@ -49,6 +57,8 @@ public class MainActivity extends BaseActivity
 
         mBinding.navView.setNavigationItemSelectedListener(this);
         mBinding.navView.setCheckedItem(R.id.navigation_trip_list);
+
+        updateLayoutLoggedUser(mockLoggedUser);
     }
 
     @Override
@@ -112,5 +122,31 @@ public class MainActivity extends BaseActivity
                 .commit();
         setTitle(title);
         mBinding.drawerLayout.closeDrawer(GravityCompat.START);
+    }
+
+    private void updateLayoutLoggedUser(User user) {
+        if (user != null) {
+            ((TextView) mBinding.navView.getHeaderView(0)
+                    .findViewById(R.id.navigation_profile_name))
+                    .setText(user.getUserName());
+            ((TextView) mBinding.navView.getHeaderView(0)
+                    .findViewById(R.id.navigation_profile_email))
+                    .setText(user.getUserEmail());
+            PicassoHelper.loadImage(user.getUserAvatarUrl(),
+                    ((ImageView) mBinding.navView.getHeaderView(0)
+                            .findViewById(R.id.navigation_profile_avatar)));
+            mBinding.navView.getMenu().findItem(R.id.navigation_login).setVisible(false);
+            mBinding.navView.getMenu().findItem(R.id.navigation_logout).setVisible(true);
+        } else {
+            ((TextView) mBinding.navView.getHeaderView(0)
+                    .findViewById(R.id.navigation_profile_name)).setText("");
+            ((TextView) mBinding.navView.getHeaderView(0)
+                    .findViewById(R.id.navigation_profile_email)).setText("");
+            ((ImageView) mBinding.navView.getHeaderView(0)
+                    .findViewById(R.id.navigation_profile_email))
+                    .setImageResource(R.mipmap.ic_launcher_foreground);
+            mBinding.navView.getMenu().findItem(R.id.navigation_login).setVisible(true);
+            mBinding.navView.getMenu().findItem(R.id.navigation_logout).setVisible(false);
+        }
     }
 }
