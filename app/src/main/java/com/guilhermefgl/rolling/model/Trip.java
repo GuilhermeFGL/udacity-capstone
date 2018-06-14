@@ -1,13 +1,15 @@
 package com.guilhermefgl.rolling.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
-public class Trip {
+public class Trip implements Parcelable {
 
     private Long tripId;
     private String tripName;
     private String tripBannerUrl;
-
     private String tripDistance;
     private String tripDuration;
     private User userOwner;
@@ -86,4 +88,46 @@ public class Trip {
     public void setPlacesPoints(List<Place> placesPoints) {
         this.placesPoints = placesPoints;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(tripId);
+        dest.writeString(tripName);
+        dest.writeString(tripBannerUrl);
+        dest.writeString(tripDistance);
+        dest.writeString(tripDuration);
+        dest.writeParcelable(userOwner, flags);
+        dest.writeParcelable(placeStart, flags);
+        dest.writeParcelable(placeEnd, flags);
+        dest.writeTypedList(placesPoints);
+    }
+
+    protected Trip(Parcel in) {
+        tripId = in.readLong();
+        tripName = in.readString();
+        tripBannerUrl = in.readString();
+        tripDistance = in.readString();
+        tripDuration = in.readString();
+        userOwner = in.readParcelable(User.class.getClassLoader());
+        placeStart = in.readParcelable(Place.class.getClassLoader());
+        placeEnd = in.readParcelable(Place.class.getClassLoader());
+        placesPoints = in.createTypedArrayList(Place.CREATOR);
+    }
+
+    public static final Creator<Trip> CREATOR = new Creator<Trip>() {
+        @Override
+        public Trip createFromParcel(Parcel in) {
+            return new Trip(in);
+        }
+
+        @Override
+        public Trip[] newArray(int size) {
+            return new Trip[size];
+        }
+    };
 }
