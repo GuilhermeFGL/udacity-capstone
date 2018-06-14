@@ -55,7 +55,7 @@ public class TripListFragment extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        TripAdapter adapter = new TripAdapter(null);
+        TripAdapter adapter = new TripAdapter(new ArrayList<Trip>());
         mBinding.tripListRecycleView.setAdapter(adapter);
         if (filterParam != null) {
             switch (filterParam) {
