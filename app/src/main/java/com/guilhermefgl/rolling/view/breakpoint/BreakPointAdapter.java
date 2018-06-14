@@ -18,8 +18,6 @@ public class BreakPointAdapter extends RecyclerView.Adapter<BreakPointAdapter.Vi
     @Nullable
     private List<Place> mBreakPoints;
 
-    public BreakPointAdapter() { }
-
     public BreakPointAdapter(@NonNull List<Place> placesPoints) {
         mBreakPoints = placesPoints;
     }

@@ -10,7 +10,11 @@ import android.view.ViewGroup;
 
 import com.guilhermefgl.rolling.R;
 import com.guilhermefgl.rolling.databinding.FragmentTripListBinding;
+import com.guilhermefgl.rolling.mock.TripMock;
+import com.guilhermefgl.rolling.model.Trip;
 import com.guilhermefgl.rolling.view.BaseFragment;
+
+import java.util.ArrayList;
 
 public class TripListFragment extends BaseFragment {
 
@@ -50,6 +54,19 @@ public class TripListFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        TripAdapter adapter = new TripAdapter(null);
+        mBinding.tripListRecycleView.setAdapter(adapter);
+        if (filterParam != null) {
+            switch (filterParam) {
+                case BUNDLE_FILTER_ALL:
+                    adapter.setTripList(TripMock.getTripList());
+                    break;
+                case BUNDLE_FILTER_USER:
+                    adapter.setTripList(TripMock.getMyTripList());
+                    break;
+            }
+        }
     }
 
 }

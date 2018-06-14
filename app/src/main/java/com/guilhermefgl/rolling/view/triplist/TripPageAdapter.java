@@ -16,11 +16,6 @@ public class TripPageAdapter extends FragmentPagerAdapter {
     }
 
     @Override
-    public CharSequence getPageTitle(int position) {
-        return "test";
-    }
-
-    @Override
     public Fragment getItem(int position) {
         switch (position) {
             case 0:

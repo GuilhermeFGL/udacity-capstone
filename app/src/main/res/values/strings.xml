@@ -19,6 +19,8 @@
     <string name="trip_item_image_description">trip placeholder image</string>
     <string name="trip_item_description">%s \n %s</string>
     <string name="trip_item_create">Create a new Trip</string>
+    <string name="trip_item_start_label">from</string>
+    <string name="trip_item_end_label">to</string>
 
     <!-- PROFILE FRAGMENT -->
     <string name="profile_name_placeholder">Name</string>
