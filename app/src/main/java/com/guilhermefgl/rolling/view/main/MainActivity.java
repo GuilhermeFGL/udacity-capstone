@@ -23,7 +23,7 @@ import com.guilhermefgl.rolling.view.BaseActivity;
 import com.guilhermefgl.rolling.view.BaseFragment;
 import com.guilhermefgl.rolling.view.current.CurrentFragment;
 import com.guilhermefgl.rolling.view.profile.ProfileFragment;
-import com.guilhermefgl.rolling.view.triplist.TripListFragment;
+import com.guilhermefgl.rolling.view.triplist.TripPageFragment;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -72,7 +72,7 @@ public class MainActivity extends BaseActivity
         Fragment initialFragment = mFragmentManager.findFragmentByTag(initialFragmentTag);
         if (initialFragment != null && !initialFragment.isVisible()) {
             replaceFragment(
-                    TripListFragment.newInstance(),
+                    TripPageFragment.newInstance(),
                     initialFragmentTag,
                     getString(R.string.navigation_trip_list));
             return;
@@ -98,7 +98,7 @@ public class MainActivity extends BaseActivity
     private BaseFragment getFragmentById(int id) {
         switch (id) {
             case R.id.navigation_trip_list:
-                return TripListFragment.newInstance();
+                return TripPageFragment.newInstance();
             case R.id.navigation_trip_current:
                 return CurrentFragment.newInstance();
             case R.id.navigation_profile:
