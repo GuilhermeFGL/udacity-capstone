@@ -3,12 +3,15 @@ package com.guilhermefgl.rolling.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class User implements Parcelable {
 
     private Long userId;
     private String userName;
     private String userEmail;
     private String userAvatarUrl;
+
+    public User() { }
 
     public Long getUserId() {
         return userId;
@@ -42,24 +45,33 @@ public class User implements Parcelable {
         this.userAvatarUrl = userAvatarUrl;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    protected User(Parcel in) {
+        if (in.readByte() == 0) {
+            userId = null;
+        } else {
+            userId = in.readLong();
+        }
+        userName = in.readString();
+        userEmail = in.readString();
+        userAvatarUrl = in.readString();
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(userId);
+        if (userId == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeLong(userId);
+        }
         dest.writeString(userName);
         dest.writeString(userEmail);
         dest.writeString(userAvatarUrl);
     }
 
-    protected User(Parcel in) {
-        userId = in.readLong();
-        userName = in.readString();
-        userEmail = in.readString();
-        userAvatarUrl = in.readString();
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {

@@ -12,11 +12,13 @@ import com.guilhermefgl.rolling.R;
 import com.guilhermefgl.rolling.databinding.FragmentTripListBinding;
 import com.guilhermefgl.rolling.mock.TripMock;
 import com.guilhermefgl.rolling.model.Trip;
+import com.guilhermefgl.rolling.view.BaseActivity;
 import com.guilhermefgl.rolling.view.BaseFragment;
+import com.guilhermefgl.rolling.view.details.DetailsActivity;
 
 import java.util.ArrayList;
 
-public class TripListFragment extends BaseFragment {
+public class TripListFragment extends BaseFragment implements TripAdapter.TripAdapterItemClick {
 
     private static final String BUNDLE_FILTER = "BUNDLE_FILTER";
 
@@ -55,7 +57,7 @@ public class TripListFragment extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        TripAdapter adapter = new TripAdapter(new ArrayList<Trip>());
+        TripAdapter adapter = new TripAdapter(new ArrayList<Trip>(), this);
         mBinding.tripListRecycleView.setAdapter(adapter);
         if (filterParam != null) {
             switch (filterParam) {
@@ -69,4 +71,10 @@ public class TripListFragment extends BaseFragment {
         }
     }
 
+    @Override
+    public void itemCLick(Trip trip) {
+        if (getActivity() instanceof BaseActivity) {
+            DetailsActivity.startActivity(((BaseActivity) getActivity()), trip);
+        }
+    }
 }

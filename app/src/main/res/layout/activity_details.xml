@@ -26,7 +26,7 @@
                 <ImageView
                     android:id="@+id/backdrop"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="250dp"
                     android:scaleType="centerCrop"
                     android:fitsSystemWindows="true"
                     android:contentDescription="@string/details_banner"
@@ -35,7 +35,7 @@
                 <android.support.v7.widget.Toolbar
                     android:id="@+id/tabbed_toolbar"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="?actionBarSize"
                     app:layout_scrollFlags="scroll|enterAlways"
                     app:layout_collapseMode="pin"
                     app:popupTheme="@style/AppTheme.PopupOverlay" />

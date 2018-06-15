@@ -38,6 +38,7 @@ public class TripMock {
                 setPlaceStart(startPlace);
                 setPlaceEnd(endPlace);
                 setPlacesPoints(places);
+                setPersons(UserMock.getTripListUser());
             }});
             add(new Trip(){{
                 setTripName("Route 66");
@@ -47,6 +48,7 @@ public class TripMock {
                 setPlaceStart(startPlace);
                 setPlaceEnd(endPlace);
                 setPlacesPoints(places);
+                setPersons(UserMock.getTripListUser());
             }});
             add(new Trip(){{
                 setTripName("South Island Circuit");
@@ -56,6 +58,7 @@ public class TripMock {
                 setPlaceStart(startPlace);
                 setPlaceEnd(endPlace);
                 setPlacesPoints(places);
+                setPersons(UserMock.getTripListUser());
             }});
         }};
     }
@@ -70,6 +73,7 @@ public class TripMock {
                 setPlaceStart(startPlace);
                 setPlaceEnd(endPlace);
                 setPlacesPoints(places);
+                setPersons(UserMock.getTripListUser());
             }});
             add(new Trip(){{
                 setTripName("South Island Circuit");
@@ -79,6 +83,7 @@ public class TripMock {
                 setPlaceStart(startPlace);
                 setPlaceEnd(endPlace);
                 setPlacesPoints(places);
+                setPersons(UserMock.getTripListUser());
             }});
         }};
     }
@@ -92,6 +97,7 @@ public class TripMock {
             setPlaceStart(startPlace);
             setPlaceEnd(endPlace);
             setPlacesPoints(places);
+            setPersons(UserMock.getTripListUser());
         }};
     }
 }

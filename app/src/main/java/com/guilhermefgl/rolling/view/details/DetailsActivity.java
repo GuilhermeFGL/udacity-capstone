@@ -53,7 +53,10 @@ public class DetailsActivity extends BaseActivity implements ViewPager.OnPageCha
     private void setupView() {
         setTitle(mTrip.getTripName());
         PicassoHelper.loadImage(mTrip.getTripBannerUrl(), mBinding.backdrop);
-        mBinding.detailsPager.setAdapter(new DetailsPageAdapter(getSupportFragmentManager()));
+
+        DetailsPageAdapter pageAdapter = new DetailsPageAdapter(getSupportFragmentManager());
+        pageAdapter.setup(this, mTrip);
+        mBinding.detailsPager.setAdapter(pageAdapter);
         mBinding.tabbedTabLayout.setupWithViewPager(mBinding.detailsPager);
         mBinding.detailsPager.addOnPageChangeListener(this);
     }

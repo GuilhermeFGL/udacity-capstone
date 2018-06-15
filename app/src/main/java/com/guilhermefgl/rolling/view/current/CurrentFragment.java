@@ -71,11 +71,11 @@ public class CurrentFragment extends BaseFragment {
     private void setupView() {
         PicassoHelper.loadImage(mockTrip.getTripBannerUrl(), mBinding.tripImage);
         mBinding.tripTitle.setText(mockTrip.getTripName());
-        mBinding.includeNavigation.tripDistance.setText(mockTrip.getTripDistance());
-        mBinding.includeNavigation.tripTime.setText(mockTrip.getTripDuration());
-        mBinding.includeNavigation.tripStart.setText(mockTrip.getPlaceStart().getPlaceName());
-        mBinding.includeNavigation.tripDestination.setText(mockTrip.getPlaceEnd().getPlaceName());
-        mBinding.includeNavigation.tripListBreakPoints
+        mBinding.includeTrip.tripDistance.setText(mockTrip.getTripDistance());
+        mBinding.includeTrip.tripTime.setText(mockTrip.getTripDuration());
+        mBinding.includeTrip.tripStart.setText(mockTrip.getPlaceStart().getPlaceName());
+        mBinding.includeTrip.tripDestination.setText(mockTrip.getPlaceEnd().getPlaceName());
+        mBinding.includeTrip.tripListBreakPoints
                 .setAdapter(new BreakPointAdapter(mockTrip.getPlacesPoints()));
     }
 }

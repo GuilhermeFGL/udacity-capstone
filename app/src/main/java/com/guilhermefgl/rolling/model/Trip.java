@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import java.util.List;
 
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class Trip implements Parcelable {
 
     private Long tripId;
@@ -16,6 +17,9 @@ public class Trip implements Parcelable {
     private Place placeStart;
     private Place placeEnd;
     private List<Place> placesPoints;
+    private List<User> persons;
+
+    public Trip() { }
 
     public Long getTripId() {
         return tripId;
@@ -89,26 +93,25 @@ public class Trip implements Parcelable {
         this.placesPoints = placesPoints;
     }
 
+    public List<User> getPersons() {
+        return persons;
+    }
+
+    public void setPersons(List<User> persons) {
+        this.persons = persons;
+    }
+
     @Override
     public int describeContents() {
         return 0;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(tripId);
-        dest.writeString(tripName);
-        dest.writeString(tripBannerUrl);
-        dest.writeString(tripDistance);
-        dest.writeString(tripDuration);
-        dest.writeParcelable(userOwner, flags);
-        dest.writeParcelable(placeStart, flags);
-        dest.writeParcelable(placeEnd, flags);
-        dest.writeTypedList(placesPoints);
-    }
-
     protected Trip(Parcel in) {
-        tripId = in.readLong();
+        if (in.readByte() == 0) {
+            tripId = null;
+        } else {
+            tripId = in.readLong();
+        }
         tripName = in.readString();
         tripBannerUrl = in.readString();
         tripDistance = in.readString();
@@ -117,6 +120,26 @@ public class Trip implements Parcelable {
         placeStart = in.readParcelable(Place.class.getClassLoader());
         placeEnd = in.readParcelable(Place.class.getClassLoader());
         placesPoints = in.createTypedArrayList(Place.CREATOR);
+        persons = in.createTypedArrayList(User.CREATOR);
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        if (tripId == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeLong(tripId);
+        }
+        dest.writeString(tripName);
+        dest.writeString(tripBannerUrl);
+        dest.writeString(tripDistance);
+        dest.writeString(tripDuration);
+        dest.writeParcelable(userOwner, flags);
+        dest.writeParcelable(placeStart, flags);
+        dest.writeParcelable(placeEnd, flags);
+        dest.writeTypedList(placesPoints);
+        dest.writeTypedList(persons);
     }
 
     public static final Creator<Trip> CREATOR = new Creator<Trip>() {

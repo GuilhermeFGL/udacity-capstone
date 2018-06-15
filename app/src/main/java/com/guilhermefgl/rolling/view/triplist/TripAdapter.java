@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.guilhermefgl.rolling.R;
@@ -18,9 +19,13 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
 
     @Nullable
     private List<Trip> mTrips;
+    @NonNull
+    private TripAdapterItemClick mAdapterItemClick;
 
-    TripAdapter(@Nullable List<Trip> trips) {
+
+    TripAdapter(@Nullable List<Trip> trips, @NonNull TripAdapterItemClick adapterItemClick) {
         mTrips = trips;
+        mAdapterItemClick = adapterItemClick;
     }
 
     @NonNull
@@ -34,7 +39,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
     @Override
     @SuppressWarnings("ConstantConditions")
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.bind(mTrips.get(position));
+        holder.bind(mTrips.get(position), mAdapterItemClick);
     }
 
     @Override
@@ -57,13 +62,23 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
             mBinding = binding;
         }
 
-        public void bind(Trip trip) {
+        public void bind(final Trip trip, final TripAdapterItemClick adapterItemClick) {
             PicassoHelper.loadImage(trip.getTripBannerUrl(), mBinding.itemTripImage);
             mBinding.itemTripTitle.setText(trip.getTripName());
             mBinding.itemTripDistance.setText(trip.getTripDistance());
             mBinding.itemTripTime.setText(trip.getTripDuration());
             mBinding.itemTripStart.setText(trip.getPlaceStart().getPlaceName());
             mBinding.itemTripEnd.setText(trip.getPlaceEnd().getPlaceName());
+            mBinding.getRoot().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    adapterItemClick.itemCLick(trip);
+                }
+            });
         }
+    }
+
+    interface TripAdapterItemClick {
+        void itemCLick(Trip trip);
     }
 }

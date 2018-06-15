@@ -6,12 +6,11 @@
         android:layout_height="match_parent">
 
         <include
-            android:id="@+id/include_navigation"
+            android:id="@+id/include_trip"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             layout="@layout/include_trip_navigation" />
 
     </FrameLayout>
-
 
 </layout>
