@@ -70,11 +70,12 @@ public class MainActivity extends BaseActivity
 
         String initialFragmentTag = generateFragmentTag(R.id.navigation_trip_list);
         Fragment initialFragment = mFragmentManager.findFragmentByTag(initialFragmentTag);
-        if (initialFragment != null && !initialFragment.isVisible()) {
+        if (initialFragment == null) {
             replaceFragment(
                     TripPageFragment.newInstance(),
                     initialFragmentTag,
                     getString(R.string.navigation_trip_list));
+            mBinding.navView.setCheckedItem(R.id.navigation_trip_list);
             return;
         }
 
