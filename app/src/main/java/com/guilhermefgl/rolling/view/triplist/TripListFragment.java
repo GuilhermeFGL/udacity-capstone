@@ -15,6 +15,7 @@ import com.guilhermefgl.rolling.model.Trip;
 import com.guilhermefgl.rolling.view.BaseActivity;
 import com.guilhermefgl.rolling.view.BaseFragment;
 import com.guilhermefgl.rolling.view.details.DetailsActivity;
+import com.guilhermefgl.rolling.view.trip.TripActivity;
 
 import java.util.ArrayList;
 
@@ -74,7 +75,11 @@ public class TripListFragment extends BaseFragment implements TripAdapter.TripAd
     @Override
     public void itemCLick(Trip trip) {
         if (getActivity() instanceof BaseActivity) {
-            DetailsActivity.startActivity(((BaseActivity) getActivity()), trip);
+            if (trip != null) {
+                DetailsActivity.startActivity(((BaseActivity) getActivity()), trip);
+            } else {
+                TripActivity.startActivity((BaseActivity) getActivity());
+            }
         }
     }
 }

@@ -10,6 +10,8 @@
         android:textSize="16sp"
         android:maxLines="1"
         android:ellipsize="end"
+        android:clickable="true"
+        android:focusable="true"
         android:drawableEnd="@drawable/ic_place"
         tools:text="Break Point Location, KM 700"/>
 

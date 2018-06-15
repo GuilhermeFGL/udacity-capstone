@@ -30,6 +30,10 @@
     <string name="profile_avatar_description">profile avatar</string>
     <string name="menu_profile_save">SAVE</string>
 
+    <!-- TRIP ACTIVITY -->
+    <string name="trip_title">New Trip</string>
+    <string name="menu_trip_save">SAVE</string>
+
     <!-- TRIP FRAGMENT -->
     <string name="trip_action_add_image">add a trip banner</string>
     <string name="trip_title_placeholder">Trip Title</string>
@@ -43,7 +47,7 @@
     <!-- CURRENT TRIP FRAGMENT -->
     <string name="menu_current_remove">Remove as Current</string>
 
-    <!-- TRIP DETAILS -->
+    <!-- TRIP DETAILS ACTIVITY -->
     <string name="details_banner">trip banner</string>
     <string name="details_item_person_avatar">person avatar</string>
     <string name="details_person_resume">%d persons confirm participation</string>

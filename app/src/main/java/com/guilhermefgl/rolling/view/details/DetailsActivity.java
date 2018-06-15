@@ -32,12 +32,6 @@ public class DetailsActivity extends BaseActivity implements ViewPager.OnPageCha
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_details);
 
-        setSupportActionBar(mBinding.tabbedToolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setHomeButtonEnabled(true);
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-        }
-
         if(getIntent().hasExtra(BUNDLE_TRIP)) {
             mTrip = getIntent().getParcelableExtra(BUNDLE_TRIP);
         }
@@ -51,7 +45,13 @@ public class DetailsActivity extends BaseActivity implements ViewPager.OnPageCha
     }
 
     private void setupView() {
-        setTitle(mTrip.getTripName());
+        setSupportActionBar(mBinding.tabbedToolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setTitle(mTrip.getTripName());
+        }
+
         PicassoHelper.loadImage(mTrip.getTripBannerUrl(), mBinding.backdrop);
 
         DetailsPageAdapter pageAdapter = new DetailsPageAdapter(getSupportFragmentManager());
@@ -81,4 +81,10 @@ public class DetailsActivity extends BaseActivity implements ViewPager.OnPageCha
 
     @Override
     public void onPageScrollStateChanged(int state) { }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }

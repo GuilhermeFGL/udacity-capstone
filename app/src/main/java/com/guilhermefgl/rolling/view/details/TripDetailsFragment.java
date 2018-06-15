@@ -10,11 +10,12 @@ import android.view.ViewGroup;
 
 import com.guilhermefgl.rolling.R;
 import com.guilhermefgl.rolling.databinding.FragmentDetailsTripBinding;
+import com.guilhermefgl.rolling.model.Place;
 import com.guilhermefgl.rolling.model.Trip;
 import com.guilhermefgl.rolling.view.BaseFragment;
 import com.guilhermefgl.rolling.view.breakpoint.BreakPointAdapter;
 
-public class TripDetailsFragment extends BaseFragment {
+public class TripDetailsFragment extends BaseFragment implements BreakPointAdapter.BreakPointAdapterItemClick {
 
     private static final String BUNDLE_TRIP = "BUNDLE_FILTER";
 
@@ -52,13 +53,17 @@ public class TripDetailsFragment extends BaseFragment {
         setupView();
     }
 
+    @Override
+    public void itemCLick(Place place) {
+
+    }
+
     private void setupView() {
         mBinding.includeTrip.tripDistance.setText(mTrip.getTripDistance());
         mBinding.includeTrip.tripTime.setText(mTrip.getTripDuration());
         mBinding.includeTrip.tripStart.setText(mTrip.getPlaceStart().getPlaceName());
         mBinding.includeTrip.tripDestination.setText(mTrip.getPlaceEnd().getPlaceName());
         mBinding.includeTrip.tripListBreakPoints
-                .setAdapter(new BreakPointAdapter(mTrip.getPlacesPoints()));
+                .setAdapter(new BreakPointAdapter(mTrip.getPlacesPoints(), this));
     }
-
 }

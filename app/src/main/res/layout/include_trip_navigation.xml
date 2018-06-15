@@ -55,6 +55,8 @@
                 android:drawablePadding="8dp"
                 android:maxLines="1"
                 android:ellipsize="end"
+                android:clickable="true"
+                android:focusable="true"
                 android:drawableEnd="@drawable/ic_map"
                 android:background="?android:selectableItemBackground"
                 tools:text="Start Point" />
@@ -70,6 +72,8 @@
                 android:drawablePadding="8dp"
                 android:maxLines="1"
                 android:ellipsize="end"
+                android:clickable="true"
+                android:focusable="true"
                 android:drawableEnd="@drawable/ic_map"
                 android:background="?android:selectableItemBackground"
                 tools:text="Destination Point" />

@@ -15,11 +15,12 @@ import com.guilhermefgl.rolling.R;
 import com.guilhermefgl.rolling.databinding.FragmentCurrentBinding;
 import com.guilhermefgl.rolling.helper.PicassoHelper;
 import com.guilhermefgl.rolling.mock.TripMock;
+import com.guilhermefgl.rolling.model.Place;
 import com.guilhermefgl.rolling.model.Trip;
 import com.guilhermefgl.rolling.view.BaseFragment;
 import com.guilhermefgl.rolling.view.breakpoint.BreakPointAdapter;
 
-public class CurrentFragment extends BaseFragment {
+public class CurrentFragment extends BaseFragment implements BreakPointAdapter.BreakPointAdapterItemClick {
 
     // TODO remove mock data
     private Trip mockTrip = TripMock.getMyCurrentTrip();
@@ -68,6 +69,11 @@ public class CurrentFragment extends BaseFragment {
         return true;
     }
 
+    @Override
+    public void itemCLick(Place place) {
+
+    }
+
     private void setupView() {
         PicassoHelper.loadImage(mockTrip.getTripBannerUrl(), mBinding.tripImage);
         mBinding.tripTitle.setText(mockTrip.getTripName());
@@ -76,6 +82,6 @@ public class CurrentFragment extends BaseFragment {
         mBinding.includeTrip.tripStart.setText(mockTrip.getPlaceStart().getPlaceName());
         mBinding.includeTrip.tripDestination.setText(mockTrip.getPlaceEnd().getPlaceName());
         mBinding.includeTrip.tripListBreakPoints
-                .setAdapter(new BreakPointAdapter(mockTrip.getPlacesPoints()));
+                .setAdapter(new BreakPointAdapter(mockTrip.getPlacesPoints(), this));
     }
 }
