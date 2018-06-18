@@ -85,8 +85,15 @@ public class CurrentFragment extends BaseFragment implements
         mBinding.includeTrip.tripTime.setText(mockTrip.getTripDuration());
         mBinding.includeTrip.tripStart.setText(mockTrip.getPlaceStart().getPlaceName());
         mBinding.includeTrip.tripDestination.setText(mockTrip.getPlaceEnd().getPlaceName());
-        mBinding.includeTrip.tripListBreakPoints
-                .setAdapter(new BreakPointAdapter(mockTrip.getPlacesPoints(), this));
+
+        if (!mockTrip.getPlacesPoints().isEmpty()) {
+            mBinding.includeTrip.tripListBreakPoints
+                    .setAdapter(new BreakPointAdapter(mockTrip.getPlacesPoints(), this));
+        } else {
+            mBinding.includeTrip.tripDivider1.setVisibility(View.GONE);
+            mBinding.includeTrip.tripBreakPointsLabel.setVisibility(View.GONE);
+            mBinding.includeTrip.tripListBreakPoints.setVisibility(View.GONE);
+        }
 
         ((SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.include_trip_map_fragment))

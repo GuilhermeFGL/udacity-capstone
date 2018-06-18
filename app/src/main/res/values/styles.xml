@@ -38,13 +38,31 @@
         <item name="android:textColor">@color/icons</item>
     </style>
 
+    <style name="TabLayoutDefault" parent="Widget.Design.TabLayout">
+        <item name="tabIndicatorColor">@color/accent</item>
+        <item name="tabSelectedTextColor">@color/icons</item>
+        <item name="tabIndicatorHeight">4dp</item>
+        <item name="tabTextAppearance">@style/TabTextAppearance</item>
+    </style>
+
+    <style name="TabTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textColor">@color/icons</item>
+    </style>
+
     <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="colorButtonNormal">@color/primary</item>
         <item name="android:textColor">@color/primary</item>
     </style>
 
+    <style name="ToolbarColoredBackArrow" parent="AppTheme">
+        <item name="android:textColorSecondary">@color/icons</item>
+    </style>
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:textColorSecondary">@color/icons</item>
+        <item name="colorControlNormal">@color/icons</item>
+    </style>
 
 </resources>

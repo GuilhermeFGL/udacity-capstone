@@ -72,8 +72,15 @@ public class TripDetailsFragment extends BaseFragment implements
         mBinding.includeTrip.tripTime.setText(mTrip.getTripDuration());
         mBinding.includeTrip.tripStart.setText(mTrip.getPlaceStart().getPlaceName());
         mBinding.includeTrip.tripDestination.setText(mTrip.getPlaceEnd().getPlaceName());
-        mBinding.includeTrip.tripListBreakPoints
-                .setAdapter(new BreakPointAdapter(mTrip.getPlacesPoints(), this));
+
+        if (!mTrip.getPlacesPoints().isEmpty()) {
+            mBinding.includeTrip.tripListBreakPoints
+                    .setAdapter(new BreakPointAdapter(mTrip.getPlacesPoints(), this));
+        } else {
+            mBinding.includeTrip.tripDivider1.setVisibility(View.GONE);
+            mBinding.includeTrip.tripBreakPointsLabel.setVisibility(View.GONE);
+            mBinding.includeTrip.tripListBreakPoints.setVisibility(View.GONE);
+        }
     }
 
     @Override

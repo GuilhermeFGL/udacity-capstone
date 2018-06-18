@@ -84,7 +84,7 @@
             </RelativeLayout>
 
             <View
-                android:id="@+id/trip_divider"
+                android:id="@+id/trip_divider_1"
                 android:layout_below="@+id/trip_read_content"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
@@ -92,7 +92,7 @@
 
             <TextView
                 android:id="@+id/trip_break_points_label"
-                android:layout_below="@+id/trip_divider"
+                android:layout_below="@+id/trip_divider_1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
@@ -127,7 +127,7 @@
                 android:id="@+id/include_trip_map_fragment"
                 android:layout_below="@+id/trip_map_label"
                 android:layout_width="match_parent"
-                android:layout_height="240dp"
+                android:layout_height="515dp"
                 android:name="com.google.android.gms.maps.SupportMapFragment" />
 
         </RelativeLayout>

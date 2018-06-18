@@ -36,6 +36,7 @@
                     android:layout_height="?actionBarSize"
                     app:layout_scrollFlags="scroll|enterAlways"
                     app:layout_collapseMode="pin"
+                    app:theme="@style/AppTheme.PopupOverlay"
                     app:popupTheme="@style/AppTheme.PopupOverlay" />
 
             </android.support.design.widget.CollapsingToolbarLayout>
@@ -45,7 +46,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_anchor="@+id/tabbed_app_bar"
-                app:layout_anchorGravity="bottom"/>
+                app:layout_anchorGravity="bottom"
+                style="@style/TabLayoutDefault" />
 
         </android.support.design.widget.AppBarLayout>
 

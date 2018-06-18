@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.view.View;
+import android.view.MenuItem;
 
 import com.guilhermefgl.rolling.R;
 import com.guilhermefgl.rolling.databinding.ActivityDetailsBinding;
@@ -44,33 +44,27 @@ public class DetailsActivity extends BaseActivity implements ViewPager.OnPageCha
 
     }
 
-    private void setupView() {
-        setSupportActionBar(mBinding.tabbedToolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setHomeButtonEnabled(true);
-            getSupportActionBar().setTitle(mTrip.getTripName());
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
         }
 
-        PicassoHelper.loadImage(mTrip.getTripBannerUrl(), mBinding.backdrop);
-
-        DetailsPageAdapter pageAdapter = new DetailsPageAdapter(getSupportFragmentManager());
-        pageAdapter.setup(this, mTrip);
-        mBinding.detailsPager.setAdapter(pageAdapter);
-        mBinding.tabbedTabLayout.setupWithViewPager(mBinding.detailsPager);
-        mBinding.detailsPager.addOnPageChangeListener(this);
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onPageSelected(int position) {
         switch (position) {
             case 0:
-                mBinding.fabCurrent.setVisibility(View.GONE);
-                mBinding.fabCurrent.setVisibility(View.VISIBLE);
+                mBinding.fabCurrent.show();
+                mBinding.fabShare.hide();
                 break;
             case 1:
-                mBinding.fabCurrent.setVisibility(View.VISIBLE);
-                mBinding.fabCurrent.setVisibility(View.GONE);
+                mBinding.fabCurrent.hide();
+                mBinding.fabShare.show();
                 break;
         }
 
@@ -82,9 +76,21 @@ public class DetailsActivity extends BaseActivity implements ViewPager.OnPageCha
     @Override
     public void onPageScrollStateChanged(int state) { }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
+    private void setupView() {
+        mBinding.tabbedActionbar.setTitle(mTrip.getTripName());
+        mBinding.tabbedAppBar.setExpanded(true, true);
+        setSupportActionBar(mBinding.tabbedToolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(true);
+        }
+
+        PicassoHelper.loadImage(mTrip.getTripBannerUrl(), mBinding.backdrop);
+
+        DetailsPageAdapter pageAdapter = new DetailsPageAdapter(getSupportFragmentManager());
+        pageAdapter.setup(this, mTrip);
+        mBinding.detailsPager.setAdapter(pageAdapter);
+        mBinding.tabbedTabLayout.setupWithViewPager(mBinding.detailsPager);
+        mBinding.detailsPager.addOnPageChangeListener(this);
     }
 }

@@ -48,6 +48,7 @@ public class TripActivity extends BaseActivity implements
                 .getMapAsync(this);
     }
 
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_new_trip, menu);
         return true;
@@ -56,13 +57,24 @@ public class TripActivity extends BaseActivity implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
             case R.id.menu_trip_save:
-                // save
+                // TODO save
                 break;
             default:
                 return super.onOptionsItemSelected(item);
         }
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        // TODO confirm
+        finish();
     }
 
     @Override
