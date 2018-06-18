@@ -8,6 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.guilhermefgl.rolling.R;
 import com.guilhermefgl.rolling.databinding.FragmentDetailsTripBinding;
 import com.guilhermefgl.rolling.model.Place;
@@ -15,7 +18,8 @@ import com.guilhermefgl.rolling.model.Trip;
 import com.guilhermefgl.rolling.view.BaseFragment;
 import com.guilhermefgl.rolling.view.breakpoint.BreakPointAdapter;
 
-public class TripDetailsFragment extends BaseFragment implements BreakPointAdapter.BreakPointAdapterItemClick {
+public class TripDetailsFragment extends BaseFragment implements
+        BreakPointAdapter.BreakPointAdapterItemClick, OnMapReadyCallback {
 
     private static final String BUNDLE_TRIP = "BUNDLE_FILTER";
 
@@ -44,6 +48,11 @@ public class TripDetailsFragment extends BaseFragment implements BreakPointAdapt
                              Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(
                 inflater, R.layout.fragment_details_trip, container, false);
+
+        ((SupportMapFragment) getChildFragmentManager()
+                .findFragmentById(R.id.include_trip_map_fragment))
+                .getMapAsync(this);
+
         return mBinding.getRoot();
     }
 
@@ -65,5 +74,10 @@ public class TripDetailsFragment extends BaseFragment implements BreakPointAdapt
         mBinding.includeTrip.tripDestination.setText(mTrip.getPlaceEnd().getPlaceName());
         mBinding.includeTrip.tripListBreakPoints
                 .setAdapter(new BreakPointAdapter(mTrip.getPlacesPoints(), this));
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+
     }
 }

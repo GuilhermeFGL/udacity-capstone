@@ -18,6 +18,7 @@ import com.guilhermefgl.rolling.view.details.DetailsActivity;
 import com.guilhermefgl.rolling.view.trip.TripActivity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TripListFragment extends BaseFragment implements TripAdapter.TripAdapterItemClick {
 
@@ -63,7 +64,9 @@ public class TripListFragment extends BaseFragment implements TripAdapter.TripAd
         if (filterParam != null) {
             switch (filterParam) {
                 case BUNDLE_FILTER_ALL:
-                    adapter.setTripList(TripMock.getTripList());
+                    List<Trip> trips = TripMock.getTripList();
+                    trips.add(0, null);
+                    adapter.setTripList(trips);
                     break;
                 case BUNDLE_FILTER_USER:
                     adapter.setTripList(TripMock.getMyTripList());

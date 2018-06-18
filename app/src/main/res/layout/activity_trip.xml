@@ -23,12 +23,129 @@
 
         </android.support.design.widget.AppBarLayout>
 
-        <fragment
-            android:id="@+id/trip_content"
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:name="com.guilhermefgl.rolling.view.trip.TripFragment"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/trip_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:background="@color/primary_light"
+                    android:contentDescription="@string/trip_action_add_image"
+                    app:srcCompat="@drawable/ic_picture"/>
+
+                <RelativeLayout
+                    android:id="@+id/trip_editable_content"
+                    android:layout_below="@+id/trip_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/trip_title_placeholder"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/trip_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="18sp"
+                            android:hint="@string/trip_title_placeholder"
+                            android:inputType="textCapWords" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/trip_start"
+                        android:layout_below="@+id/trip_title_placeholder"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:layout_marginTop="8dp"
+                        android:drawablePadding="8dp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center_vertical"
+                        android:hint="@string/trip_hint_start"
+                        android:drawableEnd="@drawable/ic_map"
+                        android:background="?android:selectableItemBackground" />
+
+                    <TextView
+                        android:id="@+id/trip_destination"
+                        android:layout_below="@+id/trip_start"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:layout_marginBottom="8dp"
+                        android:drawablePadding="8dp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center_vertical"
+                        android:hint="@string/trip_hint_destination"
+                        android:drawableEnd="@drawable/ic_map"
+                        android:background="?android:selectableItemBackground" />
+
+                </RelativeLayout>
+
+                <View
+                    android:id="@+id/trip_divider_1"
+                    android:layout_below="@+id/trip_editable_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/divider" />
+
+                <TextView
+                    android:id="@+id/trip_break_points_label"
+                    android:layout_below="@+id/trip_divider_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:textColor="@color/secondary_text"
+                    android:text="@string/trip_break_point_label" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/trip_list_break_points"
+                    android:layout_below="@+id/trip_break_points_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:listitem="@layout/item_break_point"
+                    app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
+
+                <View
+                    android:id="@+id/trip_divider_2"
+                    android:layout_below="@+id/trip_list_break_points"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/divider" />
+
+                <TextView
+                    android:id="@+id/trip_map_label"
+                    android:layout_below="@+id/trip_divider_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:textColor="@color/secondary_text"
+                    android:text="@string/trip_map_label" />
+
+                <fragment
+                    android:id="@+id/trip_map_fragment"
+                    android:layout_below="@+id/trip_map_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="240dp"
+                    android:name="com.google.android.gms.maps.MapFragment" />
+
+            </RelativeLayout>
+
+        </android.support.v4.widget.NestedScrollView>
 
     </android.support.design.widget.CoordinatorLayout>
 

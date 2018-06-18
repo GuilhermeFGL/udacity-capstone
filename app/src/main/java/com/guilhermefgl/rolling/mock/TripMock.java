@@ -47,7 +47,7 @@ public class TripMock {
                 setTripDuration("15 days");
                 setPlaceStart(startPlace);
                 setPlaceEnd(endPlace);
-                setPlacesPoints(places);
+                setPlacesPoints(new ArrayList<Place>());
                 setPersons(UserMock.getTripListUser());
             }});
             add(new Trip(){{

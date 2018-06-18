@@ -11,6 +11,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.guilhermefgl.rolling.R;
 import com.guilhermefgl.rolling.databinding.FragmentCurrentBinding;
 import com.guilhermefgl.rolling.helper.PicassoHelper;
@@ -20,7 +23,8 @@ import com.guilhermefgl.rolling.model.Trip;
 import com.guilhermefgl.rolling.view.BaseFragment;
 import com.guilhermefgl.rolling.view.breakpoint.BreakPointAdapter;
 
-public class CurrentFragment extends BaseFragment implements BreakPointAdapter.BreakPointAdapterItemClick {
+public class CurrentFragment extends BaseFragment implements
+        BreakPointAdapter.BreakPointAdapterItemClick, OnMapReadyCallback {
 
     // TODO remove mock data
     private Trip mockTrip = TripMock.getMyCurrentTrip();
@@ -83,5 +87,14 @@ public class CurrentFragment extends BaseFragment implements BreakPointAdapter.B
         mBinding.includeTrip.tripDestination.setText(mockTrip.getPlaceEnd().getPlaceName());
         mBinding.includeTrip.tripListBreakPoints
                 .setAdapter(new BreakPointAdapter(mockTrip.getPlacesPoints(), this));
+
+        ((SupportMapFragment) getChildFragmentManager()
+                .findFragmentById(R.id.include_trip_map_fragment))
+                .getMapAsync(this);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+
     }
 }

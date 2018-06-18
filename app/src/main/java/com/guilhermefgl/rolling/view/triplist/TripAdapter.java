@@ -67,7 +67,6 @@ public class TripAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public void setTripList(List<Trip> trips) {
-        trips.add(0, null);
         mTrips = trips;
         notifyDataSetChanged();
     }

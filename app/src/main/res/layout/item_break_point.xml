@@ -5,13 +5,15 @@
     <TextView
         android:id="@+id/item_break_point_text"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
+        android:layout_height="52dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:textSize="16sp"
         android:maxLines="1"
         android:ellipsize="end"
         android:clickable="true"
         android:focusable="true"
+        android:gravity="center_vertical"
         android:drawableEnd="@drawable/ic_place"
         tools:text="Break Point Location, KM 700"/>
 
