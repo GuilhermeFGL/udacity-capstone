@@ -3,6 +3,7 @@ package com.guilhermefgl.rolling.view.details;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
 
@@ -19,12 +20,16 @@ public class DetailsActivity extends BaseActivity implements ViewPager.OnPageCha
     private Trip mTrip;
     private ActivityDetailsBinding mBinding;
 
-    public static void startActivity(BaseActivity activity, Trip trip) {
+    public static void startActivity(BaseActivity activity, Trip trip, ActivityOptionsCompat options) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(BUNDLE_TRIP, trip);
-        activity.startActivity(
-                new Intent(activity, DetailsActivity.class)
-                        .putExtras(bundle));
+        if (options != null) {
+            activity.startActivity(
+                    new Intent(activity, DetailsActivity.class).putExtras(bundle),
+                    options.toBundle());
+        } else {
+            activity.startActivity(new Intent(activity, DetailsActivity.class).putExtras(bundle));
+        }
     }
 
     @Override
@@ -48,7 +53,7 @@ public class DetailsActivity extends BaseActivity implements ViewPager.OnPageCha
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                onBackPressed();
+                supportFinishAfterTransition();
                 return true;
         }
 

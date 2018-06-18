@@ -57,4 +57,7 @@
         <item>Persons</item>
     </string-array>
 
+    <!-- OTHERS -->
+    <string name="transition_details" translatable="false">transition details</string>
+
 </resources>

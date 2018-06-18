@@ -91,7 +91,7 @@ public class TripAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mBinding.getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    adapterItemClick.itemCLick(trip);
+                    adapterItemClick.itemCLick(trip, mBinding.itemTripImage);
                 }
             });
         }
@@ -111,13 +111,13 @@ public class TripAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mBinding.getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    adapterItemClick.itemCLick(null);
+                    adapterItemClick.itemCLick(null, null);
                 }
             });
         }
     }
 
     interface TripAdapterItemClick {
-        void itemCLick(Trip trip);
+        void itemCLick(Trip trip, View transitionImageView);
     }
 }
