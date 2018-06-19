@@ -9,8 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.guilhermefgl.rolling.R;
-import com.guilhermefgl.rolling.databinding.ItemTripBinding;
 import com.guilhermefgl.rolling.databinding.ItemAddTripBinding;
+import com.guilhermefgl.rolling.databinding.ItemTripBinding;
+import com.guilhermefgl.rolling.helper.DateFormatter;
 import com.guilhermefgl.rolling.helper.PicassoHelper;
 import com.guilhermefgl.rolling.model.Trip;
 
@@ -88,6 +89,8 @@ public class TripAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mBinding.itemTripTime.setText(trip.getTripDuration());
             mBinding.itemTripStart.setText(trip.getPlaceStart().getPlaceName());
             mBinding.itemTripEnd.setText(trip.getPlaceEnd().getPlaceName());
+            mBinding.itemTripDate.setText(DateFormatter.dateToString(
+                    trip.getTripDate(), mBinding.getRoot().getContext()));
             mBinding.getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

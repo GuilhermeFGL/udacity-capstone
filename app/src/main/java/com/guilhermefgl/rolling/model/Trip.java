@@ -3,6 +3,7 @@ package com.guilhermefgl.rolling.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Date;
 import java.util.List;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
@@ -13,6 +14,7 @@ public class Trip implements Parcelable {
     private String tripBannerUrl;
     private String tripDistance;
     private String tripDuration;
+    private Date tripDate;
     private User userOwner;
     private Place placeStart;
     private Place placeEnd;
@@ -101,9 +103,12 @@ public class Trip implements Parcelable {
         this.persons = persons;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public Date getTripDate() {
+        return tripDate;
+    }
+
+    public void setTripDate(Date tripDate) {
+        this.tripDate = tripDate;
     }
 
     protected Trip(Parcel in) {
@@ -116,6 +121,7 @@ public class Trip implements Parcelable {
         tripBannerUrl = in.readString();
         tripDistance = in.readString();
         tripDuration = in.readString();
+        tripDate = (Date) in.readSerializable();
         userOwner = in.readParcelable(User.class.getClassLoader());
         placeStart = in.readParcelable(Place.class.getClassLoader());
         placeEnd = in.readParcelable(Place.class.getClassLoader());
@@ -135,11 +141,17 @@ public class Trip implements Parcelable {
         dest.writeString(tripBannerUrl);
         dest.writeString(tripDistance);
         dest.writeString(tripDuration);
+        dest.writeSerializable(tripDate);
         dest.writeParcelable(userOwner, flags);
         dest.writeParcelable(placeStart, flags);
         dest.writeParcelable(placeEnd, flags);
         dest.writeTypedList(placesPoints);
         dest.writeTypedList(persons);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<Trip> CREATOR = new Creator<Trip>() {

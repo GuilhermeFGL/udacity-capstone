@@ -16,6 +16,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.guilhermefgl.rolling.R;
 import com.guilhermefgl.rolling.databinding.FragmentCurrentBinding;
+import com.guilhermefgl.rolling.helper.DateFormatter;
 import com.guilhermefgl.rolling.helper.PicassoHelper;
 import com.guilhermefgl.rolling.mock.TripMock;
 import com.guilhermefgl.rolling.model.Place;
@@ -85,6 +86,11 @@ public class CurrentFragment extends BaseFragment implements
         mBinding.includeTrip.tripTime.setText(mockTrip.getTripDuration());
         mBinding.includeTrip.tripStart.setText(mockTrip.getPlaceStart().getPlaceName());
         mBinding.includeTrip.tripDestination.setText(mockTrip.getPlaceEnd().getPlaceName());
+
+        if (getContext() != null) {
+            mBinding.includeTrip.tripDate.setText(
+                    DateFormatter.dateToString(mockTrip.getTripDate(), getContext()));
+        }
 
         if (!mockTrip.getPlacesPoints().isEmpty()) {
             mBinding.includeTrip.tripListBreakPoints

@@ -13,6 +13,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.guilhermefgl.rolling.R;
 import com.guilhermefgl.rolling.databinding.FragmentDetailsTripBinding;
+import com.guilhermefgl.rolling.helper.DateFormatter;
 import com.guilhermefgl.rolling.model.Place;
 import com.guilhermefgl.rolling.model.Trip;
 import com.guilhermefgl.rolling.view.BaseFragment;
@@ -72,6 +73,11 @@ public class TripDetailsFragment extends BaseFragment implements
         mBinding.includeTrip.tripTime.setText(mTrip.getTripDuration());
         mBinding.includeTrip.tripStart.setText(mTrip.getPlaceStart().getPlaceName());
         mBinding.includeTrip.tripDestination.setText(mTrip.getPlaceEnd().getPlaceName());
+
+        if (getContext() != null) {
+            mBinding.includeTrip.tripDate.setText(
+                    DateFormatter.dateToString(mTrip.getTripDate(), getContext()));
+        }
 
         if (!mTrip.getPlacesPoints().isEmpty()) {
             mBinding.includeTrip.tripListBreakPoints

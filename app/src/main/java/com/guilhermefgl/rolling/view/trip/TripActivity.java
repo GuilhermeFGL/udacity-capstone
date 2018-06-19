@@ -5,6 +5,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -43,6 +44,16 @@ public class TripActivity extends BaseActivity implements
         ArrayList<Place> breakPoints = new ArrayList<>();
         breakPoints.add(0, null);
         adapter.setBreakPoints(breakPoints);
+
+        mBinding.tripDurationType.setAdapter(
+                new ArrayAdapter<String>(this,
+                        android.R.layout.simple_spinner_dropdown_item,
+                        getResources().getStringArray(R.array.trip_duration_types)));
+
+        mBinding.tripDistanceType.setAdapter(
+                new ArrayAdapter<String>(this,
+                        android.R.layout.simple_spinner_dropdown_item,
+                        getResources().getStringArray(R.array.trip_distance_types)));
 
         ((MapFragment) getFragmentManager().findFragmentById(R.id.trip_map_fragment))
                 .getMapAsync(this);
