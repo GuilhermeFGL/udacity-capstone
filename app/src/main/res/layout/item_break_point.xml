@@ -15,6 +15,7 @@
         android:focusable="true"
         android:gravity="center_vertical"
         android:drawableEnd="@drawable/ic_place"
-        tools:text="Break Point Location, KM 700"/>
+        android:background="?android:selectableItemBackground"
+        tools:text="Break Point Location, KM 700" />
 
 </layout>
