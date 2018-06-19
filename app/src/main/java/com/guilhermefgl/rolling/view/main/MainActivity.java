@@ -5,12 +5,16 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,11 +26,12 @@ import com.guilhermefgl.rolling.model.User;
 import com.guilhermefgl.rolling.view.BaseActivity;
 import com.guilhermefgl.rolling.view.BaseFragment;
 import com.guilhermefgl.rolling.view.current.CurrentFragment;
+import com.guilhermefgl.rolling.view.list.TripPageFragment;
 import com.guilhermefgl.rolling.view.profile.ProfileFragment;
-import com.guilhermefgl.rolling.view.triplist.TripPageFragment;
 
 public class MainActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,
+        TripPageFragment.TripListFragmentInteractionListener, ViewPager.OnPageChangeListener {
 
     // TODO remove mock data
     User mockLoggedUser = UserMock.getLogeedUser();
@@ -57,6 +62,13 @@ public class MainActivity extends BaseActivity
 
         mBinding.navView.setNavigationItemSelectedListener(this);
         mBinding.navView.setCheckedItem(R.id.navigation_trip_list);
+
+        mBinding.mainAppBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                mBinding.mainBottomNavigation.setTranslationY(verticalOffset*-1);
+            }
+        });
 
         updateLayoutLoggedUser(mockLoggedUser);
     }
@@ -111,6 +123,41 @@ public class MainActivity extends BaseActivity
             default:
                 return null;
         }
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        switch (position) {
+            case 0:
+                mBinding.mainBottomNavigation.setSelectedItemId(R.id.navigation_recent);
+                break;
+            case 1:
+                mBinding.mainBottomNavigation.setSelectedItemId(R.id.navigation_marked);
+                break;
+        }
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) { }
+
+    @Override
+    public void onPageScrollStateChanged(int state) { }
+
+    @Override
+    public void setupTripListFragment(BottomNavigationView.OnNavigationItemSelectedListener listener) {
+        mBinding.mainBottomNavigation.setVisibility(View.VISIBLE);
+        mBinding.mainBottomNavigation.setOnNavigationItemSelectedListener(listener);
+    }
+
+    @Override
+    public void unSetupTripListFragment() {
+        mBinding.mainBottomNavigation.setVisibility(View.GONE);
+        mBinding.mainBottomNavigation.setOnNavigationItemSelectedListener(null);
+    }
+
+    @Override
+    public ViewPager.OnPageChangeListener getOnPageChangeListener() {
+        return this;
     }
 
     private String generateFragmentTag(int tag) {

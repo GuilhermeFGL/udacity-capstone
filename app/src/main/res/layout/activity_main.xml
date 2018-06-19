@@ -16,6 +16,7 @@
             android:layout_height="match_parent">
 
             <android.support.design.widget.AppBarLayout
+                android:id="@+id/main_app_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:theme="@style/AppTheme.AppBarOverlay">
@@ -24,7 +25,7 @@
                     android:id="@+id/main_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_scrollFlags="enterAlwaysCollapsed"
+                    app:layout_scrollFlags="scroll|enterAlways"
                     app:popupTheme="@style/AppTheme.PopupOverlay" />
 
             </android.support.design.widget.AppBarLayout>
@@ -34,6 +35,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+            <android.support.design.widget.BottomNavigationView
+                android:id="@+id/main_bottom_navigation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_gravity="bottom"
+                app:itemBackground="@color/primary"
+                app:itemIconTint="@color/icons"
+                app:itemTextColor="@color/icons"
+                app:menu="@menu/navigation_bottom" />
 
         </android.support.design.widget.CoordinatorLayout>
 

@@ -1,28 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".view.triplist.TripPageFragment">
+    tools:context=".view.list.TripPageFragment">
 
-    <android.support.design.widget.CoordinatorLayout
+    <android.support.v4.view.ViewPager
+        android:id="@+id/main_view_pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <android.support.v4.view.ViewPager
-            android:id="@+id/main_view_pager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <android.support.design.widget.BottomNavigationView
-            android:id="@+id/main_bottom_navigation"
-            android:layout_gravity="bottom"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:itemBackground="@color/primary"
-            app:itemIconTint="@color/icons"
-            app:itemTextColor="@color/icons"
-            app:menu="@menu/navigation_bottom" />
-
-    </android.support.design.widget.CoordinatorLayout>
+        android:layout_height="match_parent" />
 
 </layout>

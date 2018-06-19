@@ -1,4 +1,4 @@
-package com.guilhermefgl.rolling.view.triplist;
+package com.guilhermefgl.rolling.view.list;
 
 import android.app.SearchManager;
 import android.content.Context;
@@ -21,10 +21,10 @@ import com.guilhermefgl.rolling.databinding.FragmentTripPageBinding;
 import com.guilhermefgl.rolling.view.BaseFragment;
 
 public class TripPageFragment extends BaseFragment implements
-        BottomNavigationView.OnNavigationItemSelectedListener,
-        SearchView.OnQueryTextListener, ViewPager.OnPageChangeListener {
+        BottomNavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener {
 
     private FragmentTripPageBinding mBinding;
+    private TripListFragmentInteractionListener mListener;
 
     @NonNull
     public static TripPageFragment newInstance() {
@@ -50,9 +50,28 @@ public class TripPageFragment extends BaseFragment implements
         super.onActivityCreated(savedInstanceState);
 
         mBinding.mainViewPager.setAdapter(new TripPageAdapter(getFragmentManager()));
-        mBinding.mainViewPager.setCurrentItem(0);
-        mBinding.mainViewPager.addOnPageChangeListener(this);
-        mBinding.mainBottomNavigation.setOnNavigationItemSelectedListener(this);
+        if (mListener != null) {
+            mBinding.mainViewPager.addOnPageChangeListener(mListener.getOnPageChangeListener());
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof TripListFragmentInteractionListener) {
+            mListener = (TripListFragmentInteractionListener) context;
+            mListener.setupTripListFragment(this);
+        } else {
+            throw new UnsupportedOperationException();
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener.unSetupTripListFragment();
+        mBinding.mainViewPager.addOnPageChangeListener(mListener.getOnPageChangeListener());
+        mListener = null;
     }
 
     @Override
@@ -103,21 +122,9 @@ public class TripPageFragment extends BaseFragment implements
         }
     }
 
-    @Override
-    public void onPageSelected(int position) {
-        switch (position) {
-            case 0:
-                mBinding.mainBottomNavigation.setSelectedItemId(R.id.navigation_recent);
-                break;
-            case 1:
-                mBinding.mainBottomNavigation.setSelectedItemId(R.id.navigation_marked);
-                break;
-        }
+    public interface TripListFragmentInteractionListener {
+        void setupTripListFragment(BottomNavigationView.OnNavigationItemSelectedListener listener);
+        void unSetupTripListFragment();
+        ViewPager.OnPageChangeListener getOnPageChangeListener();
     }
-
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) { }
-
-    @Override
-    public void onPageScrollStateChanged(int state) { }
 }

@@ -1,4 +1,4 @@
-package com.guilhermefgl.rolling.view.triplist;
+package com.guilhermefgl.rolling.view.list;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

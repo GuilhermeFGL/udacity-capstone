@@ -1,4 +1,4 @@
-package com.guilhermefgl.rolling.view.triplist;
+package com.guilhermefgl.rolling.view.list;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
