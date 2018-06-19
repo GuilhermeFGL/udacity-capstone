@@ -2,12 +2,14 @@ package com.guilhermefgl.rolling.view.main;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
@@ -40,9 +42,9 @@ public class MainActivity extends BaseActivity
     private FragmentManager mFragmentManager;
 
     public static void startActivity(BaseActivity activity) {
-        activity.startActivity(
-                new Intent(activity, MainActivity.class)
-                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+        activity.startActivity(new Intent(activity, MainActivity.class));
+        activity.finish();
+        activity.overridePendingTransition( 0, R.anim.fade_out);
     }
 
     @Override
