@@ -73,6 +73,11 @@ public class MainActivity extends BaseActivity
         });
 
         updateLayoutLoggedUser(mockLoggedUser);
+
+        replaceFragment(
+                TripPageFragment.newInstance(),
+                generateFragmentTag(R.id.navigation_trip_list),
+                getString(R.string.navigation_trip_list));
     }
 
     @Override

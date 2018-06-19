@@ -49,7 +49,7 @@ public class TripPageFragment extends BaseFragment implements
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mBinding.mainViewPager.setAdapter(new TripPageAdapter(getFragmentManager()));
+        mBinding.mainViewPager.setAdapter(new TripPageAdapter(getChildFragmentManager()));
         if (mListener != null) {
             mBinding.mainViewPager.addOnPageChangeListener(mListener.getOnPageChangeListener());
         }
