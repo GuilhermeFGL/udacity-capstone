@@ -31,7 +31,7 @@ import com.guilhermefgl.rolling.view.current.CurrentFragment;
 import com.guilhermefgl.rolling.view.list.TripPageFragment;
 import com.guilhermefgl.rolling.view.profile.ProfileFragment;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends BaseActivity
@@ -79,11 +79,7 @@ public class MainActivity extends BaseActivity
         });
 
         updateLayoutLoggedUser(mockLoggedUser);
-
-        replaceFragment(
-                TripPageFragment.newInstance(),
-                generateFragmentTag(R.id.navigation_trip_list),
-                getString(R.string.navigation_trip_list));
+        goToDefaultFragment();
     }
 
     @Override
@@ -198,6 +194,13 @@ public class MainActivity extends BaseActivity
         mBinding.drawerLayout.closeDrawer(GravityCompat.START);
     }
 
+    private void goToDefaultFragment() {
+        replaceFragment(
+                TripPageFragment.newInstance(),
+                generateFragmentTag(R.id.navigation_trip_list),
+                getString(R.string.navigation_trip_list));
+    }
+
     private void updateLayoutLoggedUser(User user) {
         if (user != null) {
             ((TextView) mBinding.navView.getHeaderView(0)
@@ -229,8 +232,9 @@ public class MainActivity extends BaseActivity
     }
 
     private void openLogInUi() {
-        List<AuthUI.IdpConfig> providers = Collections.singletonList(
-                new AuthUI.IdpConfig.EmailBuilder().build());
+        List<AuthUI.IdpConfig> providers = Arrays.asList(
+                new AuthUI.IdpConfig.EmailBuilder().build(),
+                new AuthUI.IdpConfig.GoogleBuilder().build());
         startActivityForResult(
                 AuthUI.getInstance()
                         .createSignInIntentBuilder()
@@ -245,6 +249,7 @@ public class MainActivity extends BaseActivity
     private void openLogOut() {
         FirebaseAuth.getInstance().signOut();
         updateLayoutLoggedUser(null);
+        goToDefaultFragment();
         mSmartLockEnabled = false;
     }
 }
