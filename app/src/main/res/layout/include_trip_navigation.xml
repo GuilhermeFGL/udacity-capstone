@@ -120,6 +120,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
             android:layout_below="@+id/trip_list_break_points"
             android:layout_width="match_parent"
             android:layout_height="2dp"
+            android:layout_marginTop="16dp"
             android:background="@color/divider" />
 
         <TextView
@@ -135,7 +136,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
             android:id="@+id/include_trip_map_fragment"
             android:layout_below="@+id/trip_map_label"
             android:layout_width="match_parent"
-            android:layout_height="515dp"
+            android:layout_height="500dp"
             android:name="com.google.android.gms.maps.SupportMapFragment" />
 
     </RelativeLayout>

@@ -46,14 +46,9 @@ public class TripActivity extends BaseActivity implements
         adapter.setBreakPoints(breakPoints);
 
         mBinding.tripDurationType.setAdapter(
-                new ArrayAdapter<String>(this,
+                new ArrayAdapter<>(this,
                         android.R.layout.simple_spinner_dropdown_item,
                         getResources().getStringArray(R.array.trip_duration_types)));
-
-        mBinding.tripDistanceType.setAdapter(
-                new ArrayAdapter<String>(this,
-                        android.R.layout.simple_spinner_dropdown_item,
-                        getResources().getStringArray(R.array.trip_distance_types)));
 
         ((MapFragment) getFragmentManager().findFragmentById(R.id.trip_map_fragment))
                 .getMapAsync(this);

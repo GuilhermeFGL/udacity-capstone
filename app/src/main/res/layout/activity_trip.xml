@@ -63,8 +63,24 @@
                     </android.support.design.widget.TextInputLayout>
 
                     <android.support.design.widget.TextInputLayout
-                        android:id="@+id/trip_duration_placeholder"
+                        android:id="@+id/trip_date_placeholder"
                         android:layout_below="@+id/trip_title_placeholder"
+                        android:layout_alignParentStart="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/trip_date"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/trip_date_placeholder"
+                            android:inputType="datetime" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/trip_duration_placeholder"
+                        android:layout_below="@+id/trip_date_placeholder"
                         android:layout_toStartOf="@+id/trip_duration_type"
                         android:layout_alignParentStart="true"
                         android:layout_width="wrap_content"
@@ -88,74 +104,9 @@
                         android:minWidth="100dp"
                         android:layout_alignParentEnd="true"/>
 
-                    <android.support.design.widget.TextInputLayout
-                        android:id="@+id/trip_distance_placeholder"
-                        android:layout_below="@+id/trip_duration_placeholder"
-                        android:layout_toStartOf="@+id/trip_distance_type"
-                        android:layout_alignParentStart="true"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp">
-
-                        <android.support.design.widget.TextInputEditText
-                            android:id="@+id/trip_distance"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/trip_distance_placeholder"
-                            android:inputType="numberDecimal" />
-
-                    </android.support.design.widget.TextInputLayout>
-
-                    <Spinner
-                        android:id="@+id/trip_distance_type"
-                        android:layout_alignBottom="@+id/trip_distance_placeholder"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:minWidth="100dp"
-                        android:layout_alignParentEnd="true"/>
-
-                    <TextView
-                        android:id="@+id/trip_date_label"
-                        android:layout_below="@+id/trip_distance_placeholder"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:textSize="12sp"
-                        android:textColor="@color/secondary_text"
-                        android:text="@string/trip_date_placeholder"/>
-
-                    <TextView
-                        android:id="@+id/trip_date_picker"
-                        android:layout_below="@+id/trip_date_label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:padding="8dp"
-                        android:textSize="16sp"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:textColor="@color/secondary_text"
-                        android:text="@string/trip_date_picker_placeholder"
-                        android:background="?android:selectableItemBackground" />
-
-                    <TextView
-                        android:id="@+id/trip_hour_picker"
-                        android:layout_alignTop="@+id/trip_date_picker"
-                        android:layout_toEndOf="@+id/trip_date_picker"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="32dp"
-                        android:padding="8dp"
-                        android:textSize="16sp"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:text="@string/trip_hour_picker_placeholder"
-                        android:textColor="@color/secondary_text"
-                        android:background="?android:selectableItemBackground" />
-
                     <TextView
                         android:id="@+id/trip_start"
-                        android:layout_below="@+id/trip_date_picker"
+                        android:layout_below="@+id/trip_duration_placeholder"
                         android:layout_width="match_parent"
                         android:layout_height="52dp"
                         android:layout_marginTop="8dp"
@@ -215,6 +166,7 @@
                     android:id="@+id/trip_divider_2"
                     android:layout_below="@+id/trip_list_break_points"
                     android:layout_width="match_parent"
+                    android:layout_marginTop="16dp"
                     android:layout_height="2dp"
                     android:background="@color/divider" />
 
@@ -227,11 +179,32 @@
                     android:textColor="@color/secondary_text"
                     android:text="@string/trip_map_label" />
 
-                <fragment
-                    android:id="@+id/trip_map_fragment"
+                <TextView
+                    android:id="@+id/trip_distance_label"
                     android:layout_below="@+id/trip_map_label"
                     android:layout_width="match_parent"
-                    android:layout_height="240dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="16dp"
+                    android:textSize="14sp"
+                    android:textColor="@color/secondary_text"
+                    android:text="@string/trip_distance_placeholder" />
+
+                <TextView
+                    android:id="@+id/trip_distance"
+                    android:layout_below="@+id/trip_distance_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="16dp"
+                    android:hint="@string/trip_distance_hint" />
+
+                <fragment
+                    android:id="@+id/trip_map_fragment"
+                    android:layout_below="@+id/trip_distance"
+                    android:layout_width="match_parent"
+                    android:layout_height="500dp"
                     android:name="com.google.android.gms.maps.MapFragment" />
 
             </RelativeLayout>

@@ -2,6 +2,7 @@
 
     <string name="app_name">Rolling</string>
     <string name="date_format">dd/MM/yyyy HH:mm</string>
+    <string name="transition_details" translatable="false">transition details</string>
 
     <!-- MAIN ACTIVITY -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -13,7 +14,7 @@
     <string name="navigation_logout">Log out</string>
     <string name="navigation_login">Log in</string>
 
-    <!-- TRIPs LIST FRAGMENT -->
+    <!-- TRIP LIST FRAGMENT -->
     <string name="navigation_recent">Recent Posts</string>
     <string name="navigation_marked">My Trips</string>
     <string name="menu_search">Search trip…</string>
@@ -34,13 +35,10 @@
     <!-- TRIP ACTIVITY -->
     <string name="trip_title">New Trip</string>
     <string name="menu_trip_save">SAVE</string>
+    <string name="trip_distance_hint">Provide start and end point</string>
     <string-array name="trip_duration_types">
         <item>days</item>
         <item>hours</item>
-    </string-array>
-    <string-array name="trip_distance_types">
-        <item>Km</item>
-        <item>Ml</item>
     </string-array>
 
     <!-- TRIP FRAGMENT -->
@@ -70,8 +68,5 @@
         <item>Trip</item>
         <item>Persons</item>
     </string-array>
-
-    <!-- OTHERS -->
-    <string name="transition_details" translatable="false">transition details</string>
 
 </resources>
