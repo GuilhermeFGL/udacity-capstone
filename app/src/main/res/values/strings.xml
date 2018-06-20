@@ -2,8 +2,6 @@
 
     <string name="app_name">Rolling</string>
     <string name="date_format">dd/MM/yyyy HH:mm</string>
-    <string name="transition_details" translatable="false">transition details</string>
-
     <string name="error_google_autocomplete_widget">Cannot open Google Places</string>
 
     <!-- MAIN ACTIVITY -->
@@ -38,6 +36,7 @@
     <string name="trip_title">New Trip</string>
     <string name="menu_trip_save">SAVE</string>
     <string name="trip_distance_hint">Provide start and end point</string>
+    <string name="menu_trip_marked">Add as My Trip</string>
     <string-array name="trip_duration_types">
         <item>days</item>
         <item>hours</item>
@@ -66,10 +65,12 @@
     <string name="details_banner">trip banner</string>
     <string name="details_item_person_avatar">person avatar</string>
     <string name="details_person_resume">%d persons confirm participation</string>
-
     <string-array name="details_tab_titles">
         <item>Trip</item>
         <item>Persons</item>
     </string-array>
+
+    <!-- OTHERS -->
+    <string name="transition_details" translatable="false">transition details</string>
 
 </resources>
