@@ -21,7 +21,7 @@ import com.guilhermefgl.rolling.view.BaseFragment;
 public class ProfileFragment extends BaseFragment {
 
     // TODO remove mock data
-    private User mockProfile = UserMock.getLogeedUser();
+    private User mockProfile = UserMock.getLogedUser();
 
     private FragmentProfileBinding mBinding;
 

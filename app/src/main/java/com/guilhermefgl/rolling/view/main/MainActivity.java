@@ -2,14 +2,12 @@ package com.guilhermefgl.rolling.view.main;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
@@ -20,6 +18,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.firebase.ui.auth.AuthUI;
+import com.google.firebase.auth.FirebaseAuth;
 import com.guilhermefgl.rolling.R;
 import com.guilhermefgl.rolling.databinding.ActivityMainBinding;
 import com.guilhermefgl.rolling.helper.PicassoHelper;
@@ -31,15 +31,21 @@ import com.guilhermefgl.rolling.view.current.CurrentFragment;
 import com.guilhermefgl.rolling.view.list.TripPageFragment;
 import com.guilhermefgl.rolling.view.profile.ProfileFragment;
 
+import java.util.Collections;
+import java.util.List;
+
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         TripPageFragment.TripListFragmentInteractionListener, ViewPager.OnPageChangeListener {
 
     // TODO remove mock data
-    User mockLoggedUser = UserMock.getLogeedUser();
+    User mockLoggedUser = UserMock.getLogedUser();
+
+    private static final Integer RESULT_LOGIN = 1001;
 
     private ActivityMainBinding mBinding;
     private FragmentManager mFragmentManager;
+    private Boolean mSmartLockEnabled = true;
 
     public static void startActivity(BaseActivity activity) {
         activity.startActivity(new Intent(activity, MainActivity.class));
@@ -78,6 +84,17 @@ public class MainActivity extends BaseActivity
                 TripPageFragment.newInstance(),
                 generateFragmentTag(R.id.navigation_trip_list),
                 getString(R.string.navigation_trip_list));
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+            if (requestCode == RESULT_LOGIN) {
+                updateLayoutLoggedUser(mockLoggedUser);
+            }
+        }
     }
 
     @Override
@@ -124,8 +141,10 @@ public class MainActivity extends BaseActivity
             case R.id.navigation_profile:
                 return ProfileFragment.newInstance();
             case R.id.navigation_login:
+                openLogInUi();
                 return null;
             case R.id.navigation_logout:
+                openLogOut();
                 return null;
             default:
                 return null;
@@ -192,16 +211,40 @@ public class MainActivity extends BaseActivity
                             .findViewById(R.id.navigation_profile_avatar)));
             mBinding.navView.getMenu().findItem(R.id.navigation_login).setVisible(false);
             mBinding.navView.getMenu().findItem(R.id.navigation_logout).setVisible(true);
+            mBinding.navView.getMenu().findItem(R.id.navigation_trip_current).setVisible(true);
+            mBinding.navView.getMenu().findItem(R.id.navigation_profile).setVisible(true);
         } else {
             ((TextView) mBinding.navView.getHeaderView(0)
                     .findViewById(R.id.navigation_profile_name)).setText("");
             ((TextView) mBinding.navView.getHeaderView(0)
                     .findViewById(R.id.navigation_profile_email)).setText("");
             ((ImageView) mBinding.navView.getHeaderView(0)
-                    .findViewById(R.id.navigation_profile_email))
+                    .findViewById(R.id.navigation_profile_avatar))
                     .setImageResource(R.mipmap.ic_launcher_foreground);
             mBinding.navView.getMenu().findItem(R.id.navigation_login).setVisible(true);
             mBinding.navView.getMenu().findItem(R.id.navigation_logout).setVisible(false);
+            mBinding.navView.getMenu().findItem(R.id.navigation_trip_current).setVisible(false);
+            mBinding.navView.getMenu().findItem(R.id.navigation_profile).setVisible(false);
         }
+    }
+
+    private void openLogInUi() {
+        List<AuthUI.IdpConfig> providers = Collections.singletonList(
+                new AuthUI.IdpConfig.EmailBuilder().build());
+        startActivityForResult(
+                AuthUI.getInstance()
+                        .createSignInIntentBuilder()
+                        .setAvailableProviders(providers)
+                        .setIsSmartLockEnabled(mSmartLockEnabled)
+                        .setLogo(R.mipmap.ic_launcher_foreground)
+                        .setTheme(R.style.AppTheme)
+                        .build(),
+                RESULT_LOGIN);
+    }
+
+    private void openLogOut() {
+        FirebaseAuth.getInstance().signOut();
+        updateLayoutLoggedUser(null);
+        mSmartLockEnabled = false;
     }
 }

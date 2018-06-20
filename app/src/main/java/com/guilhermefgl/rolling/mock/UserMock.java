@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class UserMock {
 
-    public static User getLogeedUser() {
+    public static User getLogedUser() {
         return new User() {{
            setUserId(0L);
            setUserName("Woody Stevens");
