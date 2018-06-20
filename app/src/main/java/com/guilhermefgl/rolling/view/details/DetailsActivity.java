@@ -59,6 +59,8 @@ public class DetailsActivity extends BaseActivity implements ViewPager.OnPageCha
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.menu_trip_mark:
+                return true;
             case android.R.id.home:
                 supportFinishAfterTransition();
                 return true;
