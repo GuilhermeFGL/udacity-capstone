@@ -100,14 +100,7 @@ public class MainActivity extends BaseActivity
             return;
         }
 
-        String initialFragmentTag = generateFragmentTag(R.id.navigation_trip_list);
-        Fragment initialFragment = mFragmentManager.findFragmentByTag(initialFragmentTag);
-        if (initialFragment == null) {
-            replaceFragment(
-                    TripPageFragment.newInstance(),
-                    initialFragmentTag,
-                    getString(R.string.navigation_trip_list));
-            mBinding.navView.setCheckedItem(R.id.navigation_trip_list);
+        if (goToDefaultFragment()) {
             return;
         }
 
@@ -194,11 +187,18 @@ public class MainActivity extends BaseActivity
         mBinding.drawerLayout.closeDrawer(GravityCompat.START);
     }
 
-    private void goToDefaultFragment() {
-        replaceFragment(
-                TripPageFragment.newInstance(),
-                generateFragmentTag(R.id.navigation_trip_list),
-                getString(R.string.navigation_trip_list));
+    private boolean goToDefaultFragment() {
+        String initialFragmentTag = generateFragmentTag(R.id.navigation_trip_list);
+        Fragment initialFragment = mFragmentManager.findFragmentByTag(initialFragmentTag);
+        if (initialFragment == null) {
+            replaceFragment(
+                    TripPageFragment.newInstance(),
+                    initialFragmentTag,
+                    getString(R.string.navigation_trip_list));
+            mBinding.navView.setCheckedItem(R.id.navigation_trip_list);
+            return true;
+        }
+        return false;
     }
 
     private void updateLayoutLoggedUser(User user) {

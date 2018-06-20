@@ -3,6 +3,7 @@
     <string name="app_name">Rolling</string>
     <string name="date_format">dd/MM/yyyy HH:mm</string>
     <string name="transition_details" translatable="false">transition details</string>
+
     <string name="error_google_autocomplete_widget">Cannot open Google Places</string>
 
     <!-- MAIN ACTIVITY -->
@@ -65,6 +66,7 @@
     <string name="details_banner">trip banner</string>
     <string name="details_item_person_avatar">person avatar</string>
     <string name="details_person_resume">%d persons confirm participation</string>
+
     <string-array name="details_tab_titles">
         <item>Trip</item>
         <item>Persons</item>
