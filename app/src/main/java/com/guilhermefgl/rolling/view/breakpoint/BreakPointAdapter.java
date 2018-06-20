@@ -13,6 +13,7 @@ import com.guilhermefgl.rolling.databinding.ItemAddBreakPointBinding;
 import com.guilhermefgl.rolling.databinding.ItemBreakPointBinding;
 import com.guilhermefgl.rolling.model.Place;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BreakPointAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -66,8 +67,16 @@ public class BreakPointAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     public void setBreakPoints(List<Place> breakPoints) {
-        this.mBreakPoints = breakPoints;
+        mBreakPoints = breakPoints;
         notifyDataSetChanged();
+    }
+
+    public void addBreakPoints(Place breakPoint) {
+        if (mBreakPoints == null) {
+            mBreakPoints = new ArrayList<>();
+        }
+        mBreakPoints.add(breakPoint);
+        notifyItemInserted(mBreakPoints.size());
     }
 
     class ItemViewHolder extends RecyclerView.ViewHolder {

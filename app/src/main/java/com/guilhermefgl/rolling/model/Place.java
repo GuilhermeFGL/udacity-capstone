@@ -8,10 +8,8 @@ public class Place implements Parcelable {
 
     private Long placeId;
     private String placeName;
-    private Long placeLatitude;
-    private Long placeLongitude;
-
-    public Place() { }
+    private Double placeLatitude;
+    private Double placeLongitude;
 
     public Long getPlaceId() {
         return placeId;
@@ -29,21 +27,23 @@ public class Place implements Parcelable {
         this.placeName = placeName;
     }
 
-    public Long getPlaceLatitude() {
+    public Double getPlaceLatitude() {
         return placeLatitude;
     }
 
-    public void setPlaceLatitude(Long placeLatitude) {
+    public void setPlaceLatitude(Double placeLatitude) {
         this.placeLatitude = placeLatitude;
     }
 
-    public Long getPlaceLongitude() {
+    public Double getPlaceLongitude() {
         return placeLongitude;
     }
 
-    public void setPlaceLongitude(Long placeLongitude) {
+    public void setPlaceLongitude(Double placeLongitude) {
         this.placeLongitude = placeLongitude;
     }
+
+    public Place() { }
 
     protected Place(Parcel in) {
         if (in.readByte() == 0) {
@@ -55,12 +55,12 @@ public class Place implements Parcelable {
         if (in.readByte() == 0) {
             placeLatitude = null;
         } else {
-            placeLatitude = in.readLong();
+            placeLatitude = in.readDouble();
         }
         if (in.readByte() == 0) {
             placeLongitude = null;
         } else {
-            placeLongitude = in.readLong();
+            placeLongitude = in.readDouble();
         }
     }
 
@@ -77,13 +77,13 @@ public class Place implements Parcelable {
             dest.writeByte((byte) 0);
         } else {
             dest.writeByte((byte) 1);
-            dest.writeLong(placeLatitude);
+            dest.writeDouble(placeLatitude);
         }
         if (placeLongitude == null) {
             dest.writeByte((byte) 0);
         } else {
             dest.writeByte((byte) 1);
-            dest.writeLong(placeLongitude);
+            dest.writeDouble(placeLongitude);
         }
     }
 
@@ -103,4 +103,6 @@ public class Place implements Parcelable {
             return new Place[size];
         }
     };
+
+
 }

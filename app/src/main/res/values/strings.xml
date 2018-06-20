@@ -3,6 +3,7 @@
     <string name="app_name">Rolling</string>
     <string name="date_format">dd/MM/yyyy HH:mm</string>
     <string name="transition_details" translatable="false">transition details</string>
+    <string name="error_google_autocomplete_widget">Cannot open Google Places</string>
 
     <!-- MAIN ACTIVITY -->
     <string name="navigation_drawer_open">Open navigation drawer</string>

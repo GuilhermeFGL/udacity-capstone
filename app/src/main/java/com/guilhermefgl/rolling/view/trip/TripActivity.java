@@ -5,8 +5,11 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -19,7 +22,14 @@ import com.guilhermefgl.rolling.view.breakpoint.BreakPointAdapter;
 import java.util.ArrayList;
 
 public class TripActivity extends BaseActivity implements
-        BreakPointAdapter.BreakPointAdapterItemClick, OnMapReadyCallback {
+        BreakPointAdapter.BreakPointAdapterItemClick, OnMapReadyCallback, View.OnClickListener {
+
+    private static final Integer RESULT_START = 1001;
+    private static final Integer RESULT_END = 1002;
+    private static final Integer RESULT_BREAK_POINT = 1003;
+
+    private ActivityTripBinding mBinding;
+    private BreakPointAdapter mAdapter;
 
     public static void startActivity(BaseActivity activity) {
         activity.startActivity(
@@ -29,8 +39,7 @@ public class TripActivity extends BaseActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityTripBinding mBinding =
-                DataBindingUtil.setContentView(this, R.layout.activity_trip);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_trip);
 
         setSupportActionBar(mBinding.tripToolbar);
         if (getSupportActionBar() != null) {
@@ -39,11 +48,11 @@ public class TripActivity extends BaseActivity implements
             getSupportActionBar().setTitle(getString(R.string.trip_title));
         }
 
-        BreakPointAdapter adapter = new BreakPointAdapter(null, this);
-        mBinding.tripListBreakPoints.setAdapter(adapter);
+        mAdapter = new BreakPointAdapter(null, this);
+        mBinding.tripListBreakPoints.setAdapter(mAdapter);
         ArrayList<Place> breakPoints = new ArrayList<>();
         breakPoints.add(0, null);
-        adapter.setBreakPoints(breakPoints);
+        mAdapter.setBreakPoints(breakPoints);
 
         mBinding.tripDurationType.setAdapter(
                 new ArrayAdapter<>(this,
@@ -52,6 +61,28 @@ public class TripActivity extends BaseActivity implements
 
         ((MapFragment) getFragmentManager().findFragmentById(R.id.trip_map_fragment))
                 .getMapAsync(this);
+
+        mBinding.tripStart.setOnClickListener(this);
+        mBinding.tripDestination.setOnClickListener(this);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == RESULT_START) {
+                mBinding.tripStart.setText(PlaceAutocomplete.getPlace(this, data).getName());
+            } else if (requestCode == RESULT_END) {
+                mBinding.tripDestination.setText(PlaceAutocomplete.getPlace(this, data).getName());
+            } else if (requestCode == RESULT_BREAK_POINT) {
+                final com.google.android.gms.location.places.Place googlePlace =
+                        PlaceAutocomplete.getPlace(this, data);
+                mAdapter.addBreakPoints(new Place() {{
+                    setPlaceName(googlePlace.getName().toString());
+                    setPlaceLatitude(googlePlace.getLatLng().latitude);
+                    setPlaceLongitude(googlePlace.getLatLng().longitude);
+                }});
+            }
+        }
     }
 
     @Override
@@ -84,8 +115,36 @@ public class TripActivity extends BaseActivity implements
     }
 
     @Override
-    public void itemCLick(Place place) { }
+    public void onMapReady(GoogleMap googleMap) { }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) { }
+    public void onClick(View v) {
+        if (v.getId() == R.id.trip_start) {
+            openSearchPlaceWidget(RESULT_START);
+        } else if (v.getId() == R.id.trip_destination) {
+            openSearchPlaceWidget(RESULT_END);
+        }
+    }
+
+    @Override
+    public void itemCLick(Place place) {
+        if (place == null) {
+            openSearchPlaceWidget(RESULT_BREAK_POINT);
+        }
+    }
+
+    private void openSearchPlaceWidget(Integer result) {
+        try {
+            startActivityForResult(
+                    new PlaceAutocomplete
+                            .IntentBuilder(PlaceAutocomplete.MODE_OVERLAY)
+                            .build(this),
+                    result);
+        } catch (Exception e) {
+            Toast.makeText(this,
+                    getString(R.string.error_google_autocomplete_widget),
+                    Toast.LENGTH_LONG)
+                    .show();
+        }
+    }
 }
