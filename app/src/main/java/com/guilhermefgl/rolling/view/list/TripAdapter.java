@@ -91,7 +91,7 @@ public class TripAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mBinding.itemTripEnd.setText(trip.getPlaceEnd().getPlaceName());
             mBinding.itemTripDate.setText(DateFormatter.dateToString(
                     trip.getTripDate(), mBinding.getRoot().getContext()));
-            mBinding.getRoot().setOnClickListener(new View.OnClickListener() {
+            mBinding.itemTripContent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     adapterItemClick.itemCLick(trip, mBinding.itemTripImage);
@@ -111,7 +111,7 @@ public class TripAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         public void bind(final TripAdapterItemClick adapterItemClick) {
-            mBinding.getRoot().setOnClickListener(new View.OnClickListener() {
+            mBinding.itemTripAddContent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     adapterItemClick.itemCLick(null, null);
