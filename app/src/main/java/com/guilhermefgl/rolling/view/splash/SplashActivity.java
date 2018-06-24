@@ -9,6 +9,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.guilhermefgl.rolling.R;
 import com.guilhermefgl.rolling.view.BaseActivity;
 import com.guilhermefgl.rolling.view.main.MainActivity;
+import com.guilhermefgl.rolling.view.widget.TripWidgetProvider;
 
 public class SplashActivity extends BaseActivity implements OnMapReadyCallback {
 
@@ -22,6 +23,8 @@ public class SplashActivity extends BaseActivity implements OnMapReadyCallback {
         ((SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.splash_map))
                 .getMapAsync(this);
+
+        TripWidgetProvider.update(this);
     }
 
     @Override

@@ -32,6 +32,20 @@
         <activity android:name=".view.trip.TripActivity" />
         <activity android:name=".view.details.DetailsActivity" />
 
+        <receiver android:name=".view.widget.TripWidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/trip_widget_provider_info" />
+        </receiver>
+
+        <service
+            android:name=".view.widget.ListWidgetFactoryService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
     </application>
 
 </manifest>
