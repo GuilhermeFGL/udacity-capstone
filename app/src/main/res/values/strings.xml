@@ -70,6 +70,10 @@
         <item>Persons</item>
     </string-array>
 
+    <!-- WIDGET -->
+    <string name="widget_default_title">Current Trip</string>
+    <string name="widget_empty_label">Mark a Trip as Current clicking at the button</string>
+
     <!-- OTHERS -->
     <string name="transition_details" translatable="false">transition details</string>
 
