@@ -11,7 +11,7 @@ import android.widget.RemoteViews;
 
 import com.guilhermefgl.rolling.R;
 import com.guilhermefgl.rolling.model.Trip;
-import com.guilhermefgl.rolling.service.SelectCurrentWidgetTripTask;
+import com.guilhermefgl.rolling.service.taks.SelectCurrentWidgetTripTask;
 import com.guilhermefgl.rolling.view.details.DetailsActivity;
 import com.guilhermefgl.rolling.view.splash.SplashActivity;
 

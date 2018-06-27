@@ -14,6 +14,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.guilhermefgl.rolling.R;
 import com.guilhermefgl.rolling.databinding.FragmentDetailsTripBinding;
 import com.guilhermefgl.rolling.helper.DateFormatter;
+import com.guilhermefgl.rolling.helper.MapDrawer;
 import com.guilhermefgl.rolling.model.Place;
 import com.guilhermefgl.rolling.model.Trip;
 import com.guilhermefgl.rolling.view.BaseFragment;
@@ -68,6 +69,11 @@ public class TripDetailsFragment extends BaseFragment implements
 
     }
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        new MapDrawer(getContext()).drawnMap(googleMap, mTrip);
+    }
+
     private void setupView() {
         mBinding.includeTrip.tripDistance.setText(mTrip.getTripDistance());
         mBinding.includeTrip.tripTime.setText(mTrip.getTripDuration());
@@ -87,10 +93,5 @@ public class TripDetailsFragment extends BaseFragment implements
             mBinding.includeTrip.tripBreakPointsLabel.setVisibility(View.GONE);
             mBinding.includeTrip.tripListBreakPoints.setVisibility(View.GONE);
         }
-    }
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-
     }
 }
