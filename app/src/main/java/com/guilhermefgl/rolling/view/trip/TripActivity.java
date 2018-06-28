@@ -15,6 +15,8 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.guilhermefgl.rolling.R;
 import com.guilhermefgl.rolling.databinding.ActivityTripBinding;
+import com.guilhermefgl.rolling.helper.MapDrawer;
+import com.guilhermefgl.rolling.helper.MapRouter;
 import com.guilhermefgl.rolling.model.Place;
 import com.guilhermefgl.rolling.view.BaseActivity;
 import com.guilhermefgl.rolling.view.breakpoint.BreakPointAdapter;
@@ -22,7 +24,7 @@ import com.guilhermefgl.rolling.view.breakpoint.BreakPointAdapter;
 import java.util.ArrayList;
 
 public class TripActivity extends BaseActivity implements
-        BreakPointAdapter.BreakPointAdapterItemClick, OnMapReadyCallback, View.OnClickListener {
+        BreakPointAdapter.BreakPointAdapterItemClick, OnMapReadyCallback, View.OnClickListener, MapDrawer.MapDrawnCallBack {
 
     private static final Integer RESULT_START = 1001;
     private static final Integer RESULT_END = 1002;
@@ -30,6 +32,9 @@ public class TripActivity extends BaseActivity implements
 
     private ActivityTripBinding mBinding;
     private BreakPointAdapter mAdapter;
+    private GoogleMap mMap;
+    private MapDrawer mMapDrawer;
+    private MapRouter mMapRouter;
 
     public static void startActivity(BaseActivity activity) {
         activity.startActivity(
@@ -64,23 +69,44 @@ public class TripActivity extends BaseActivity implements
 
         mBinding.tripStart.setOnClickListener(this);
         mBinding.tripDestination.setOnClickListener(this);
+
+        mMapDrawer = new MapDrawer(this, this);
+        mMapRouter = new MapRouter();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
-            if (requestCode == RESULT_START) {
-                mBinding.tripStart.setText(PlaceAutocomplete.getPlace(this, data).getName());
-            } else if (requestCode == RESULT_END) {
-                mBinding.tripDestination.setText(PlaceAutocomplete.getPlace(this, data).getName());
-            } else if (requestCode == RESULT_BREAK_POINT) {
+            if (requestCode == RESULT_START || requestCode == RESULT_END
+                    || requestCode == RESULT_BREAK_POINT) {
                 final com.google.android.gms.location.places.Place googlePlace =
                         PlaceAutocomplete.getPlace(this, data);
-                mAdapter.addBreakPoints(new Place() {{
-                    setPlaceName(googlePlace.getName().toString());
-                    setPlaceLatitude(googlePlace.getLatLng().latitude);
-                    setPlaceLongitude(googlePlace.getLatLng().longitude);
-                }});
+
+                if (requestCode == RESULT_START) {
+                    mBinding.tripStart.setText(googlePlace.getName());
+                    mMapRouter.setStartPoint(new Place() {{
+                        setPlaceName(String.valueOf(googlePlace.getName()));
+                        setPlaceLatitude(googlePlace.getLatLng().latitude);
+                        setPlaceLongitude(googlePlace.getLatLng().longitude);
+                    }});
+                } else if (requestCode == RESULT_END) {
+                    mBinding.tripDestination.setText(googlePlace.getName());
+                    mMapRouter.setEndPoint(new Place() {{
+                        setPlaceName(String.valueOf(googlePlace.getName()));
+                        setPlaceLatitude(googlePlace.getLatLng().latitude);
+                        setPlaceLongitude(googlePlace.getLatLng().longitude);
+                    }});
+                } else {
+                    Place place = new Place() {{
+                        setPlaceName(googlePlace.getName().toString());
+                        setPlaceLatitude(googlePlace.getLatLng().latitude);
+                        setPlaceLongitude(googlePlace.getLatLng().longitude);
+                    }};
+                    mAdapter.addBreakPoints(place);
+                    mMapRouter.addBreakPlace(place);
+                }
+
+                mMapDrawer.drawnMap(mMap, mMapRouter);
             }
         }
     }
@@ -115,7 +141,9 @@ public class TripActivity extends BaseActivity implements
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) { }
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+    }
 
     @Override
     public void onClick(View v) {
@@ -131,6 +159,11 @@ public class TripActivity extends BaseActivity implements
         if (place == null) {
             openSearchPlaceWidget(RESULT_BREAK_POINT);
         }
+    }
+
+    @Override
+    public void onMapDrawnFinish(Double distance) {
+        mBinding.tripDistance.setText(getString(R.string.trip_distance_format, distance));
     }
 
     private void openSearchPlaceWidget(Integer result) {

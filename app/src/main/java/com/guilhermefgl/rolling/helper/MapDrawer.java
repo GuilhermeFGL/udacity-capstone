@@ -1,8 +1,7 @@
 package com.guilhermefgl.rolling.helper;
 
-import android.content.Context;
+import android.app.Activity;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -11,56 +10,120 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.guilhermefgl.rolling.model.GoogleResponse;
 import com.guilhermefgl.rolling.model.Place;
-import com.guilhermefgl.rolling.model.Trip;
+import com.guilhermefgl.rolling.service.MapClient;
 
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MapDrawer {
 
-    private final Context mContext;
+    private static final String MAP_UNIT = "metric";
+    private static final String ROUTE_TYPE = "driving";
+    private static final Integer ROUTE_WIDTH = 20;
+    private static final Integer ROUTE_COLOR = Color.RED;
 
-    public MapDrawer(Context context) {
-        mContext = context;
+    private final Activity mActivity;
+    private GoogleMap mMap;
+    private Double mDistance;
+    private MapDrawnCallBack mCallBack;
+
+    public MapDrawer(Activity activity, MapDrawnCallBack callBack) {
+        mActivity = activity;
+        mCallBack = callBack;
+        mDistance = 0d;
     }
 
-    public void drawnMap(GoogleMap map, Trip trip) {
-        map.clear();
+    public void drawnMap(GoogleMap map, MapRouter mapRouter) {
+        mMap = map;
+        mMap.clear();
 
         LatLng originMarker = null;
         LatLng destinationMarker = null;
-        if (trip.getPlaceStart() != null) {
-            MarkerOptions marker = createMarker(trip.getPlaceStart(), BitmapDescriptorFactory.HUE_AZURE);
+        ArrayList<LatLng> positions = new ArrayList<>();
+        if (mapRouter.getStartPoint() != null) {
+            MarkerOptions marker = createMarker(mapRouter.getStartPoint(), BitmapDescriptorFactory.HUE_AZURE);
             originMarker = marker.getPosition();
-            map.addMarker(marker);
+            mMap.addMarker(marker);
+            positions.add(originMarker);
         }
-        if (trip.getPlaceEnd() != null) {
-            MarkerOptions marker = createMarker(trip.getPlaceEnd(), BitmapDescriptorFactory.HUE_MAGENTA);
-            destinationMarker = marker.getPosition();
-            map.addMarker(marker);
-        }
-        if (trip.getPlacesPoints() != null && !trip.getPlacesPoints().isEmpty()) {
-            for (Place place : trip.getPlacesPoints()) {
-                map.addMarker(createMarker(place, BitmapDescriptorFactory.HUE_CYAN));
+        if (mapRouter.getBreakPlaces() != null && !mapRouter.getBreakPlaces().isEmpty()) {
+            for (Place place : mapRouter.getBreakPlaces()) {
+                MarkerOptions breakMarker = createMarker(place, BitmapDescriptorFactory.HUE_CYAN);
+                mMap.addMarker(breakMarker);
+                positions.add(breakMarker.getPosition());
             }
+        }
+        if (mapRouter.getEndPlace() != null) {
+            MarkerOptions marker = createMarker(mapRouter.getEndPlace(), BitmapDescriptorFactory.HUE_MAGENTA);
+            destinationMarker = marker.getPosition();
+            mMap.addMarker(marker);
+            positions.add(destinationMarker);
         }
 
         if (originMarker != null && destinationMarker != null) {
-            map.moveCamera(CameraUpdateFactory.newLatLng(originMarker));
-        }else if (originMarker != null) {
-            map.moveCamera(CameraUpdateFactory.newLatLng(originMarker));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(originMarker));
+        } else if (originMarker != null) {
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(originMarker));
         } else if (destinationMarker != null) {
-            map.moveCamera(CameraUpdateFactory.newLatLng(destinationMarker));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(destinationMarker));
+        }
+
+        requestMapService(positions);
+    }
+
+    private void requestMapService(final ArrayList<LatLng> positions){
+        if (positions.size() > 1) {
+            LatLng positionA = positions.remove(0);
+            LatLng positionB = positions.get(0);
+
+            MapClient.getInstance()
+                    .getDistanceDuration(
+                            MAP_UNIT,
+                            positionA.latitude + "," + positionA.longitude,
+                            positionB.latitude + "," + positionB.longitude,
+                            ROUTE_TYPE)
+                    .enqueue(new Callback<GoogleResponse>() {
+                        @Override
+                        public void onResponse(@NonNull Call<GoogleResponse> call,
+                                               @NonNull Response<GoogleResponse> response) {
+                            if (mActivity.isFinishing() || mActivity.isDestroyed()) {
+                                return;
+                            }
+
+                            GoogleResponse googleResponse = response.body();
+                            if (googleResponse != null) {
+                                for (int i = 0; i < googleResponse.getRoutes().size(); i++) {
+                                    String distanceResource = googleResponse.getRoutes().get(i)
+                                            .getLegs().get(i).getDistance().getText();
+                                    List<LatLng> polygons = decodePoly(googleResponse.getRoutes().get(0)
+                                            .getOverviewPolyline().getPoints());
+                                    mDistance += Double.valueOf(distanceResource);
+                                    mMap.addPolyline(
+                                            new PolylineOptions()
+                                                    .addAll(polygons)
+                                                    .width(ROUTE_WIDTH)
+                                                    .color(ROUTE_COLOR)
+                                                    .geodesic(true)
+                                    );
+                                }
+                            }
+
+                            requestMapService(positions);
+                        }
+
+                        @Override
+                        public void onFailure(@NonNull Call<GoogleResponse> call, @NonNull Throwable t) {
+                            t.printStackTrace();
+                        }
+                    });
+        } else {
+            mCallBack.onMapDrawnFinish(mDistance);
         }
     }
 
@@ -71,148 +134,40 @@ public class MapDrawer {
                 .icon(BitmapDescriptorFactory.defaultMarker(iconHUE));
     }
 
+    private List<LatLng> decodePoly(String encoded) {
+        List<LatLng> poly = new ArrayList<>();
+        int index = 0, len = encoded.length();
+        int lat = 0, lng = 0;
 
+        while (index < len) {
+            int b, shift = 0, result = 0;
+            do {
+                b = encoded.charAt(index++) - 63;
+                result |= (b & 0x1f) << shift;
+                shift += 5;
+            } while (b >= 0x20);
+            int distanceLat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+            lat += distanceLat;
 
+            shift = 0;
+            result = 0;
+            do {
+                b = encoded.charAt(index++) - 63;
+                result |= (b & 0x1f) << shift;
+                shift += 5;
+            } while (b >= 0x20);
+            int distanceLng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+            lng += distanceLng;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    private static class DownloadTask extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... url) {
-            String data = "";
-            try {
-                data = downloadUrl(url[0]);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return data;
+            LatLng p = new LatLng( (((double) lat / 1E5)),
+                    (((double) lng / 1E5) ));
+            poly.add(p);
         }
 
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            new ParserTask().execute(result);
-        }
-
-        private String downloadUrl(String strUrl) throws IOException {
-            String data = "";
-            InputStream iStream = null;
-            HttpURLConnection urlConnection = null;
-
-            try {
-                urlConnection = (HttpURLConnection) new URL(strUrl).openConnection();
-                urlConnection.connect();
-
-                iStream = urlConnection.getInputStream();
-                BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
-                StringBuilder sb = new StringBuilder();
-
-                String line;
-                while ((line = br.readLine()) != null) {
-                    sb.append(line);
-                }
-
-                data = sb.toString();
-                br.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                if (iStream != null) {
-                    iStream.close();
-                }
-                if (urlConnection != null) {
-                    urlConnection.disconnect();
-                }
-            }
-            return data;
-        }
+        return poly;
     }
 
-    private static class ParserTask extends AsyncTask<String, Integer, List<List<HashMap>>> {
-
-        @Override
-        protected List<List<HashMap>> doInBackground(String... jsonData) {
-            JSONObject jObject;
-            List<List<HashMap>> routes = null;
-            try {
-                jObject = new JSONObject(jsonData[0]);
-                DirectionsJSONParser parser = new DirectionsJSONParser();
-
-                routes = parser.parse(jObject);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return routes;
-        }
-
-        @Override
-        protected void onPostExecute(List<List<HashMap>> result) {
-            ArrayList points = null;
-            PolylineOptions lineOptions = null;
-            MarkerOptions markerOptions = new MarkerOptions();
-
-            for (int i = 0; i < result.size(); i++) {
-                points = new ArrayList();
-                lineOptions = new PolylineOptions();
-
-                List<HashMap> path = result.get(i);
-
-                for (int j = 0; j < path.size(); j++) {
-                    HashMap point = path.get(j);
-
-                    double lat = Double.parseDouble(point.get("lat"));
-                    double lng = Double.parseDouble(point.get("lng"));
-                    LatLng position = new LatLng(lat, lng);
-
-                    points.add(position);
-                }
-
-                lineOptions.addAll(points);
-                lineOptions.width(12);
-                lineOptions.color(Color.RED);
-                lineOptions.geodesic(true);
-
-            }
-
-            mMap.addPolyline(lineOptions);
-        }
+    public interface MapDrawnCallBack {
+        void onMapDrawnFinish(Double distance);
     }
-
-    private String getDirectionsUrl(LatLng origin, LatLng dest) {
-
-        // Origin of route
-        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
-
-        // Destination of route
-        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
-
-        // Sensor enabled
-        String sensor = "sensor=false";
-        String mode = "mode=driving";
-
-        // Building the parameters to the web service
-        String parameters = str_origin + "&" + str_dest + "&" + sensor + "&" + mode;
-
-        // Output format
-        String output = "json";
-
-        // Building the url to the web service
-        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
-
-
-        return url;
-    }
-
 }
