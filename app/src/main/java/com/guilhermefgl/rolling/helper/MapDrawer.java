@@ -99,11 +99,10 @@ public class MapDrawer {
                             GoogleResponse googleResponse = response.body();
                             if (googleResponse != null) {
                                 for (int i = 0; i < googleResponse.getRoutes().size(); i++) {
-                                    String distanceResource = googleResponse.getRoutes().get(i)
-                                            .getLegs().get(i).getDistance().getText();
                                     List<LatLng> polygons = decodePoly(googleResponse.getRoutes().get(0)
                                             .getOverviewPolyline().getPoints());
-                                    mDistance += Double.valueOf(distanceResource);
+                                    mDistance += googleResponse.getRoutes().get(i)
+                                            .getLegs().get(i).getDistance().getValue();
                                     mMap.addPolyline(
                                             new PolylineOptions()
                                                     .addAll(polygons)

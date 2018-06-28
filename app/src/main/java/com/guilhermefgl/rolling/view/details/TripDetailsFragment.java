@@ -71,7 +71,7 @@ public class TripDetailsFragment extends BaseFragment implements
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        new MapDrawer(getContext()).drawnMap(googleMap, mTrip);
+//        new MapDrawer(getActivity(), thi).drawnMap(googleMap, mTrip);
     }
 
     private void setupView() {
