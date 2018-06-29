@@ -11,9 +11,9 @@ import android.widget.Toast;
 
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.guilhermefgl.rolling.R;
+import com.guilhermefgl.rolling.component.ScrollableMapView;
 import com.guilhermefgl.rolling.databinding.ActivityTripBinding;
 import com.guilhermefgl.rolling.helper.MapDrawer;
 import com.guilhermefgl.rolling.helper.MapRouter;
@@ -64,8 +64,15 @@ public class TripActivity extends BaseActivity implements
                         android.R.layout.simple_spinner_dropdown_item,
                         getResources().getStringArray(R.array.trip_duration_types)));
 
-        ((MapFragment) getFragmentManager().findFragmentById(R.id.trip_map_fragment))
-                .getMapAsync(this);
+        ScrollableMapView supportMapFragment = ((ScrollableMapView)
+                getSupportFragmentManager().findFragmentById(R.id.trip_map_fragment));
+        supportMapFragment.getMapAsync(this);
+        supportMapFragment.setListener(new ScrollableMapView.OnTouchListener() {
+            @Override
+            public void onTouch() {
+                mBinding.tripScroll.requestDisallowInterceptTouchEvent(true);
+            }
+        });
 
         mBinding.tripStart.setOnClickListener(this);
         mBinding.tripDestination.setOnClickListener(this);

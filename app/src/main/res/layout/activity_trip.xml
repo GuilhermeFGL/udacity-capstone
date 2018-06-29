@@ -24,6 +24,7 @@
         </android.support.design.widget.AppBarLayout>
 
         <android.support.v4.widget.NestedScrollView
+            android:id="@+id/trip_scroll"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -205,7 +206,7 @@
                     android:layout_below="@+id/trip_distance"
                     android:layout_width="match_parent"
                     android:layout_height="500dp"
-                    android:name="com.google.android.gms.maps.MapFragment" />
+                    android:name="com.guilhermefgl.rolling.component.ScrollableMapView" />
 
             </RelativeLayout>
 
