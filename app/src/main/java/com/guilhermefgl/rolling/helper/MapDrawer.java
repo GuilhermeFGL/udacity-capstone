@@ -8,6 +8,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.guilhermefgl.rolling.model.GoogleResponse;
@@ -25,8 +26,9 @@ public class MapDrawer {
 
     private static final String MAP_UNIT = "metric";
     private static final String ROUTE_TYPE = "driving";
-    private static final Integer ROUTE_WIDTH = 20;
+    private static final Integer ROUTE_WIDTH = 15;
     private static final Integer ROUTE_COLOR = Color.RED;
+    private static final Integer GOOGLE_DISTANCE_SCALE = 10000;
 
     private final Activity mActivity;
     private GoogleMap mMap;
@@ -43,36 +45,31 @@ public class MapDrawer {
         mMap = map;
         mMap.clear();
 
-        LatLng originMarker = null;
-        LatLng destinationMarker = null;
         ArrayList<LatLng> positions = new ArrayList<>();
+        LatLngBounds.Builder markerBuilder = new LatLngBounds.Builder();
+
         if (mapRouter.getStartPoint() != null) {
             MarkerOptions marker = createMarker(mapRouter.getStartPoint(), BitmapDescriptorFactory.HUE_AZURE);
-            originMarker = marker.getPosition();
             mMap.addMarker(marker);
-            positions.add(originMarker);
+            positions.add(marker.getPosition());
+            markerBuilder.include(marker.getPosition());
         }
         if (mapRouter.getBreakPlaces() != null && !mapRouter.getBreakPlaces().isEmpty()) {
             for (Place place : mapRouter.getBreakPlaces()) {
-                MarkerOptions breakMarker = createMarker(place, BitmapDescriptorFactory.HUE_CYAN);
-                mMap.addMarker(breakMarker);
-                positions.add(breakMarker.getPosition());
+                MarkerOptions marker = createMarker(place, BitmapDescriptorFactory.HUE_CYAN);
+                mMap.addMarker(marker);
+                positions.add(marker.getPosition());
+                markerBuilder.include(marker.getPosition());
             }
         }
         if (mapRouter.getEndPlace() != null) {
             MarkerOptions marker = createMarker(mapRouter.getEndPlace(), BitmapDescriptorFactory.HUE_MAGENTA);
-            destinationMarker = marker.getPosition();
             mMap.addMarker(marker);
-            positions.add(destinationMarker);
+            positions.add(marker.getPosition());
+            markerBuilder.include(marker.getPosition());
         }
 
-        if (originMarker != null && destinationMarker != null) {
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(originMarker));
-        } else if (originMarker != null) {
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(originMarker));
-        } else if (destinationMarker != null) {
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(destinationMarker));
-        }
+        mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(markerBuilder.build(), 0));
 
         requestMapService(positions);
     }
@@ -102,7 +99,7 @@ public class MapDrawer {
                                     List<LatLng> polygons = decodePoly(googleResponse.getRoutes().get(0)
                                             .getOverviewPolyline().getPoints());
                                     mDistance += googleResponse.getRoutes().get(i)
-                                            .getLegs().get(i).getDistance().getValue();
+                                            .getLegs().get(i).getDistance().getValue() / GOOGLE_DISTANCE_SCALE;
                                     mMap.addPolyline(
                                             new PolylineOptions()
                                                     .addAll(polygons)

@@ -8,6 +8,7 @@ import java.util.List;
 
 import okhttp3.Route;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class GoogleResponse {
 
     private String status;
@@ -29,8 +30,8 @@ public class GoogleResponse {
         return routes.get(0).getLegs().get(0).getDistance().value;
     }
 
-    //    public final List<GLocation> getOverwiewPolyline(int routeIndex) {
-    public final String getOverwiewPolyline(int routeIndex) {
+    //    public final List<GLocation> getOverviewPolyline(int routeIndex) {
+    public final String getOverviewPolyline(int routeIndex) {
         GRoute route = routes.get(routeIndex);
         GPolyline polyline = route.getOverviewPolyline();
         return polyline.getPoints();
@@ -80,21 +81,24 @@ public class GoogleResponse {
             LatLng position = new LatLng(((double) lat / 1E5),((double) lng / 1E5));
             poly.add(position);
         }
-
-        Route route = new Gson().fromJson(createJson(poly), Route.class);
-
-        return route;
+        return new Gson().fromJson(createJson(poly), Route.class);
     }
 
     private String createJson(List<LatLng> data) {
-        String buildQuery = "{coordinates:[";
+        StringBuilder buildQuery = new StringBuilder("{coordinates:[");
         for (LatLng latlng : data) {
-            buildQuery += "{lat:"+latlng.latitude+","+"lng:"+latlng.longitude+"},";
+            buildQuery
+                    .append("{lat:")
+                    .append(latlng.latitude)
+                    .append(",")
+                    .append("lng:")
+                    .append(latlng.longitude)
+                    .append("},");
         }
-        buildQuery = buildQuery.substring(0, buildQuery.length()-1);
-        buildQuery +="]}";
+        buildQuery = new StringBuilder(buildQuery.substring(0, buildQuery.length() - 1));
+        buildQuery.append("]}");
 
-        return buildQuery;
+        return buildQuery.toString();
     }
 
     public class GRoute {
