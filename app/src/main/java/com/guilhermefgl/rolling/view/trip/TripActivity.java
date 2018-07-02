@@ -178,7 +178,9 @@ public class TripActivity extends BaseActivity implements
             mBinding.tripStart.setEnabled(true);
             mBinding.tripDestination.setEnabled(true);
             mBinding.tripListBreakPoints.setEnabled(true);
-            mBinding.tripDistance.setText(getString(R.string.trip_distance_format, distance));
+            mBinding.tripDistance.setText(distance != null ?
+                    getString(R.string.trip_distance_format, distance) :
+                    getString(R.string.trip_distance_hint));
         }
     }
 

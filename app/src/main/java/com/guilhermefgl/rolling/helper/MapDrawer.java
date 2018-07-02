@@ -70,9 +70,12 @@ public class MapDrawer {
             markerBuilder.include(marker.getPosition());
         }
 
-        mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(markerBuilder.build(), MAP_PADDING));
-
-        requestMapService(positions);
+        if (!positions.isEmpty()) {
+            mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(markerBuilder.build(), MAP_PADDING));
+            requestMapService(positions);
+        } else {
+            mCallBack.onMapDrawnFinish(null);
+        }
     }
 
     private void requestMapService(final ArrayList<LatLng> positions){
