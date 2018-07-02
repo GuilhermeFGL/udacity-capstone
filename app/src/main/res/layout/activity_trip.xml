@@ -216,6 +216,9 @@
             android:id="@+id/trip_progress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="-6dp"
+            android:visibility="gone"
+            android:indeterminate="true"
             android:layout_gravity="bottom"
             style="?android:attr/progressBarStyleHorizontal" />
 

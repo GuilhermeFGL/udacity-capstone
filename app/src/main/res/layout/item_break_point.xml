@@ -1,21 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/item_break_point_text"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="52dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:textSize="16sp"
-        android:maxLines="1"
-        android:ellipsize="end"
-        android:clickable="true"
-        android:focusable="true"
-        android:gravity="center_vertical"
-        android:drawableEnd="@drawable/ic_place"
-        android:background="?android:selectableItemBackground"
-        tools:text="Break Point Location, KM 700" />
+        android:layout_height="52dp">
+
+        <RelativeLayout
+            android:id="@+id/item_break_point_background"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/accent">
+
+            <ImageView
+                android:id="@+id/delete_icon"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="16dp"
+                android:contentDescription="@string/trip_break_point_remove"
+                app:srcCompat="@drawable/ic_delete" />
+
+            <TextView
+                android:layout_toStartOf="@+id/delete_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_centerVertical="true"
+                android:textColor="@color/icons"
+                android:text="@string/trip_break_point_remove" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/item_break_point_foreground"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/background_light">
+
+            <TextView
+                android:id="@+id/item_break_point_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:textSize="16sp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:drawableEnd="@drawable/ic_place"
+                android:background="?android:selectableItemBackground"
+                tools:text="Break Point Location, KM 700" />
+
+        </RelativeLayout>
+
+
+    </FrameLayout>
 
 </layout>

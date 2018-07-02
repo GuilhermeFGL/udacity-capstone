@@ -75,7 +75,7 @@ public class CurrentFragment extends BaseFragment implements
     }
 
     @Override
-    public void itemCLick(Place place) {
+    public void onBreakPointItemCLick(Place place) {
 
     }
 

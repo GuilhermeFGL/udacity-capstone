@@ -27,7 +27,8 @@ public class MapDrawer {
     private static final String MAP_UNIT = "metric";
     private static final String ROUTE_TYPE = "driving";
     private static final Integer ROUTE_WIDTH = 15;
-    private static final Integer ROUTE_COLOR = Color.RED;
+    private static final Integer ROUTE_COLOR = Color.BLUE;
+    private static final Integer MAP_PADDING = 150;
     private static final Integer GOOGLE_DISTANCE_SCALE = 10000;
 
     private final Activity mActivity;
@@ -63,13 +64,13 @@ public class MapDrawer {
             }
         }
         if (mapRouter.getEndPlace() != null) {
-            MarkerOptions marker = createMarker(mapRouter.getEndPlace(), BitmapDescriptorFactory.HUE_MAGENTA);
+            MarkerOptions marker = createMarker(mapRouter.getEndPlace(), BitmapDescriptorFactory.HUE_RED);
             mMap.addMarker(marker);
             positions.add(marker.getPosition());
             markerBuilder.include(marker.getPosition());
         }
 
-        mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(markerBuilder.build(), 0));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(markerBuilder.build(), MAP_PADDING));
 
         requestMapService(positions);
     }

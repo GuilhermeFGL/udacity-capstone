@@ -3,6 +3,7 @@ package com.guilhermefgl.rolling.view.trip;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,11 +21,12 @@ import com.guilhermefgl.rolling.helper.MapRouter;
 import com.guilhermefgl.rolling.model.Place;
 import com.guilhermefgl.rolling.view.BaseActivity;
 import com.guilhermefgl.rolling.view.breakpoint.BreakPointAdapter;
+import com.guilhermefgl.rolling.view.breakpoint.BreakPointItemTouchHelper;
 
 import java.util.ArrayList;
 
 public class TripActivity extends BaseActivity implements
-        BreakPointAdapter.BreakPointAdapterItemClick, OnMapReadyCallback, View.OnClickListener, MapDrawer.MapDrawnCallBack {
+        BreakPointAdapter.BreakPointAdapterItemClick, OnMapReadyCallback, View.OnClickListener, MapDrawer.MapDrawnCallBack, BreakPointItemTouchHelper.BreakPointItemTouchListener {
 
     private static final Integer RESULT_START = 1001;
     private static final Integer RESULT_END = 1002;
@@ -58,6 +60,8 @@ public class TripActivity extends BaseActivity implements
         ArrayList<Place> breakPoints = new ArrayList<>();
         breakPoints.add(0, null);
         mAdapter.setBreakPoints(breakPoints);
+        new ItemTouchHelper(new BreakPointItemTouchHelper(0, ItemTouchHelper.LEFT, this))
+                .attachToRecyclerView(mBinding.tripListBreakPoints);
 
         mBinding.tripDurationType.setAdapter(
                 new ArrayAdapter<>(this,
@@ -88,32 +92,24 @@ public class TripActivity extends BaseActivity implements
                     || requestCode == RESULT_BREAK_POINT) {
                 final com.google.android.gms.location.places.Place googlePlace =
                         PlaceAutocomplete.getPlace(this, data);
+                Place place = new Place() {{
+                    setPlaceName(String.valueOf(googlePlace.getName()));
+                    setPlaceLatitude(googlePlace.getLatLng().latitude);
+                    setPlaceLongitude(googlePlace.getLatLng().longitude);
+                }};
 
                 if (requestCode == RESULT_START) {
                     mBinding.tripStart.setText(googlePlace.getName());
-                    mMapRouter.setStartPoint(new Place() {{
-                        setPlaceName(String.valueOf(googlePlace.getName()));
-                        setPlaceLatitude(googlePlace.getLatLng().latitude);
-                        setPlaceLongitude(googlePlace.getLatLng().longitude);
-                    }});
+                    mMapRouter.setStartPoint(place);
                 } else if (requestCode == RESULT_END) {
                     mBinding.tripDestination.setText(googlePlace.getName());
-                    mMapRouter.setEndPoint(new Place() {{
-                        setPlaceName(String.valueOf(googlePlace.getName()));
-                        setPlaceLatitude(googlePlace.getLatLng().latitude);
-                        setPlaceLongitude(googlePlace.getLatLng().longitude);
-                    }});
+                    mMapRouter.setEndPoint(place);
                 } else {
-                    Place place = new Place() {{
-                        setPlaceName(googlePlace.getName().toString());
-                        setPlaceLatitude(googlePlace.getLatLng().latitude);
-                        setPlaceLongitude(googlePlace.getLatLng().longitude);
-                    }};
                     mAdapter.addBreakPoints(place);
                     mMapRouter.addBreakPlace(place);
                 }
 
-                mMapDrawer.drawnMap(mMap, mMapRouter);
+                startDrawnMap();
             }
         }
     }
@@ -162,15 +158,38 @@ public class TripActivity extends BaseActivity implements
     }
 
     @Override
-    public void itemCLick(Place place) {
-        if (place == null) {
+    public void onBreakPointItemCLick(Place place) {
+        if (place == null && mBinding.tripListBreakPoints.isEnabled()) {
             openSearchPlaceWidget(RESULT_BREAK_POINT);
         }
     }
 
     @Override
+    public void onBreakPointItemSwiped(int position) {
+        mAdapter.removeBreakPoint(position);
+        mMapRouter.removeBreakPlace(position);
+        startDrawnMap();
+    }
+
+    @Override
     public void onMapDrawnFinish(Double distance) {
-        mBinding.tripDistance.setText(getString(R.string.trip_distance_format, distance));
+        if (!isFinishing() && !isDestroyed() && mMap != null) {
+            mBinding.tripProgress.setVisibility(View.GONE);
+            mBinding.tripStart.setEnabled(true);
+            mBinding.tripDestination.setEnabled(true);
+            mBinding.tripListBreakPoints.setEnabled(true);
+            mBinding.tripDistance.setText(getString(R.string.trip_distance_format, distance));
+        }
+    }
+
+    private void startDrawnMap() {
+        if (mMap != null) {
+            mBinding.tripProgress.setVisibility(View.VISIBLE);
+            mBinding.tripStart.setEnabled(false);
+            mBinding.tripDestination.setEnabled(false);
+            mBinding.tripListBreakPoints.setEnabled(false);
+            mMapDrawer.drawnMap(mMap, mMapRouter);
+        }
     }
 
     private void openSearchPlaceWidget(Integer result) {

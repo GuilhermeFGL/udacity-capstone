@@ -79,14 +79,25 @@ public class BreakPointAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         notifyItemInserted(mBreakPoints.size());
     }
 
+    public void removeBreakPoint(int position) {
+        if (mBreakPoints != null) {
+            mBreakPoints.remove(position);
+            notifyItemRemoved(position);
+        }
+    }
+
     class ItemViewHolder extends RecyclerView.ViewHolder {
 
         @NonNull
         private final ItemBreakPointBinding mBinding;
+        @NonNull
+        private final View mViewBackground, mViewForeground;
 
         ItemViewHolder(@NonNull ItemBreakPointBinding binding) {
             super(binding.getRoot());
             mBinding = binding;
+            mViewForeground = mBinding.itemBreakPointForeground;
+            mViewBackground = mBinding.itemBreakPointBackground;
         }
 
         public void bind(final Place place, final BreakPointAdapterItemClick mAdapterItemClick) {
@@ -94,9 +105,17 @@ public class BreakPointAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             mBinding.getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mAdapterItemClick.itemCLick(place);
+                    mAdapterItemClick.onBreakPointItemCLick(place);
                 }
             });
+        }
+
+        public View getViewForeground() {
+            return mViewForeground;
+        }
+
+        public View getViewBackground() {
+            return mViewBackground;
         }
     }
 
@@ -108,19 +127,20 @@ public class BreakPointAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         AddViewHolder(@NonNull ItemAddBreakPointBinding binding) {
             super(binding.getRoot());
             mBinding = binding;
+
         }
 
         public void bind(final BreakPointAdapterItemClick adapterItemClick) {
             mBinding.getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    adapterItemClick.itemCLick(null);
+                    adapterItemClick.onBreakPointItemCLick(null);
                 }
             });
         }
     }
 
     public interface BreakPointAdapterItemClick {
-        void itemCLick(Place place);
+        void onBreakPointItemCLick(Place place);
     }
 }

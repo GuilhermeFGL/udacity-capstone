@@ -37,6 +37,7 @@
     <string name="menu_trip_save">SAVE</string>
     <string name="trip_distance_hint">Provide start and end point</string>
     <string name="trip_distance_format">%1$,.2f Km</string>
+    <string name="trip_break_point_remove">Remove</string>
     <string name="menu_trip_marked">Add as My Trip</string>
     <string-array name="trip_duration_types">
         <item>days</item>

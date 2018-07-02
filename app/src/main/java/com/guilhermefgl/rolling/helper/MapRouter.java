@@ -8,6 +8,7 @@ import com.guilhermefgl.rolling.model.Place;
 
 import java.util.ArrayList;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class MapRouter {
 
     @Nullable
@@ -42,7 +43,7 @@ public class MapRouter {
     }
 
     public void removeBreakPlace(int position) {
-        mBreakPlaces.remove(position);
+        mBreakPlaces.remove(position - 1);
     }
 
     public ArrayList<Place> getBreakPlaces() {
