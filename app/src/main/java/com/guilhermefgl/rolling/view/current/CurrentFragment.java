@@ -13,10 +13,12 @@ import android.view.ViewGroup;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.guilhermefgl.rolling.R;
+import com.guilhermefgl.rolling.component.ScrollableMapView;
 import com.guilhermefgl.rolling.databinding.FragmentCurrentBinding;
 import com.guilhermefgl.rolling.helper.DateFormatter;
+import com.guilhermefgl.rolling.helper.MapDrawer;
+import com.guilhermefgl.rolling.helper.MapRouter;
 import com.guilhermefgl.rolling.helper.PicassoHelper;
 import com.guilhermefgl.rolling.mock.TripMock;
 import com.guilhermefgl.rolling.model.Place;
@@ -101,13 +103,25 @@ public class CurrentFragment extends BaseFragment implements
             mBinding.includeTrip.tripListBreakPoints.setVisibility(View.GONE);
         }
 
-        ((SupportMapFragment) getChildFragmentManager()
-                .findFragmentById(R.id.include_trip_map_fragment))
-                .getMapAsync(this);
+        ScrollableMapView supportMapFragment = ((ScrollableMapView)
+                getChildFragmentManager().findFragmentById(R.id.include_trip_map_fragment));
+        supportMapFragment.getMapAsync(this);
+        supportMapFragment.setListener(new ScrollableMapView.OnTouchListener() {
+            @Override
+            public void onTouch() {
+                mBinding.tripScroll.requestDisallowInterceptTouchEvent(true);
+            }
+        });
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-
+        new MapDrawer(getActivity(), null).drawnMap(googleMap, new MapRouter(){{
+            setStartPoint(mockTrip.getPlaceStart());
+            setEndPoint(mockTrip.getPlaceEnd());
+            for (Place breakPoint : mockTrip.getPlacesPoints()) {
+                addBreakPlace(breakPoint);
+            }
+        }});
     }
 }

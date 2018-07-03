@@ -74,7 +74,9 @@ public class MapDrawer {
             mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(markerBuilder.build(), MAP_PADDING));
             requestMapService(positions);
         } else {
-            mCallBack.onMapDrawnFinish(null);
+            if (mCallBack != null) {
+                mCallBack.onMapDrawnFinish(null);
+            }
         }
     }
 
@@ -123,7 +125,9 @@ public class MapDrawer {
                         }
                     });
         } else {
-            mCallBack.onMapDrawnFinish(mDistance);
+            if (mCallBack != null) {
+                mCallBack.onMapDrawnFinish(mDistance);
+            }
         }
     }
 

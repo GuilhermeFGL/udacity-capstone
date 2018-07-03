@@ -10,22 +10,34 @@ public class TripMock {
 
     private static Place startPlace = new Place() {{
         setPlaceName("Santos, SP - Brazil");
+        setPlaceLatitude(-23.8642341);
+        setPlaceLongitude(-46.3602693);
     }};
     private static Place endPlace = new Place() {{
         setPlaceName("Antofagasta - Chile");
+        setPlaceLatitude(-23.6283541);
+        setPlaceLongitude(-70.4747683);
     }};
     private static ArrayList<Place> places = new ArrayList<Place>() {{
         add(new Place() {{
             setPlaceName("Maringá PR - Brasil");
+            setPlaceLatitude(-23.4108875);
+            setPlaceLongitude(-52.0406484);
         }});
         add(new Place() {{
             setPlaceName("Assunção - Paraguai");
+            setPlaceLatitude(-25.2968485);
+            setPlaceLongitude(-57.6331085);
         }});
         add(new Place() {{
             setPlaceName("Juan José Castelli, CH - Argentina");
+            setPlaceLatitude(-25.9515881);
+            setPlaceLongitude(-60.6393901);
         }});
         add(new Place() {{
             setPlaceName("Salta - Argentina");
+            setPlaceLatitude(-24.7960685);
+            setPlaceLongitude(-65.5006684);
         }});
     }};
 

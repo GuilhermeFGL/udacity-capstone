@@ -139,7 +139,7 @@
             android:layout_below="@+id/trip_map_label"
             android:layout_width="match_parent"
             android:layout_height="500dp"
-            android:name="com.google.android.gms.maps.SupportMapFragment" />
+            android:name="com.guilhermefgl.rolling.component.ScrollableMapView" />
 
     </RelativeLayout>
 
