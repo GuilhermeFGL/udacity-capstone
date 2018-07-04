@@ -14,9 +14,9 @@ import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.guilhermefgl.rolling.R;
-import com.guilhermefgl.rolling.component.ScrollableMapView;
+import com.guilhermefgl.rolling.helper.component.ScrollableMapView;
 import com.guilhermefgl.rolling.databinding.ActivityTripBinding;
-import com.guilhermefgl.rolling.helper.MapDrawer;
+import com.guilhermefgl.rolling.helper.MapDrawerHelper;
 import com.guilhermefgl.rolling.helper.MapRouter;
 import com.guilhermefgl.rolling.model.Place;
 import com.guilhermefgl.rolling.view.BaseActivity;
@@ -26,7 +26,7 @@ import com.guilhermefgl.rolling.view.breakpoint.BreakPointItemTouchHelper;
 import java.util.ArrayList;
 
 public class TripActivity extends BaseActivity implements
-        BreakPointAdapter.BreakPointAdapterItemClick, OnMapReadyCallback, View.OnClickListener, MapDrawer.MapDrawnCallBack, BreakPointItemTouchHelper.BreakPointItemTouchListener {
+        BreakPointAdapter.BreakPointAdapterItemClick, OnMapReadyCallback, View.OnClickListener, MapDrawerHelper.MapDrawnCallBack, BreakPointItemTouchHelper.BreakPointItemTouchListener {
 
     private static final Integer RESULT_START = 1001;
     private static final Integer RESULT_END = 1002;
@@ -35,7 +35,7 @@ public class TripActivity extends BaseActivity implements
     private ActivityTripBinding mBinding;
     private BreakPointAdapter mAdapter;
     private GoogleMap mMap;
-    private MapDrawer mMapDrawer;
+    private MapDrawerHelper mMapDrawerHelper;
     private MapRouter mMapRouter;
 
     public static void startActivity(BaseActivity activity) {
@@ -81,7 +81,7 @@ public class TripActivity extends BaseActivity implements
         mBinding.tripStart.setOnClickListener(this);
         mBinding.tripDestination.setOnClickListener(this);
 
-        mMapDrawer = new MapDrawer(this, this);
+        mMapDrawerHelper = new MapDrawerHelper(this, this);
         mMapRouter = new MapRouter();
     }
 
@@ -190,7 +190,7 @@ public class TripActivity extends BaseActivity implements
             mBinding.tripStart.setEnabled(false);
             mBinding.tripDestination.setEnabled(false);
             mBinding.tripListBreakPoints.setEnabled(false);
-            mMapDrawer.drawnMap(mMap, mMapRouter);
+            mMapDrawerHelper.drawnMap(mMap, mMapRouter);
         }
     }
 

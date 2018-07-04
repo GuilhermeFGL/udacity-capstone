@@ -14,10 +14,10 @@ import android.view.ViewGroup;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.guilhermefgl.rolling.R;
-import com.guilhermefgl.rolling.component.ScrollableMapView;
+import com.guilhermefgl.rolling.helper.component.ScrollableMapView;
 import com.guilhermefgl.rolling.databinding.FragmentCurrentBinding;
-import com.guilhermefgl.rolling.helper.DateFormatter;
-import com.guilhermefgl.rolling.helper.MapDrawer;
+import com.guilhermefgl.rolling.helper.DateFormatterHelper;
+import com.guilhermefgl.rolling.helper.MapDrawerHelper;
 import com.guilhermefgl.rolling.helper.MapRouter;
 import com.guilhermefgl.rolling.helper.PicassoHelper;
 import com.guilhermefgl.rolling.mock.TripMock;
@@ -91,7 +91,7 @@ public class CurrentFragment extends BaseFragment implements
 
         if (getContext() != null) {
             mBinding.includeTrip.tripDate.setText(
-                    DateFormatter.dateToString(mockTrip.getTripDate(), getContext()));
+                    DateFormatterHelper.dateToString(mockTrip.getTripDate(), getContext()));
         }
 
         if (!mockTrip.getPlacesPoints().isEmpty()) {
@@ -116,7 +116,7 @@ public class CurrentFragment extends BaseFragment implements
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        new MapDrawer(getActivity(), null).drawnMap(googleMap, new MapRouter(){{
+        new MapDrawerHelper(getActivity(), null).drawnMap(googleMap, new MapRouter(){{
             setStartPoint(mockTrip.getPlaceStart());
             setEndPoint(mockTrip.getPlaceEnd());
             for (Place breakPoint : mockTrip.getPlacesPoints()) {

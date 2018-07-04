@@ -12,10 +12,10 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.guilhermefgl.rolling.R;
-import com.guilhermefgl.rolling.component.ScrollableMapView;
+import com.guilhermefgl.rolling.helper.component.ScrollableMapView;
 import com.guilhermefgl.rolling.databinding.FragmentDetailsTripBinding;
-import com.guilhermefgl.rolling.helper.DateFormatter;
-import com.guilhermefgl.rolling.helper.MapDrawer;
+import com.guilhermefgl.rolling.helper.DateFormatterHelper;
+import com.guilhermefgl.rolling.helper.MapDrawerHelper;
 import com.guilhermefgl.rolling.helper.MapRouter;
 import com.guilhermefgl.rolling.model.Place;
 import com.guilhermefgl.rolling.model.Trip;
@@ -73,7 +73,7 @@ public class TripDetailsFragment extends BaseFragment implements
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        new MapDrawer(getActivity(), null).drawnMap(googleMap, new MapRouter(){{
+        new MapDrawerHelper(getActivity(), null).drawnMap(googleMap, new MapRouter(){{
             setStartPoint(mTrip.getPlaceStart());
             setEndPoint(mTrip.getPlaceEnd());
             for (Place breakPoint : mTrip.getPlacesPoints()) {
@@ -90,7 +90,7 @@ public class TripDetailsFragment extends BaseFragment implements
 
         if (getContext() != null) {
             mBinding.includeTrip.tripDate.setText(
-                    DateFormatter.dateToString(mTrip.getTripDate(), getContext()));
+                    DateFormatterHelper.dateToString(mTrip.getTripDate(), getContext()));
         }
 
         if (!mTrip.getPlacesPoints().isEmpty()) {

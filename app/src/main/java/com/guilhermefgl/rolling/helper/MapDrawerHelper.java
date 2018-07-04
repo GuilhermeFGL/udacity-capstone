@@ -22,7 +22,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MapDrawer {
+public class MapDrawerHelper {
 
     private static final String MAP_UNIT = "metric";
     private static final String ROUTE_TYPE = "driving";
@@ -36,7 +36,7 @@ public class MapDrawer {
     private Double mDistance;
     private MapDrawnCallBack mCallBack;
 
-    public MapDrawer(Activity activity, MapDrawnCallBack callBack) {
+    public MapDrawerHelper(Activity activity, MapDrawnCallBack callBack) {
         mActivity = activity;
         mCallBack = callBack;
         mDistance = 0d;

@@ -20,9 +20,6 @@ import com.guilhermefgl.rolling.view.BaseFragment;
 
 public class ProfileFragment extends BaseFragment {
 
-    // TODO remove mock data
-    private User mockProfile = UserMock.getLogedUser();
-
     private FragmentProfileBinding mBinding;
 
     public ProfileFragment() { }
@@ -49,9 +46,9 @@ public class ProfileFragment extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        PicassoHelper.loadImage(mockProfile.getUserAvatarUrl(), mBinding.profileAvatar);
-        mBinding.profileEmail.setText(mockProfile.getUserEmail());
-        mBinding.profileNameInput.setText(mockProfile.getUserName());
+//        PicassoHelper.loadImage(mockProfile.getUserAvatarUrl(), mBinding.profileAvatar);
+//        mBinding.profileEmail.setText(mockProfile.getUserEmail());
+//        mBinding.profileNameInput.setText(mockProfile.getUserName());
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.guilhermefgl.rolling.component;
+package com.guilhermefgl.rolling.helper.component;
 
 import android.content.Context;
 import android.os.Bundle;

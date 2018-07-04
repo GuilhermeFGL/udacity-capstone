@@ -3,21 +3,23 @@ package com.guilhermefgl.rolling.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.auth.FirebaseUser;
+
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class User implements Parcelable {
 
-    private Long userId;
+    private String userId;
     private String userName;
     private String userEmail;
     private String userAvatarUrl;
 
     public User() { }
 
-    public Long getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
@@ -46,11 +48,7 @@ public class User implements Parcelable {
     }
 
     protected User(Parcel in) {
-        if (in.readByte() == 0) {
-            userId = null;
-        } else {
-            userId = in.readLong();
-        }
+        userId = in.readString();
         userName = in.readString();
         userEmail = in.readString();
         userAvatarUrl = in.readString();
@@ -58,12 +56,7 @@ public class User implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        if (userId == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeLong(userId);
-        }
+        dest.writeString(userId);
         dest.writeString(userName);
         dest.writeString(userEmail);
         dest.writeString(userAvatarUrl);
@@ -85,4 +78,18 @@ public class User implements Parcelable {
             return new User[size];
         }
     };
+
+    public static User createFromFirebaseUser(final FirebaseUser currentUser) {
+        if (currentUser != null) {
+            return new User() {{
+                setUserId(currentUser.getUid());
+                setUserName(currentUser.getDisplayName());
+                setUserEmail(currentUser.getEmail());
+                if (currentUser.getPhotoUrl() != null) {
+                    setUserAvatarUrl(currentUser.getPhotoUrl().toString());
+                }
+            }};
+        }
+        return null;
+    }
 }

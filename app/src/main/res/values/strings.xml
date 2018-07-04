@@ -2,6 +2,7 @@
 
     <string name="app_name">Rolling</string>
     <string name="date_format">dd/MM/yyyy HH:mm</string>
+    <string name="error_login">Unable to login</string>
     <string name="error_google_autocomplete_widget">Cannot open Google Places</string>
 
     <!-- MAIN ACTIVITY -->

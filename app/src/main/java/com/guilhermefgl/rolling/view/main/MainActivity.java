@@ -17,14 +17,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
-import com.google.firebase.auth.FirebaseAuth;
 import com.guilhermefgl.rolling.R;
 import com.guilhermefgl.rolling.databinding.ActivityMainBinding;
 import com.guilhermefgl.rolling.helper.PicassoHelper;
-import com.guilhermefgl.rolling.mock.UserMock;
 import com.guilhermefgl.rolling.model.User;
+import com.guilhermefgl.rolling.presenter.main.MainPresenter;
+import com.guilhermefgl.rolling.presenter.main.MainPresenterContract;
 import com.guilhermefgl.rolling.view.BaseActivity;
 import com.guilhermefgl.rolling.view.BaseFragment;
 import com.guilhermefgl.rolling.view.current.CurrentFragment;
@@ -35,17 +36,14 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener,
+        implements MainViewContract, NavigationView.OnNavigationItemSelectedListener,
         TripPageFragment.TripListFragmentInteractionListener, ViewPager.OnPageChangeListener {
 
-    // TODO remove mock data
-    User mockLoggedUser = UserMock.getLogedUser();
-
-    private static final Integer RESULT_LOGIN = 1001;
+    private static final Integer REQUEST_LOGIN = 1001;
 
     private ActivityMainBinding mBinding;
     private FragmentManager mFragmentManager;
-    private Boolean mSmartLockEnabled = true;
+    private MainPresenterContract mPresenter;
 
     public static void startActivity(BaseActivity activity) {
         activity.startActivity(new Intent(activity, MainActivity.class));
@@ -78,18 +76,29 @@ public class MainActivity extends BaseActivity
             }
         });
 
-        updateLayoutLoggedUser(mockLoggedUser);
         goToDefaultFragment();
+
+        new MainPresenter().setView(this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mPresenter.start();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mPresenter.stop();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK) {
-            if (requestCode == RESULT_LOGIN) {
-                updateLayoutLoggedUser(mockLoggedUser);
-            }
+        if (requestCode == REQUEST_LOGIN && resultCode != RESULT_OK) {
+            Toast.makeText(this, R.string.error_login, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -120,24 +129,9 @@ public class MainActivity extends BaseActivity
         return true;
     }
 
-    @Nullable
-    private BaseFragment getFragmentById(int id) {
-        switch (id) {
-            case R.id.navigation_trip_list:
-                return TripPageFragment.newInstance();
-            case R.id.navigation_trip_current:
-                return CurrentFragment.newInstance();
-            case R.id.navigation_profile:
-                return ProfileFragment.newInstance();
-            case R.id.navigation_login:
-                openLogInUi();
-                return null;
-            case R.id.navigation_logout:
-                openLogOut();
-                return null;
-            default:
-                return null;
-        }
+    @Override
+    public void setPresenter(@NonNull MainPresenterContract presenter) {
+        mPresenter = presenter;
     }
 
     @Override
@@ -175,33 +169,8 @@ public class MainActivity extends BaseActivity
         return this;
     }
 
-    private String generateFragmentTag(int tag) {
-        return String.valueOf(tag);
-    }
-
-    private void replaceFragment(BaseFragment fragment, String tag, CharSequence title) {
-        mFragmentManager.beginTransaction()
-                .replace(R.id.main_content, fragment, tag)
-                .commit();
-        setTitle(title);
-        mBinding.drawerLayout.closeDrawer(GravityCompat.START);
-    }
-
-    private boolean goToDefaultFragment() {
-        String initialFragmentTag = generateFragmentTag(R.id.navigation_trip_list);
-        Fragment initialFragment = mFragmentManager.findFragmentByTag(initialFragmentTag);
-        if (initialFragment == null) {
-            replaceFragment(
-                    TripPageFragment.newInstance(),
-                    initialFragmentTag,
-                    getString(R.string.navigation_trip_list));
-            mBinding.navView.setCheckedItem(R.id.navigation_trip_list);
-            return true;
-        }
-        return false;
-    }
-
-    private void updateLayoutLoggedUser(User user) {
+    @Override
+    public void updateUser(User user) {
         if (user != null) {
             ((TextView) mBinding.navView.getHeaderView(0)
                     .findViewById(R.id.navigation_profile_name))
@@ -231,7 +200,8 @@ public class MainActivity extends BaseActivity
         }
     }
 
-    private void openLogInUi() {
+    @Override
+    public void goToLogin(boolean isSmartLockEnabled) {
         List<AuthUI.IdpConfig> providers = Arrays.asList(
                 new AuthUI.IdpConfig.EmailBuilder().build(),
                 new AuthUI.IdpConfig.GoogleBuilder().build());
@@ -239,17 +209,61 @@ public class MainActivity extends BaseActivity
                 AuthUI.getInstance()
                         .createSignInIntentBuilder()
                         .setAvailableProviders(providers)
-                        .setIsSmartLockEnabled(mSmartLockEnabled)
+                        .setIsSmartLockEnabled(isSmartLockEnabled)
                         .setLogo(R.mipmap.ic_launcher_foreground)
                         .setTheme(R.style.AppTheme)
                         .build(),
-                RESULT_LOGIN);
+                REQUEST_LOGIN);
     }
 
-    private void openLogOut() {
-        FirebaseAuth.getInstance().signOut();
-        updateLayoutLoggedUser(null);
+    @Override
+    public void goToLogout() {
         goToDefaultFragment();
-        mSmartLockEnabled = false;
+    }
+
+    @Nullable
+    private BaseFragment getFragmentById(int id) {
+        switch (id) {
+            case R.id.navigation_trip_list:
+                return TripPageFragment.newInstance();
+            case R.id.navigation_trip_current:
+                return CurrentFragment.newInstance();
+            case R.id.navigation_profile:
+                return ProfileFragment.newInstance();
+            case R.id.navigation_login:
+                mPresenter.login();
+                return null;
+            case R.id.navigation_logout:
+                mPresenter.logout();
+                return null;
+            default:
+                return null;
+        }
+    }
+
+    private String generateFragmentTag(int tag) {
+        return String.valueOf(tag);
+    }
+
+    private void replaceFragment(BaseFragment fragment, String tag, CharSequence title) {
+        mFragmentManager.beginTransaction()
+                .replace(R.id.main_content, fragment, tag)
+                .commit();
+        setTitle(title);
+        mBinding.drawerLayout.closeDrawer(GravityCompat.START);
+    }
+
+    private boolean goToDefaultFragment() {
+        String initialFragmentTag = generateFragmentTag(R.id.navigation_trip_list);
+        Fragment initialFragment = mFragmentManager.findFragmentByTag(initialFragmentTag);
+        if (initialFragment == null) {
+            replaceFragment(
+                    TripPageFragment.newInstance(),
+                    initialFragmentTag,
+                    getString(R.string.navigation_trip_list));
+            mBinding.navView.setCheckedItem(R.id.navigation_trip_list);
+            return true;
+        }
+        return false;
     }
 }
