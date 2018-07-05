@@ -139,10 +139,18 @@ public class ProfileFragment extends BasePickImageFragment implements ProfileVie
     }
 
     @Override
-    public void setUser(User user) {
-        PicassoHelper.loadImage(user.getUserAvatarUrl(), mBinding.profileAvatar);
-        mBinding.profileEmail.setText(user.getUserEmail());
-        mBinding.profileNameInput.setText(user.getUserName());
+    public void setUser(User user, boolean isPasswordProvider) {
+        if (user != null) {
+            PicassoHelper.loadImage(user.getUserAvatarUrl(), mBinding.profileAvatar);
+            mBinding.profileEmail.setText(user.getUserEmail());
+            mBinding.profileNameInput.setText(user.getUserName());
+
+            if (!isPasswordProvider) {
+                mBinding.profilePasswordAction.setVisibility(View.GONE);
+                mBinding.profilePasswordInput.setVisibility(View.GONE);
+                mBinding.profilePasswordPlaceholder.setVisibility(View.GONE);
+            }
+        }
     }
 
     @Override

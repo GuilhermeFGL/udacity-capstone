@@ -30,12 +30,15 @@ public class ProfilePresenter implements ProfilePresenterContract, FirebaseAuth.
         mStorage = FirebaseHelper.getAvatarStorageInstance();
         mView = view;
         mView.setPresenter(this);
+        for(String provider : mAuth.getCurrentUser().getProviders()) {
+            String p = provider;
+        }
     }
 
     @Override
     public void start() {
         mAuth.addAuthStateListener(this);
-        mView.setUser(createUser(mAuth.getCurrentUser()));
+        mView.setUser(createUser(mAuth.getCurrentUser()), FirebaseHelper.isUserPasswordProvider());
     }
 
     @Override
@@ -93,7 +96,7 @@ public class ProfilePresenter implements ProfilePresenterContract, FirebaseAuth.
 
     @Override
     public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-        mView.setUser(createUser(firebaseAuth.getCurrentUser()));
+        mView.setUser(createUser(firebaseAuth.getCurrentUser()), FirebaseHelper.isUserPasswordProvider());
     }
 
     private User createUser(@Nullable FirebaseUser currentUser) {

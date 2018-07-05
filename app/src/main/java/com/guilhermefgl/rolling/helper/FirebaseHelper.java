@@ -7,7 +7,10 @@ import com.google.firebase.storage.StorageReference;
 
 public class FirebaseHelper {
 
+    private static final String PROVIDER_PASSWORD = "password";
     private static final String FIREBASE_AVATAR_DIR = "avatar/";
+
+    private FirebaseHelper() { }
 
     public static FirebaseAuth getAuthInstance() {
         return FirebaseAuth.getInstance();
@@ -25,6 +28,18 @@ public class FirebaseHelper {
         } else {
             return String.valueOf(time);
         }
+    }
+
+    public static boolean isUserPasswordProvider() {
+        FirebaseUser user = getAuthInstance().getCurrentUser();
+        if (user != null && user.getProviders() != null) {
+            for (String provider : user.getProviders()) {
+                if(provider.equals(PROVIDER_PASSWORD)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private static StorageReference getStorageReferenceInstance() {
