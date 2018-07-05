@@ -11,4 +11,11 @@ public interface ProfilePresenterContract extends BasePresenter {
     void changePassword(String userPassword);
 
     void changeAvatar(Bitmap userAvatar);
+
+    interface UpdateProfileCallBack {
+
+        void onUpdateUserSuccess();
+
+        void onUpdateUserFailure();
+    }
 }

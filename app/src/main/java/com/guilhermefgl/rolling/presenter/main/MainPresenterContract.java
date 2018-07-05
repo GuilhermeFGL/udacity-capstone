@@ -7,4 +7,6 @@ public interface MainPresenterContract extends BasePresenter {
     void login();
 
     void logout();
+
+    void refresh();
 }

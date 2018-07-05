@@ -35,9 +35,7 @@ public class ProfilePresenter implements ProfilePresenterContract, FirebaseAuth.
     @Override
     public void start() {
         mAuth.addAuthStateListener(this);
-
-        FirebaseUser firebaseUser = mAuth.getCurrentUser();
-        mView.setUser(createUser(firebaseUser));
+        mView.setUser(createUser(mAuth.getCurrentUser()));
     }
 
     @Override
@@ -47,7 +45,9 @@ public class ProfilePresenter implements ProfilePresenterContract, FirebaseAuth.
 
     @Override
     public void changeName(String userName) {
-
+        updateUser(new UserProfileChangeRequest.Builder()
+                .setDisplayName(userName)
+                .build());
     }
 
     @Override
@@ -65,8 +65,9 @@ public class ProfilePresenter implements ProfilePresenterContract, FirebaseAuth.
         userAvatar.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         byte[] data = stream.toByteArray();
 
-        mStorage.child(mAuth.getCurrentUser().getUid())
-                .putBytes(data)
+        final StorageReference uploadReference =
+                mStorage.child(FirebaseHelper.createUniqueFileName());
+        uploadReference.putBytes(data)
                 .continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                     @Override
                     public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task)
@@ -74,31 +75,17 @@ public class ProfilePresenter implements ProfilePresenterContract, FirebaseAuth.
                         if (!task.isSuccessful() && task.getException() != null) {
                             throw task.getException();
                         }
-                        return mStorage.getDownloadUrl();
+                        return uploadReference.getDownloadUrl();
                     }
                 }).addOnCompleteListener(new OnCompleteListener<Uri>() {
                     @Override
                     public void onComplete(@NonNull Task<Uri> task) {
                         if (task.isSuccessful() && mAuth.getCurrentUser() != null) {
-                            mAuth.getCurrentUser()
-                                    .updateProfile( new UserProfileChangeRequest.Builder()
-                                            .setPhotoUri(task.getResult())
-                                            .build())
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                // Handle success
-                                                // ...
-                                            } else {
-                                                // Handle failures
-                                                // ...
-                                            }
-                                        }
-                                    });
+                            updateUser(new UserProfileChangeRequest.Builder()
+                                    .setPhotoUri(task.getResult())
+                                    .build());
                         } else {
-                            // Handle failures
-                            // ...
+                            mView.onUpdateUserFailure();
                         }
                     }
                 });
@@ -111,5 +98,29 @@ public class ProfilePresenter implements ProfilePresenterContract, FirebaseAuth.
 
     private User createUser(@Nullable FirebaseUser currentUser) {
         return User.createFromFirebaseUser(currentUser);
+    }
+
+    private void updateUser(UserProfileChangeRequest profileUpdates) {
+        if (mAuth.getCurrentUser() == null) {
+            return;
+        }
+
+        mAuth.getCurrentUser().updateProfile(profileUpdates)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            mAuth.getCurrentUser().reload()
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            mView.onUpdateUserSuccess();
+                                        }
+                                    });
+                        } else {
+                            mView.onUpdateUserFailure();
+                        }
+                    }
+                });
     }
 }

@@ -42,7 +42,7 @@ import java.util.List;
 public class MainActivity extends BaseActivity
         implements MainViewContract, NavigationView.OnNavigationItemSelectedListener,
         TripPageFragment.TripListFragmentInteractionListener, PickImageInteractionListener,
-        ViewPager.OnPageChangeListener {
+        ViewPager.OnPageChangeListener, ProfileFragment.ProfileFragmentInteractionListener {
 
     private static final Integer REQUEST_LOGIN = 1001;
 
@@ -188,6 +188,11 @@ public class MainActivity extends BaseActivity
     @Override
     public ViewPager.OnPageChangeListener getOnPageChangeListener() {
         return this;
+    }
+
+    @Override
+    public void refreshUser() {
+
     }
 
     @Override

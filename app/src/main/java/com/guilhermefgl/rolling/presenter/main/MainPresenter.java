@@ -25,7 +25,7 @@ public class MainPresenter implements MainPresenterContract, FirebaseAuth.AuthSt
     @Override
     public void start() {
         mAuth.addAuthStateListener(this);
-        mView.updateUser(createUser(mAuth.getCurrentUser()));
+        refresh();
     }
 
     @Override
@@ -46,8 +46,13 @@ public class MainPresenter implements MainPresenterContract, FirebaseAuth.AuthSt
     }
 
     @Override
+    public void refresh() {
+        mView.updateUser(createUser(mAuth.getCurrentUser()));
+    }
+
+    @Override
     public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-        mView.updateUser(createUser(firebaseAuth.getCurrentUser()));
+        refresh();
     }
 
     private User createUser(@Nullable FirebaseUser currentUser) {

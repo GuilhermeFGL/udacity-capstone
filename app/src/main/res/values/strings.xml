@@ -4,6 +4,7 @@
     <string name="date_format">dd/MM/yyyy HH:mm</string>
     <string name="error_login">Unable to login</string>
     <string name="error_image">Unable to load image</string>
+    <string name="error_update_profile">Unable to update profile</string>
     <string name="error_google_autocomplete_widget">Cannot open Google Places</string>
 
     <!-- MAIN ACTIVITY -->

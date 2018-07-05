@@ -6,12 +6,12 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.guilhermefgl.rolling.R;
 import com.guilhermefgl.rolling.databinding.FragmentProfileBinding;
@@ -26,7 +26,9 @@ public class ProfileFragment extends BasePickImageFragment implements ProfileVie
 
     private FragmentProfileBinding mBinding;
     private ProfilePresenterContract mPresenter;
-    private PickImageInteractionListener mListener;
+    private PickImageInteractionListener mPickImageListener;
+    private ProfileFragmentInteractionListener mListener;
+    private Boolean mProfileNameChanged;
 
     public ProfileFragment() { }
 
@@ -37,7 +39,6 @@ public class ProfileFragment extends BasePickImageFragment implements ProfileVie
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
     }
 
     @Override
@@ -64,6 +65,26 @@ public class ProfileFragment extends BasePickImageFragment implements ProfileVie
                 updatePassword();
             }
         });
+        mBinding.profileNameInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    changeName();
+                }
+            }
+        });
+        mBinding.profileNameInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mProfileNameChanged = true;
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
+        });
 
         new ProfilePresenter(this);
     }
@@ -71,35 +92,45 @@ public class ProfileFragment extends BasePickImageFragment implements ProfileVie
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof PickImageInteractionListener) {
-            mListener = (PickImageInteractionListener) context;
+        if (context instanceof ProfileFragmentInteractionListener) {
+            mListener = (ProfileFragmentInteractionListener) context;
         } else {
             throw new UnsupportedOperationException();
         }
-    }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        menu.clear();
-        inflater.inflate(R.menu.menu_profile, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_profile_save:
-                // save
-                break;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (context instanceof PickImageInteractionListener) {
+            mPickImageListener = (PickImageInteractionListener) context;
+        } else {
+            throw new UnsupportedOperationException();
         }
-        return true;
+
+        mProfileNameChanged = false;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        if (mProfileNameChanged) {
+            mPresenter.changeName(mBinding.profileNameInput.getText().toString());
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mPresenter.start();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mPresenter.stop();
     }
 
     @Override
     public void getUserImage(Bitmap image) {
         mPresenter.changeAvatar(image);
+        mBinding.profileProgress.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -114,11 +145,37 @@ public class ProfileFragment extends BasePickImageFragment implements ProfileVie
         mBinding.profileNameInput.setText(user.getUserName());
     }
 
+    @Override
+    public void onUpdateUserSuccess() {
+        mListener.refreshUser();
+        mBinding.profileProgress.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onUpdateUserFailure() {
+        if (isAdded()) {
+            Toast.makeText(getContext(), R.string.error_update_profile, Toast.LENGTH_LONG).show();
+            mBinding.profileProgress.setVisibility(View.GONE);
+        }
+    }
+
     private void updateAvatar() {
-        mListener.getUserImage();
+        mPickImageListener.getUserImage();
+    }
+
+    private void changeName() {
+        mPresenter.changeName(mBinding.profileNameInput.getText().toString());
+        mBinding.profileProgress.setVisibility(View.VISIBLE);
+        mProfileNameChanged = false;
     }
 
     private void updatePassword() {
         mPresenter.changePassword(mBinding.profilePasswordInput.getText().toString());
+        mBinding.profileProgress.setVisibility(View.VISIBLE);
+    }
+
+    public interface ProfileFragmentInteractionListener {
+
+        void refreshUser();
     }
 }
