@@ -3,6 +3,7 @@
     <string name="app_name">Rolling</string>
     <string name="date_format">dd/MM/yyyy HH:mm</string>
     <string name="error_login">Unable to login</string>
+    <string name="error_image">Unable to load image</string>
     <string name="error_google_autocomplete_widget">Cannot open Google Places</string>
 
     <!-- MAIN ACTIVITY -->
@@ -32,6 +33,7 @@
     <string name="profile_password_action">CHANGE PASSWORD</string>
     <string name="profile_avatar_description">profile avatar</string>
     <string name="menu_profile_save">SAVE</string>
+    <string name="profile_avatar_chooser_title">Select a image as your avatar</string>
 
     <!-- TRIP ACTIVITY -->
     <string name="trip_title">New Trip</string>

@@ -15,13 +15,9 @@ public class MainPresenter implements MainPresenterContract, FirebaseAuth.AuthSt
     private MainViewContract mView;
     private Boolean mSmartLockEnabled;
 
-    public MainPresenter() {
+    public MainPresenter(@NonNull MainViewContract view) {
         mAuth = FirebaseHelper.getAuthInstance();
         mSmartLockEnabled = true;
-    }
-
-    @Override
-    public void setView(@NonNull MainViewContract view) {
         mView = view;
         mView.setPresenter(this);
     }

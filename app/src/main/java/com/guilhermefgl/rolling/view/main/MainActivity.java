@@ -3,6 +3,7 @@ package com.guilhermefgl.rolling.view.main;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -23,21 +24,25 @@ import com.firebase.ui.auth.AuthUI;
 import com.guilhermefgl.rolling.R;
 import com.guilhermefgl.rolling.databinding.ActivityMainBinding;
 import com.guilhermefgl.rolling.helper.PicassoHelper;
+import com.guilhermefgl.rolling.helper.contracts.PickImageInteractionListener;
 import com.guilhermefgl.rolling.model.User;
 import com.guilhermefgl.rolling.presenter.main.MainPresenter;
 import com.guilhermefgl.rolling.presenter.main.MainPresenterContract;
 import com.guilhermefgl.rolling.view.BaseActivity;
 import com.guilhermefgl.rolling.view.BaseFragment;
+import com.guilhermefgl.rolling.view.BasePickImageFragment;
 import com.guilhermefgl.rolling.view.current.CurrentFragment;
 import com.guilhermefgl.rolling.view.list.TripPageFragment;
 import com.guilhermefgl.rolling.view.profile.ProfileFragment;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends BaseActivity
         implements MainViewContract, NavigationView.OnNavigationItemSelectedListener,
-        TripPageFragment.TripListFragmentInteractionListener, ViewPager.OnPageChangeListener {
+        TripPageFragment.TripListFragmentInteractionListener, PickImageInteractionListener,
+        ViewPager.OnPageChangeListener {
 
     private static final Integer REQUEST_LOGIN = 1001;
 
@@ -78,7 +83,7 @@ public class MainActivity extends BaseActivity
 
         goToDefaultFragment();
 
-        new MainPresenter().setView(this);
+        new MainPresenter(this);
     }
 
     @Override
@@ -99,6 +104,22 @@ public class MainActivity extends BaseActivity
 
         if (requestCode == REQUEST_LOGIN && resultCode != RESULT_OK) {
             Toast.makeText(this, R.string.error_login, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (requestCode == REQUEST_IMAGE && resultCode == RESULT_OK && data != null) {
+            Fragment currentFragment = getCurrentFragment();
+            if (currentFragment instanceof BasePickImageFragment) {
+                try {
+                    ((BasePickImageFragment) currentFragment)
+                            .getUserImage(
+                                    MediaStore.Images.Media.getBitmap(
+                                            this.getContentResolver(),
+                                            data.getData()));
+                } catch (IOException e) {
+                    Toast.makeText(this, R.string.error_image, Toast.LENGTH_SHORT).show();
+                }
+            }
         }
     }
 
@@ -167,6 +188,22 @@ public class MainActivity extends BaseActivity
     @Override
     public ViewPager.OnPageChangeListener getOnPageChangeListener() {
         return this;
+    }
+
+    @Override
+    public void getUserImage() {
+        Intent libraryIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        libraryIntent.setType(AVATAR_FILE_TYPE);
+
+        Intent cameraIntent = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        cameraIntent.setType(AVATAR_FILE_TYPE);
+
+        Intent chooserIntent = Intent.createChooser(libraryIntent,
+                getString(R.string.profile_avatar_chooser_title));
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {cameraIntent});
+
+        startActivityForResult(chooserIntent, REQUEST_IMAGE);
     }
 
     @Override
@@ -265,5 +302,9 @@ public class MainActivity extends BaseActivity
             return true;
         }
         return false;
+    }
+
+    private Fragment getCurrentFragment() {
+        return mFragmentManager.findFragmentById(R.id.main_content);
     }
 }
