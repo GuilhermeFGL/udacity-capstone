@@ -20,7 +20,7 @@ import com.guilhermefgl.rolling.view.profile.ProfileViewContract;
 
 import java.io.ByteArrayOutputStream;
 
-public class ProfilePresenter implements ProfilePresenterContract, FirebaseAuth.AuthStateListener {
+public class ProfilePresenter implements ProfilePresenterContract {
 
     private final FirebaseAuth mAuth;
     private final StorageReference mStorage;
@@ -31,18 +31,14 @@ public class ProfilePresenter implements ProfilePresenterContract, FirebaseAuth.
         mStorage = FirebaseHelper.getAvatarStorageInstance();
         mView = view;
         mView.setPresenter(this);
-    }
-
-    @Override
-    public void start() {
-        mAuth.addAuthStateListener(this);
         mView.setUser(createUser(mAuth.getCurrentUser()), FirebaseHelper.isUserPasswordProvider());
     }
 
     @Override
-    public void stop() {
-        mAuth.removeAuthStateListener(this);
-    }
+    public void start() { }
+
+    @Override
+    public void stop() { }
 
     @Override
     public void changeName(String userName) {
@@ -115,11 +111,6 @@ public class ProfilePresenter implements ProfilePresenterContract, FirebaseAuth.
                         }
                     }
                 });
-    }
-
-    @Override
-    public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-        mView.setUser(createUser(firebaseAuth.getCurrentUser()), FirebaseHelper.isUserPasswordProvider());
     }
 
     private User createUser(@Nullable FirebaseUser currentUser) {

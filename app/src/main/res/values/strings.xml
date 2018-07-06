@@ -1,6 +1,8 @@
 <resources>
 
     <string name="app_name">Rolling</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
     <string name="date_format">dd/MM/yyyy HH:mm</string>
     <string name="error_login">Unable to login</string>
     <string name="error_image">Unable to load image</string>
@@ -33,8 +35,9 @@
     <string name="profile_password_placeholder">Password</string>
     <string name="profile_password_action">CHANGE PASSWORD</string>
     <string name="profile_avatar_description">profile avatar</string>
-    <string name="menu_profile_save">SAVE</string>
     <string name="profile_avatar_chooser_title">Select a image as your avatar</string>
+    <string name="profile_dialog_password_title">Change password</string>
+    <string name="profile_dialog_password_label">Confirm your old password</string>
 
     <!-- TRIP ACTIVITY -->
     <string name="trip_title">New Trip</string>
@@ -82,9 +85,5 @@
 
     <!-- OTHERS -->
     <string name="transition_details" translatable="false">transition details</string>
-    <string name="profile_dialog_password_title">Change password</string>
-    <string name="confirm">confirm</string>
-    <string name="cancel">cancel</string>
-    <string name="profile_dialog_password_label">Confirm your old password</string>
 
 </resources>

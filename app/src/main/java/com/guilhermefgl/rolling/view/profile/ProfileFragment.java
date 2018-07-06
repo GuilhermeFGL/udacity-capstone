@@ -6,8 +6,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,13 +23,14 @@ import com.guilhermefgl.rolling.view.BasePickImageFragment;
 public class ProfileFragment extends BasePickImageFragment
         implements ProfileViewContract, PasswordInputDialog.PasswordDialogCallback {
 
+    private static final Integer FRAGMENT_PASSWORD_CODE = 1001;
     private static final String FRAGMENT_PASSWORD_TAG = "FRAGMENT_PASSWORD_TAG";
 
     private FragmentProfileBinding mBinding;
     private ProfilePresenterContract mPresenter;
     private PickImageInteractionListener mPickImageListener;
     private ProfileFragmentInteractionListener mListener;
-    private Boolean mProfileNameChanged;
+    private User mUser;
 
     public ProfileFragment() { }
 
@@ -68,26 +67,6 @@ public class ProfileFragment extends BasePickImageFragment
                 updatePassword();
             }
         });
-        mBinding.profileNameInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    changeName();
-                }
-            }
-        });
-        mBinding.profileNameInput.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mProfileNameChanged = true;
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) { }
-        });
 
         new ProfilePresenter(this);
     }
@@ -106,28 +85,15 @@ public class ProfileFragment extends BasePickImageFragment
         } else {
             throw new UnsupportedOperationException();
         }
-
-        mProfileNameChanged = false;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        if (mProfileNameChanged) {
+        if (mUser != null
+                && !mUser.getUserName().equals(mBinding.profileNameInput.getText().toString())) {
             mPresenter.changeName(mBinding.profileNameInput.getText().toString());
         }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        mPresenter.start();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        mPresenter.stop();
     }
 
     @Override
@@ -143,6 +109,7 @@ public class ProfileFragment extends BasePickImageFragment
 
     @Override
     public void setUser(User user, boolean isPasswordProvider) {
+        mUser = user;
         if (user != null) {
             PicassoHelper.loadImage(user.getUserAvatarUrl(), mBinding.profileAvatar);
             mBinding.profileEmail.setText(user.getUserEmail());
@@ -180,16 +147,12 @@ public class ProfileFragment extends BasePickImageFragment
         mPickImageListener.getUserImage();
     }
 
-    private void changeName() {
-        mPresenter.changeName(mBinding.profileNameInput.getText().toString());
-        mBinding.profileProgress.setVisibility(View.VISIBLE);
-        mProfileNameChanged = false;
-    }
-
     private void updatePassword() {
-        PasswordInputDialog dialog = PasswordInputDialog.newInstance();
-        dialog.setTargetFragment(ProfileFragment.this, 300);
-        dialog.show(getChildFragmentManager(), FRAGMENT_PASSWORD_TAG);
+        if (getActivity() != null) {
+            PasswordInputDialog dialog = PasswordInputDialog.newInstance();
+            dialog.setTargetFragment(ProfileFragment.this, FRAGMENT_PASSWORD_CODE);
+            dialog.show(getActivity().getSupportFragmentManager(), FRAGMENT_PASSWORD_TAG);
+        }
     }
 
     public interface ProfileFragmentInteractionListener {

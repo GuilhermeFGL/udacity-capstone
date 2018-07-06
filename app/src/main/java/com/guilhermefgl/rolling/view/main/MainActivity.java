@@ -13,6 +13,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,7 +41,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends BaseActivity
-        implements MainViewContract, NavigationView.OnNavigationItemSelectedListener,
+        implements MainViewContract, NavigationView.OnNavigationItemSelectedListener, DrawerLayout.DrawerListener,
         TripPageFragment.TripListFragmentInteractionListener, PickImageInteractionListener,
         ViewPager.OnPageChangeListener, ProfileFragment.ProfileFragmentInteractionListener {
 
@@ -49,6 +50,7 @@ public class MainActivity extends BaseActivity
     private ActivityMainBinding mBinding;
     private FragmentManager mFragmentManager;
     private MainPresenterContract mPresenter;
+    private MenuItem mMenuFragmentToSet;
 
     public static void startActivity(BaseActivity activity) {
         activity.startActivity(new Intent(activity, MainActivity.class));
@@ -73,6 +75,7 @@ public class MainActivity extends BaseActivity
 
         mBinding.navView.setNavigationItemSelectedListener(this);
         mBinding.navView.setCheckedItem(R.id.navigation_trip_list);
+        mBinding.drawerLayout.addDrawerListener(this);
 
         mBinding.mainAppBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
@@ -87,23 +90,15 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        mPresenter.start();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        mPresenter.stop();
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == REQUEST_LOGIN && resultCode != RESULT_OK) {
-            Toast.makeText(this, R.string.error_login, Toast.LENGTH_SHORT).show();
+        if (requestCode == REQUEST_LOGIN ) {
+            if (resultCode != RESULT_OK) {
+                mPresenter.refresh();
+            } else {
+                Toast.makeText(this, R.string.error_login, Toast.LENGTH_SHORT).show();
+            }
             return;
         }
 
@@ -146,8 +141,29 @@ public class MainActivity extends BaseActivity
             return false;
         }
 
-        replaceFragment(fragment, tag, item.getTitle());
+        mMenuFragmentToSet = item;
+        mBinding.drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+
+    @Override
+    public void onDrawerSlide(@NonNull View drawerView, float slideOffset) { }
+
+    @Override
+    public void onDrawerOpened(@NonNull View drawerView) { }
+
+    @Override
+    public void onDrawerStateChanged(int newState) { }
+
+    @Override
+    public void onDrawerClosed(@NonNull View drawerView) {
+        if (mMenuFragmentToSet != null) {
+            BaseFragment fragment = getFragmentById(mMenuFragmentToSet.getItemId());
+            String tag = generateFragmentTag(mMenuFragmentToSet.getItemId());
+            replaceFragment(fragment, tag, mMenuFragmentToSet.getTitle());
+        }
+        mMenuFragmentToSet = null;
     }
 
     @Override
@@ -192,7 +208,7 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void refreshUser() {
-
+        mPresenter.refresh();
     }
 
     @Override
@@ -292,7 +308,6 @@ public class MainActivity extends BaseActivity
                 .replace(R.id.main_content, fragment, tag)
                 .commit();
         setTitle(title);
-        mBinding.drawerLayout.closeDrawer(GravityCompat.START);
     }
 
     private boolean goToDefaultFragment() {

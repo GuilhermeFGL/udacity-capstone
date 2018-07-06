@@ -9,7 +9,7 @@ import com.guilhermefgl.rolling.helper.FirebaseHelper;
 import com.guilhermefgl.rolling.model.User;
 import com.guilhermefgl.rolling.view.main.MainViewContract;
 
-public class MainPresenter implements MainPresenterContract, FirebaseAuth.AuthStateListener {
+public class MainPresenter implements MainPresenterContract {
 
     private FirebaseAuth mAuth;
     private MainViewContract mView;
@@ -20,18 +20,14 @@ public class MainPresenter implements MainPresenterContract, FirebaseAuth.AuthSt
         mSmartLockEnabled = true;
         mView = view;
         mView.setPresenter(this);
+        mView.updateUser(createUser(mAuth.getCurrentUser()));
     }
 
     @Override
-    public void start() {
-        mAuth.addAuthStateListener(this);
-        refresh();
-    }
+    public void start() { }
 
     @Override
-    public void stop() {
-        mAuth.removeAuthStateListener(this);
-    }
+    public void stop() { }
 
     @Override
     public void login() {
@@ -42,17 +38,13 @@ public class MainPresenter implements MainPresenterContract, FirebaseAuth.AuthSt
     public void logout() {
         mAuth.signOut();
         mSmartLockEnabled = false;
+        refresh();
         mView.goToLogout();
     }
 
     @Override
     public void refresh() {
         mView.updateUser(createUser(mAuth.getCurrentUser()));
-    }
-
-    @Override
-    public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-        refresh();
     }
 
     private User createUser(@Nullable FirebaseUser currentUser) {

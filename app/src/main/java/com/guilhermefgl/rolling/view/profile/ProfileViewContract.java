@@ -8,5 +8,4 @@ public interface ProfileViewContract extends BaseView<ProfilePresenterContract>,
         ProfilePresenterContract.UpdateProfileCallBack {
 
     void setUser(User user, boolean isPasswordProvider);
-
 }
