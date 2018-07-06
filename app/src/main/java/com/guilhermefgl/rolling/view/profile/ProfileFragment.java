@@ -22,7 +22,10 @@ import com.guilhermefgl.rolling.presenter.profile.ProfilePresenter;
 import com.guilhermefgl.rolling.presenter.profile.ProfilePresenterContract;
 import com.guilhermefgl.rolling.view.BasePickImageFragment;
 
-public class ProfileFragment extends BasePickImageFragment implements ProfileViewContract {
+public class ProfileFragment extends BasePickImageFragment
+        implements ProfileViewContract, PasswordInputDialog.PasswordDialogCallback {
+
+    private static final String FRAGMENT_PASSWORD_TAG = "FRAGMENT_PASSWORD_TAG";
 
     private FragmentProfileBinding mBinding;
     private ProfilePresenterContract mPresenter;
@@ -167,6 +170,12 @@ public class ProfileFragment extends BasePickImageFragment implements ProfileVie
         }
     }
 
+    @Override
+    public void onSubmitPassword(String oldPassword) {
+        mBinding.profileProgress.setVisibility(View.VISIBLE);
+        mPresenter.changePassword(mBinding.profilePasswordInput.getText().toString(), oldPassword);
+    }
+
     private void updateAvatar() {
         mPickImageListener.getUserImage();
     }
@@ -178,8 +187,9 @@ public class ProfileFragment extends BasePickImageFragment implements ProfileVie
     }
 
     private void updatePassword() {
-        mPresenter.changePassword(mBinding.profilePasswordInput.getText().toString());
-        mBinding.profileProgress.setVisibility(View.VISIBLE);
+        PasswordInputDialog dialog = PasswordInputDialog.newInstance();
+        dialog.setTargetFragment(ProfileFragment.this, 300);
+        dialog.show(getChildFragmentManager(), FRAGMENT_PASSWORD_TAG);
     }
 
     public interface ProfileFragmentInteractionListener {

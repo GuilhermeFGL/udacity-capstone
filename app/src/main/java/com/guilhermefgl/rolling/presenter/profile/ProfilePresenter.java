@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -30,9 +31,6 @@ public class ProfilePresenter implements ProfilePresenterContract, FirebaseAuth.
         mStorage = FirebaseHelper.getAvatarStorageInstance();
         mView = view;
         mView.setPresenter(this);
-        for(String provider : mAuth.getCurrentUser().getProviders()) {
-            String p = provider;
-        }
     }
 
     @Override
@@ -54,8 +52,33 @@ public class ProfilePresenter implements ProfilePresenterContract, FirebaseAuth.
     }
 
     @Override
-    public void changePassword(String userPassword) {
+    public void changePassword(final String userPassword, final String oldPassword) {
+        final FirebaseUser user = mAuth.getCurrentUser();
+        if (user == null || !FirebaseHelper.isUserPasswordProvider()) {
+            return;
+        }
 
+        user.reauthenticate(EmailAuthProvider.getCredential(user.getEmail(), oldPassword))
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            user.updatePassword(userPassword)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                mView.onUpdateUserSuccess();
+                                            } else {
+                                                mView.onUpdateUserFailure();
+                                            }
+                                        }
+                                    });
+                        } else {
+                            mView.onUpdateUserFailure();
+                        }
+                    }
+                });
     }
 
     @Override

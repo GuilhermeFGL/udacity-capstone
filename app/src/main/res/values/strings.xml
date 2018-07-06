@@ -82,5 +82,9 @@
 
     <!-- OTHERS -->
     <string name="transition_details" translatable="false">transition details</string>
+    <string name="profile_dialog_password_title">Change password</string>
+    <string name="confirm">confirm</string>
+    <string name="cancel">cancel</string>
+    <string name="profile_dialog_password_label">Confirm your old password</string>
 
 </resources>

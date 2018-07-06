@@ -8,7 +8,7 @@ public interface ProfilePresenterContract extends BasePresenter {
 
     void changeName(String userName);
 
-    void changePassword(String userPassword);
+    void changePassword(String userPassword, String oldPassword);
 
     void changeAvatar(Bitmap userAvatar);
 
