@@ -88,7 +88,7 @@ public class ProfilePresenter implements ProfilePresenterContract {
         byte[] data = stream.toByteArray();
 
         final StorageReference uploadReference =
-                mStorage.child(FirebaseHelper.createUniqueFileName());
+                mStorage.child(FirebaseHelper.createUniqueId());
         uploadReference.putBytes(data)
                 .continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                     @Override

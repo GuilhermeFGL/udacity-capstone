@@ -3,31 +3,34 @@ package com.guilhermefgl.rolling.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.database.IgnoreExtraProperties;
+
 import java.util.Date;
 import java.util.List;
 
+@IgnoreExtraProperties
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class Trip implements Parcelable {
 
-    private Long tripId;
+    private String tripId;
     private String tripName;
     private String tripBannerUrl;
     private String tripDistance;
     private String tripDuration;
     private Date tripDate;
-    private User userOwner;
     private Place placeStart;
     private Place placeEnd;
     private List<Place> placesPoints;
     private List<User> persons;
+    private String userOwner;
 
     public Trip() { }
 
-    public Long getTripId() {
+    public String getTripId() {
         return tripId;
     }
 
-    public void setTripId(Long tripId) {
+    public void setTripId(String tripId) {
         this.tripId = tripId;
     }
 
@@ -63,11 +66,11 @@ public class Trip implements Parcelable {
         this.tripDuration = tripDuration;
     }
 
-    public User getUserOwner() {
+    public String getUserOwner() {
         return userOwner;
     }
 
-    public void setUserOwner(User userOwner) {
+    public void setUserOwner(String userOwner) {
         this.userOwner = userOwner;
     }
 
@@ -112,41 +115,32 @@ public class Trip implements Parcelable {
     }
 
     protected Trip(Parcel in) {
-        if (in.readByte() == 0) {
-            tripId = null;
-        } else {
-            tripId = in.readLong();
-        }
+        tripId = in.readString();
         tripName = in.readString();
         tripBannerUrl = in.readString();
         tripDistance = in.readString();
         tripDuration = in.readString();
         tripDate = (Date) in.readSerializable();
-        userOwner = in.readParcelable(User.class.getClassLoader());
         placeStart = in.readParcelable(Place.class.getClassLoader());
         placeEnd = in.readParcelable(Place.class.getClassLoader());
         placesPoints = in.createTypedArrayList(Place.CREATOR);
         persons = in.createTypedArrayList(User.CREATOR);
+        userOwner = in.readString();
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        if (tripId == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeLong(tripId);
-        }
+        dest.writeString(tripId);
         dest.writeString(tripName);
         dest.writeString(tripBannerUrl);
         dest.writeString(tripDistance);
         dest.writeString(tripDuration);
         dest.writeSerializable(tripDate);
-        dest.writeParcelable(userOwner, flags);
         dest.writeParcelable(placeStart, flags);
         dest.writeParcelable(placeEnd, flags);
         dest.writeTypedList(placesPoints);
         dest.writeTypedList(persons);
+        dest.writeString(userOwner);
     }
 
     @Override

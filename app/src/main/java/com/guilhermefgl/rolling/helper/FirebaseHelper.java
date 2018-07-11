@@ -2,13 +2,17 @@ package com.guilhermefgl.rolling.helper;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 public class FirebaseHelper {
 
     private static final String PROVIDER_PASSWORD = "password";
-    private static final String FIREBASE_AVATAR_DIR = "avatar/";
+    private static final String DATABASE_TRIPS = "trips";
+    private static final String STORAGE_AVATAR = "avatar/";
+    private static final String STORAGE_BANNER = "banner/";
 
     private FirebaseHelper() { }
 
@@ -16,11 +20,23 @@ public class FirebaseHelper {
         return FirebaseAuth.getInstance();
     }
 
-    public static StorageReference getAvatarStorageInstance() {
-        return getStorageReferenceInstance().child(FIREBASE_AVATAR_DIR);
+    public static DatabaseReference getTripDatabaseInstance() {
+        FirebaseDatabase databaseInstance = FirebaseDatabase.getInstance();
+        databaseInstance.setPersistenceEnabled(true);
+        DatabaseReference databaseReference = databaseInstance.getReference(DATABASE_TRIPS);
+        databaseReference.keepSynced(true);
+        return databaseReference;
     }
 
-    public static String createUniqueFileName() {
+    public static StorageReference getAvatarStorageInstance() {
+        return getStorageReferenceInstance().child(STORAGE_AVATAR);
+    }
+
+    public static StorageReference getBannerStorageInstance() {
+        return getStorageReferenceInstance().child(STORAGE_BANNER);
+    }
+
+    public static String createUniqueId() {
         FirebaseUser user = getAuthInstance().getCurrentUser();
         long time = System.currentTimeMillis();
         if (user != null) {
