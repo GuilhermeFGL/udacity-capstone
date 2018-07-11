@@ -3,6 +3,8 @@ package com.guilhermefgl.rolling.view.trip;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,29 +16,37 @@ import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.guilhermefgl.rolling.R;
-import com.guilhermefgl.rolling.helper.component.ScrollableMapView;
 import com.guilhermefgl.rolling.databinding.ActivityTripBinding;
+import com.guilhermefgl.rolling.helper.DateFormatterHelper;
 import com.guilhermefgl.rolling.helper.MapDrawerHelper;
 import com.guilhermefgl.rolling.helper.MapRouter;
+import com.guilhermefgl.rolling.helper.component.ScrollableMapView;
 import com.guilhermefgl.rolling.model.Place;
+import com.guilhermefgl.rolling.presenter.trip.TripPresenter;
+import com.guilhermefgl.rolling.presenter.trip.TripPresenterContract;
 import com.guilhermefgl.rolling.view.BaseActivity;
 import com.guilhermefgl.rolling.view.breakpoint.BreakPointAdapter;
 import com.guilhermefgl.rolling.view.breakpoint.BreakPointItemTouchHelper;
 
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 public class TripActivity extends BaseActivity implements
-        BreakPointAdapter.BreakPointAdapterItemClick, OnMapReadyCallback, View.OnClickListener, MapDrawerHelper.MapDrawnCallBack, BreakPointItemTouchHelper.BreakPointItemTouchListener {
+        BreakPointAdapter.BreakPointAdapterItemClick, OnMapReadyCallback, View.OnClickListener,
+        MapDrawerHelper.MapDrawnCallBack, BreakPointItemTouchHelper.BreakPointItemTouchListener,
+        TripViewContract {
 
     private static final Integer RESULT_START = 1001;
     private static final Integer RESULT_END = 1002;
     private static final Integer RESULT_BREAK_POINT = 1003;
+    private static final Integer REQUEST_IMAGE = 1004;
 
     private ActivityTripBinding mBinding;
     private BreakPointAdapter mAdapter;
     private GoogleMap mMap;
     private MapDrawerHelper mMapDrawerHelper;
-    private MapRouter mMapRouter;
+    private TripPresenterContract mPresenter;
 
     public static void startActivity(BaseActivity activity) {
         activity.startActivity(
@@ -80,9 +90,11 @@ public class TripActivity extends BaseActivity implements
 
         mBinding.tripStart.setOnClickListener(this);
         mBinding.tripDestination.setOnClickListener(this);
+        mBinding.tripImage.setOnClickListener(this);
 
         mMapDrawerHelper = new MapDrawerHelper(this, this);
-        mMapRouter = new MapRouter();
+
+        new TripPresenter(this);
     }
 
     @Override
@@ -100,16 +112,25 @@ public class TripActivity extends BaseActivity implements
 
                 if (requestCode == RESULT_START) {
                     mBinding.tripStart.setText(googlePlace.getName());
-                    mMapRouter.setStartPoint(place);
+                    mPresenter.setStartPlace(place);
                 } else if (requestCode == RESULT_END) {
                     mBinding.tripDestination.setText(googlePlace.getName());
-                    mMapRouter.setEndPoint(place);
+                    mPresenter.setEndPlace(place);
                 } else {
                     mAdapter.addBreakPoints(place);
-                    mMapRouter.addBreakPlace(place);
+                    mPresenter.addBreakPlace(place);
                 }
+            }
 
-                startDrawnMap();
+            if (requestCode == REQUEST_IMAGE && data != null) {
+                try {
+                    mPresenter.setBanner(
+                            MediaStore.Images.Media.getBitmap(
+                                    this.getContentResolver(),
+                                    data.getData()));
+                } catch (IOException e) {
+                    Toast.makeText(this, R.string.error_image, Toast.LENGTH_SHORT).show();
+                }
             }
         }
     }
@@ -127,7 +148,7 @@ public class TripActivity extends BaseActivity implements
                 onBackPressed();
                 break;
             case R.id.menu_trip_save:
-                // TODO save
+                save();
                 break;
             default:
                 return super.onOptionsItemSelected(item);
@@ -149,26 +170,29 @@ public class TripActivity extends BaseActivity implements
     }
 
     @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.trip_start) {
-            openSearchPlaceWidget(RESULT_START);
-        } else if (v.getId() == R.id.trip_destination) {
-            openSearchPlaceWidget(RESULT_END);
-        }
+    public void setPresenter(@NonNull TripPresenterContract presenter) {
+        mPresenter = presenter;
     }
 
     @Override
-    public void onBreakPointItemCLick(Place place) {
-        if (place == null && mBinding.tripListBreakPoints.isEnabled()) {
-            openSearchPlaceWidget(RESULT_BREAK_POINT);
-        }
+    public void drawMap(MapRouter mapRouter) {
+        mBinding.tripProgress.setVisibility(View.VISIBLE);
+        mBinding.tripStart.setEnabled(false);
+        mBinding.tripDestination.setEnabled(false);
+        mBinding.tripListBreakPoints.setEnabled(false);
+        mMapDrawerHelper.drawnMap(mMap, mapRouter);
     }
 
     @Override
-    public void onBreakPointItemSwiped(int position) {
-        mAdapter.removeBreakPoint(position);
-        mMapRouter.removeBreakPlace(position);
-        startDrawnMap();
+    public void onSaveTripSuccess() {
+        Toast.makeText(this, "Trip created with success", Toast.LENGTH_LONG).show();
+        finish();
+    }
+
+    @Override
+    public void onSaveTripFailure() {
+        mBinding.tripProgress.setVisibility(View.GONE);
+        Toast.makeText(this, "Unable to crate Trip", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -184,14 +208,39 @@ public class TripActivity extends BaseActivity implements
         }
     }
 
-    private void startDrawnMap() {
-        if (mMap != null) {
-            mBinding.tripProgress.setVisibility(View.VISIBLE);
-            mBinding.tripStart.setEnabled(false);
-            mBinding.tripDestination.setEnabled(false);
-            mBinding.tripListBreakPoints.setEnabled(false);
-            mMapDrawerHelper.drawnMap(mMap, mMapRouter);
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.trip_start) {
+            openSearchPlaceWidget(RESULT_START);
+        } else if (v.getId() == R.id.trip_destination) {
+            openSearchPlaceWidget(RESULT_END);
+        } else if (v.getId() == R.id.trip_image) {
+            Intent libraryIntent = new Intent(Intent.ACTION_GET_CONTENT);
+            libraryIntent.setType(AVATAR_FILE_TYPE);
+
+            Intent cameraIntent = new Intent(Intent.ACTION_PICK,
+                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            cameraIntent.setType(AVATAR_FILE_TYPE);
+
+            Intent chooserIntent = Intent.createChooser(libraryIntent,
+                    getString(R.string.profile_avatar_chooser_title));
+            chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {cameraIntent});
+
+            startActivityForResult(chooserIntent, REQUEST_IMAGE);
         }
+    }
+
+    @Override
+    public void onBreakPointItemCLick(Place place) {
+        if (place == null && mBinding.tripListBreakPoints.isEnabled()) {
+            openSearchPlaceWidget(RESULT_BREAK_POINT);
+        }
+    }
+
+    @Override
+    public void onBreakPointItemSwiped(int position) {
+        mAdapter.removeBreakPoint(position);
+        mPresenter.removeBreakPlace(position);
     }
 
     private void openSearchPlaceWidget(Integer result) {
@@ -206,6 +255,22 @@ public class TripActivity extends BaseActivity implements
                     getString(R.string.error_google_autocomplete_widget),
                     Toast.LENGTH_LONG)
                     .show();
+        }
+    }
+
+    private void save() {
+        try {
+            mPresenter.setDate(
+                    DateFormatterHelper.stringToDate(
+                            mBinding.tripDate.getText().toString(), this));
+            mPresenter.setTitle(mBinding.tripTitle.getText().toString());
+            mPresenter.setDuration(mBinding.tripDuration.getText().toString());
+            mPresenter.setDistance(mBinding.tripDuration.getText().toString());
+            mPresenter.save(this);
+        } catch (UnsupportedOperationException e) {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+        } catch (ParseException e) {
+            Toast.makeText(this, "Invalid date and time", Toast.LENGTH_LONG).show();
         }
     }
 }

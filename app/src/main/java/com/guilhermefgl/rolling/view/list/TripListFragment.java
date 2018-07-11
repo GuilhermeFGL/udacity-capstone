@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 
 import com.guilhermefgl.rolling.R;
 import com.guilhermefgl.rolling.databinding.FragmentTripListBinding;
-import com.guilhermefgl.rolling.mock.TripMock;
 import com.guilhermefgl.rolling.model.Trip;
 import com.guilhermefgl.rolling.view.BaseActivity;
 import com.guilhermefgl.rolling.view.BaseFragment;
@@ -65,12 +64,12 @@ public class TripListFragment extends BaseFragment implements TripAdapter.TripAd
         if (filterParam != null) {
             switch (filterParam) {
                 case BUNDLE_FILTER_ALL:
-                    List<Trip> trips = TripMock.getTripList();
+                    List<Trip> trips = new ArrayList<>();
                     trips.add(0, null);
                     adapter.setTripList(trips);
                     break;
                 case BUNDLE_FILTER_USER:
-                    adapter.setTripList(TripMock.getMyTripList());
+                    adapter.setTripList(new ArrayList<Trip>());
                     break;
             }
         }

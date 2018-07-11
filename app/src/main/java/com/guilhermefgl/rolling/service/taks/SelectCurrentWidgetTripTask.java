@@ -3,13 +3,11 @@ package com.guilhermefgl.rolling.service.taks;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import com.guilhermefgl.rolling.mock.TripMock;
 import com.guilhermefgl.rolling.model.Trip;
 
 public class SelectCurrentWidgetTripTask extends AsyncTask<Void, Void, Trip> {
 
-    // TODO remove mock data
-    private Trip mTrip = TripMock.getMyCurrentTrip();
+    private Trip mTrip = new Trip();
 
     private final SelectTripCallBack mCallBack;
 

@@ -6,7 +6,6 @@ import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.guilhermefgl.rolling.R;
-import com.guilhermefgl.rolling.mock.TripMock;
 import com.guilhermefgl.rolling.model.Place;
 import com.guilhermefgl.rolling.model.Trip;
 
@@ -14,9 +13,7 @@ import java.util.List;
 
 public class ListWidgetFactoryService extends RemoteViewsService {
 
-    // TODO remove mock data
-    private Trip mTrip = TripMock.getMyCurrentTrip();
-
+    private Trip mTrip = new Trip();
 
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {

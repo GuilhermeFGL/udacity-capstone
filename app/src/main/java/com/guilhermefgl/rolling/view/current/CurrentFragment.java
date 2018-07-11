@@ -20,7 +20,6 @@ import com.guilhermefgl.rolling.helper.DateFormatterHelper;
 import com.guilhermefgl.rolling.helper.MapDrawerHelper;
 import com.guilhermefgl.rolling.helper.MapRouter;
 import com.guilhermefgl.rolling.helper.PicassoHelper;
-import com.guilhermefgl.rolling.mock.TripMock;
 import com.guilhermefgl.rolling.model.Place;
 import com.guilhermefgl.rolling.model.Trip;
 import com.guilhermefgl.rolling.view.BaseFragment;
@@ -29,8 +28,7 @@ import com.guilhermefgl.rolling.view.breakpoint.BreakPointAdapter;
 public class CurrentFragment extends BaseFragment implements
         BreakPointAdapter.BreakPointAdapterItemClick, OnMapReadyCallback {
 
-    // TODO remove mock data
-    private Trip mockTrip = TripMock.getMyCurrentTrip();
+    private Trip mockTrip = new Trip();
 
     private FragmentCurrentBinding mBinding;
 
