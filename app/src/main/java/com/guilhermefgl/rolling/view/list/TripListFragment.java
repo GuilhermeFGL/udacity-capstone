@@ -8,6 +8,7 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.guilhermefgl.rolling.R;
 import com.guilhermefgl.rolling.databinding.FragmentTripListBinding;
@@ -22,7 +23,8 @@ import com.guilhermefgl.rolling.view.trip.TripActivity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TripListFragment extends BaseFragment implements TripListViewContract, TripAdapter.TripAdapterItemClick {
+public class TripListFragment extends BaseFragment implements TripListViewContract,
+        TripAdapter.TripAdapterItemClick {
 
     private static final String BUNDLE_FILTER = "BUNDLE_FILTER";
 
@@ -106,5 +108,10 @@ public class TripListFragment extends BaseFragment implements TripListViewContra
             mBinding.tripListMarkedEmpty.setVisibility(View.VISIBLE);
             mBinding.tripListRecycleView.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public void onDatabaseErrorListener() {
+        Toast.makeText(getActivity(), R.string.error_network, Toast.LENGTH_SHORT).show();
     }
 }

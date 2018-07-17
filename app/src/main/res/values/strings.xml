@@ -8,6 +8,7 @@
     <string name="date_time_mask">##/##/#### ##:##</string>
     <string name="error_login">Unable to login</string>
     <string name="error_image">Unable to load image</string>
+    <string name="error_network">Unable to connect</string>
     <string name="error_update_profile">Unable to update profile</string>
     <string name="error_google_autocomplete_widget">Cannot open Google Places</string>
 

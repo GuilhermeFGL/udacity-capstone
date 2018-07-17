@@ -63,5 +63,7 @@ public class TripListPresenter implements TripListPresenterContract, ValueEventL
     }
 
     @Override
-    public void onCancelled(@NonNull DatabaseError databaseError) { }
+    public void onCancelled(@NonNull DatabaseError databaseError) {
+        mView.onDatabaseErrorListener();
+    }
 }

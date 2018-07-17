@@ -11,4 +11,6 @@ import java.util.List;
 public interface TripListViewContract extends BaseView<TripListPresenterContract> {
 
     void setList(@NonNull List<Trip> trips);
+
+    void onDatabaseErrorListener();
 }
