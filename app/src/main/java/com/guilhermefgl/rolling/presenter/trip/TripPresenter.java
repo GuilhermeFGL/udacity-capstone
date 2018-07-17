@@ -1,6 +1,5 @@
 package com.guilhermefgl.rolling.presenter.trip;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -51,14 +50,10 @@ public class TripPresenter implements TripPresenterContract {
     }
 
     @Override
-    public void start() {
-
-    }
+    public void start() { }
 
     @Override
-    public void stop() {
-
-    }
+    public void stop() { }
 
     @Override
     public void setBanner(Bitmap banner) {
@@ -72,7 +67,7 @@ public class TripPresenter implements TripPresenterContract {
 
     @Override
     public void setDate(Date date) {
-        mTrip.setTripDate(date);
+        mTrip.setTripDate(new Date(date.getTime()));
     }
 
     @Override
@@ -87,17 +82,20 @@ public class TripPresenter implements TripPresenterContract {
 
     @Override
     public void setStartPlace(Place startPlace) {
-        mRoute.setStartPoint(startPlace);
+        mRoute.setStartPoint(startPlace.clone());
+        mView.drawMap(mRoute);
     }
 
     @Override
     public void setEndPlace(Place endPlace) {
-        mRoute.setEndPoint(endPlace);
+        mRoute.setEndPoint(endPlace.clone());
+        mView.drawMap(mRoute);
     }
 
     @Override
     public void addBreakPlace(Place breakPlace) {
-        mRoute.addBreakPlace(breakPlace);
+        mRoute.addBreakPlace(breakPlace.clone());
+        mView.drawMap(mRoute);
     }
 
     @Override
@@ -106,7 +104,7 @@ public class TripPresenter implements TripPresenterContract {
     }
 
     @Override
-    public boolean isValid(Context context) throws UnsupportedOperationException {
+    public boolean isValid() throws UnsupportedOperationException {
         if (mTrip.getTripName() == null || mTrip.getTripName().isEmpty()) {
             throw new UnsupportedOperationException("Invalid title");
         }
@@ -129,11 +127,13 @@ public class TripPresenter implements TripPresenterContract {
     }
 
     @Override
-    public void save(Context context) throws UnsupportedOperationException {
-        if (isValid(context) && mAuth.getCurrentUser() != null) {
-            String uId = FirebaseHelper.createUniqueId();
-
-            mTrip.setTripId(uId);
+    public void save() throws UnsupportedOperationException {
+        String uId = FirebaseHelper.createUniqueId();
+        mTrip.setTripId(uId);
+        mTrip.setPlaceStart(mRoute.getStartPoint());
+        mTrip.setPlaceEnd(mRoute.getEndPlace());
+        mTrip.setPlacesPoints(mRoute.getBreakPlaces());
+        if (isValid() && mAuth.getCurrentUser() != null) {
             mTrip.setUserOwner(mAuth.getCurrentUser().getUid());
 
             if (mBannerBitmap != null) {
@@ -157,21 +157,22 @@ public class TripPresenter implements TripPresenterContract {
                             public void onComplete(@NonNull Task<Uri> task) {
                                 if (task.isSuccessful() && mAuth.getCurrentUser() != null) {
                                     mTrip.setTripBannerUrl(task.getResult().toString());
-                                    postTrip();
+                                    mView.onSaveBannerSuccess();
                                 } else {
                                     mView.onSaveTripFailure();
                                 }
                             }
                         });
             } else {
-                postTrip();
+                saveTrip();
             }
         } else {
             throw new UnsupportedOperationException("Invalid trip");
         }
     }
 
-    private void postTrip() {
+    @Override
+    public void saveTrip() throws UnsupportedOperationException {
         mDataBase.child(mTrip.getTripId())
                 .setValue(mTrip, new DatabaseReference.CompletionListener(){
                     @Override

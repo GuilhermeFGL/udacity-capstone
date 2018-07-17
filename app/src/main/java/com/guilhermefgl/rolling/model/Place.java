@@ -104,5 +104,19 @@ public class Place implements Parcelable {
         }
     };
 
+    @Override
+    public Place clone() {
+        Place clone;
+        try {
+            clone = (Place) super.clone();
+        } catch (CloneNotSupportedException e) {
+            clone = new Place();
+        }
+        clone.setPlaceLongitude(this.placeLongitude);
+        clone.setPlaceLatitude(this.placeLatitude);
+        clone.setPlaceName(this.placeName);
+        clone.setPlaceId(this.placeId);
+        return clone;
+    }
 
 }

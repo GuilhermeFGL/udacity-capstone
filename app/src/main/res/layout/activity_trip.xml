@@ -37,9 +37,11 @@
                     android:id="@+id/trip_image"
                     android:layout_width="match_parent"
                     android:layout_height="250dp"
+                    android:scaleType="centerCrop"
+                    android:fitsSystemWindows="true"
                     android:background="@color/primary_light"
                     android:contentDescription="@string/trip_action_add_image"
-                    app:srcCompat="@drawable/ic_picture"/>
+                    app:srcCompat="@drawable/ic_picture" />
 
                 <RelativeLayout
                     android:id="@+id/trip_editable_content"

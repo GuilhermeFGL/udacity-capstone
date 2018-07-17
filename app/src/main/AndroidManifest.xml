@@ -28,8 +28,12 @@
         </activity>
         <activity
             android:name=".view.main.MainActivity"
-            android:launchMode="singleTop" />
-        <activity android:name=".view.trip.TripActivity" />
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.trip.TripActivity"
+            android:windowSoftInputMode="stateVisible|adjustPan"
+            android:screenOrientation="portrait" />
         <activity android:name=".view.details.DetailsActivity" />
 
         <receiver android:name=".view.widget.TripWidgetProvider">

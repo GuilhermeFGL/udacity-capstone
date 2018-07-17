@@ -29,7 +29,7 @@ public class MapDrawerHelper {
     private static final Integer ROUTE_WIDTH = 15;
     private static final Integer ROUTE_COLOR = Color.BLUE;
     private static final Integer MAP_PADDING = 150;
-    private static final Integer GOOGLE_DISTANCE_SCALE = 10000;
+    private static final Integer GOOGLE_DISTANCE_SCALE = 1000;
 
     private final Activity mActivity;
     private GoogleMap mMap;

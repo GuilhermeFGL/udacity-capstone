@@ -21,7 +21,6 @@ public class Trip implements Parcelable {
     private Place placeStart;
     private Place placeEnd;
     private List<Place> placesPoints;
-    private List<User> persons;
     private String userOwner;
 
     public Trip() { }
@@ -98,14 +97,6 @@ public class Trip implements Parcelable {
         this.placesPoints = placesPoints;
     }
 
-    public List<User> getPersons() {
-        return persons;
-    }
-
-    public void setPersons(List<User> persons) {
-        this.persons = persons;
-    }
-
     public Date getTripDate() {
         return tripDate;
     }
@@ -124,7 +115,6 @@ public class Trip implements Parcelable {
         placeStart = in.readParcelable(Place.class.getClassLoader());
         placeEnd = in.readParcelable(Place.class.getClassLoader());
         placesPoints = in.createTypedArrayList(Place.CREATOR);
-        persons = in.createTypedArrayList(User.CREATOR);
         userOwner = in.readString();
     }
 
@@ -139,7 +129,6 @@ public class Trip implements Parcelable {
         dest.writeParcelable(placeStart, flags);
         dest.writeParcelable(placeEnd, flags);
         dest.writeTypedList(placesPoints);
-        dest.writeTypedList(persons);
         dest.writeString(userOwner);
     }
 

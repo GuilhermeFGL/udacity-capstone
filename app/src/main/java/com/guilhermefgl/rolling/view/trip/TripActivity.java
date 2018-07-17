@@ -2,6 +2,7 @@ package com.guilhermefgl.rolling.view.trip;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -20,6 +21,7 @@ import com.guilhermefgl.rolling.databinding.ActivityTripBinding;
 import com.guilhermefgl.rolling.helper.DateFormatterHelper;
 import com.guilhermefgl.rolling.helper.MapDrawerHelper;
 import com.guilhermefgl.rolling.helper.MapRouter;
+import com.guilhermefgl.rolling.helper.DateTimeEditText;
 import com.guilhermefgl.rolling.helper.component.ScrollableMapView;
 import com.guilhermefgl.rolling.model.Place;
 import com.guilhermefgl.rolling.presenter.trip.TripPresenter;
@@ -91,6 +93,7 @@ public class TripActivity extends BaseActivity implements
         mBinding.tripStart.setOnClickListener(this);
         mBinding.tripDestination.setOnClickListener(this);
         mBinding.tripImage.setOnClickListener(this);
+        mBinding.tripDate.addTextChangedListener(DateTimeEditText.mask(mBinding.tripDate));
 
         mMapDrawerHelper = new MapDrawerHelper(this, this);
 
@@ -124,10 +127,10 @@ public class TripActivity extends BaseActivity implements
 
             if (requestCode == REQUEST_IMAGE && data != null) {
                 try {
-                    mPresenter.setBanner(
-                            MediaStore.Images.Media.getBitmap(
-                                    this.getContentResolver(),
-                                    data.getData()));
+                    Bitmap bannerBitmap = MediaStore.Images.Media.getBitmap(
+                            this.getContentResolver(), data.getData());
+                    mBinding.tripImage.setImageBitmap(bannerBitmap);
+                    mPresenter.setBanner(bannerBitmap);
                 } catch (IOException e) {
                     Toast.makeText(this, R.string.error_image, Toast.LENGTH_SHORT).show();
                 }
@@ -181,6 +184,11 @@ public class TripActivity extends BaseActivity implements
         mBinding.tripDestination.setEnabled(false);
         mBinding.tripListBreakPoints.setEnabled(false);
         mMapDrawerHelper.drawnMap(mMap, mapRouter);
+    }
+
+    @Override
+    public void onSaveBannerSuccess() {
+        mPresenter.saveTrip();
     }
 
     @Override
@@ -266,7 +274,8 @@ public class TripActivity extends BaseActivity implements
             mPresenter.setTitle(mBinding.tripTitle.getText().toString());
             mPresenter.setDuration(mBinding.tripDuration.getText().toString());
             mPresenter.setDistance(mBinding.tripDuration.getText().toString());
-            mPresenter.save(this);
+            mPresenter.save();
+            mBinding.tripProgress.setVisibility(View.VISIBLE);
         } catch (UnsupportedOperationException e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
         } catch (ParseException e) {

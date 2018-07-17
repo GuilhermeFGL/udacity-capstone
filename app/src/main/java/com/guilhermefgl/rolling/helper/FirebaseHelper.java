@@ -10,7 +10,7 @@ import com.google.firebase.storage.StorageReference;
 public class FirebaseHelper {
 
     private static final String PROVIDER_PASSWORD = "password";
-    private static final String DATABASE_TRIPS = "trips";
+    private static final String DATABASE_TRIPS = "trips/";
     private static final String STORAGE_AVATAR = "avatar/";
     private static final String STORAGE_BANNER = "banner/";
 
@@ -22,7 +22,6 @@ public class FirebaseHelper {
 
     public static DatabaseReference getTripDatabaseInstance() {
         FirebaseDatabase databaseInstance = FirebaseDatabase.getInstance();
-        databaseInstance.setPersistenceEnabled(true);
         DatabaseReference databaseReference = databaseInstance.getReference(DATABASE_TRIPS);
         databaseReference.keepSynced(true);
         return databaseReference;

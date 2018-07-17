@@ -4,6 +4,7 @@
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
     <string name="date_time_format">dd/MM/yyyy HH:mm</string>
+    <string name="date_time_mask">##/##/#### ##:##</string>
     <string name="error_login">Unable to login</string>
     <string name="error_image">Unable to load image</string>
     <string name="error_update_profile">Unable to update profile</string>
