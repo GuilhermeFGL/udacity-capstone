@@ -22,6 +22,7 @@ import com.guilhermefgl.rolling.helper.DateFormatterHelper;
 import com.guilhermefgl.rolling.helper.MapDrawerHelper;
 import com.guilhermefgl.rolling.helper.MapRouter;
 import com.guilhermefgl.rolling.helper.DateTimeEditText;
+import com.guilhermefgl.rolling.helper.component.ProgressDialog;
 import com.guilhermefgl.rolling.helper.component.ScrollableMapView;
 import com.guilhermefgl.rolling.model.Place;
 import com.guilhermefgl.rolling.presenter.trip.TripPresenter;
@@ -43,12 +44,14 @@ public class TripActivity extends BaseActivity implements
     private static final Integer RESULT_END = 1002;
     private static final Integer RESULT_BREAK_POINT = 1003;
     private static final Integer REQUEST_IMAGE = 1004;
+    private static final String FRAGMENT_PROGRESS_TAG = "FRAGMENT_PROGRESS_TAG";
 
     private ActivityTripBinding mBinding;
     private BreakPointAdapter mAdapter;
     private GoogleMap mMap;
     private MapDrawerHelper mMapDrawerHelper;
     private TripPresenterContract mPresenter;
+    private ProgressDialog mProgressDialog;
 
     public static void startActivity(BaseActivity activity) {
         activity.startActivity(
@@ -96,6 +99,7 @@ public class TripActivity extends BaseActivity implements
         mBinding.tripDate.addTextChangedListener(DateTimeEditText.mask(mBinding.tripDate));
 
         mMapDrawerHelper = new MapDrawerHelper(this, this);
+        mProgressDialog = new ProgressDialog();
 
         new TripPresenter(this);
     }
@@ -148,7 +152,7 @@ public class TripActivity extends BaseActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                onBackPressed();
+                finish();
                 break;
             case R.id.menu_trip_save:
                 save();
@@ -157,14 +161,6 @@ public class TripActivity extends BaseActivity implements
                 return super.onOptionsItemSelected(item);
         }
         return true;
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-
-        // TODO confirm
-        finish();
     }
 
     @Override
@@ -193,14 +189,20 @@ public class TripActivity extends BaseActivity implements
 
     @Override
     public void onSaveTripSuccess() {
-        Toast.makeText(this, "Trip created with success", Toast.LENGTH_LONG).show();
-        finish();
+        if (!(isFinishing() || isDestroyed())) {
+            Toast.makeText(this, "Trip created with success", Toast.LENGTH_LONG).show();
+            mProgressDialog.dismiss();
+            finish();
+        }
     }
 
     @Override
     public void onSaveTripFailure() {
-        mBinding.tripProgress.setVisibility(View.GONE);
-        Toast.makeText(this, "Unable to crate Trip", Toast.LENGTH_LONG).show();
+        if (!(isFinishing() || isDestroyed())) {
+            mBinding.tripProgress.setVisibility(View.GONE);
+            mProgressDialog.dismiss();
+            Toast.makeText(this, "Unable to crate Trip", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
@@ -283,6 +285,7 @@ public class TripActivity extends BaseActivity implements
             }
             mPresenter.save();
             mBinding.tripProgress.setVisibility(View.VISIBLE);
+            mProgressDialog.show(getSupportFragmentManager(), FRAGMENT_PROGRESS_TAG);
         } catch (UnsupportedOperationException e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
         } catch (ParseException e) {

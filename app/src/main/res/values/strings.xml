@@ -3,6 +3,7 @@
     <string name="app_name">Rolling</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
+    <string name="wait">Please, wait…</string>
     <string name="date_time_format">dd/MM/yyyy HH:mm</string>
     <string name="date_time_mask">##/##/#### ##:##</string>
     <string name="error_login">Unable to login</string>
