@@ -30,6 +30,8 @@
     <string name="trip_item_create">Create a new Trip</string>
     <string name="trip_item_start_label">from</string>
     <string name="trip_item_end_label">to</string>
+    <string name="trip_list_empty_label_1">Mark some interesting trip as\n\'My Trip\'\nby clinking</string>
+    <string name="trip_list_empty_label_2">at the trip details page</string>
 
     <!-- PROFILE FRAGMENT -->
     <string name="profile_name_placeholder">Name</string>

@@ -4,11 +4,64 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".view.list.TripPageFragment">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/trip_list_recycle_view"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:listitem="@layout/item_trip"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
+        android:layout_height="match_parent">
+
+        <ProgressBar
+            android:id="@+id/trip_list_progress"
+            android:layout_marginTop="-6dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="gone"
+            style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/trip_list_recycle_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/item_trip"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
+
+        <LinearLayout
+            android:id="@+id/trip_list_marked_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:textSize="16sp"
+                android:gravity="center"
+                android:textColor="@color/secondary_text"
+                android:text="@string/trip_list_empty_label_1" />
+
+            <ImageView
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:padding="8dp"
+                android:background="@color/accent"
+                android:foreground="@drawable/shape_round"
+                android:contentDescription="@string/menu_trip_marked"
+                app:srcCompat="@drawable/ic_unmarked" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:textSize="16sp"
+                android:gravity="center"
+                android:textColor="@color/secondary_text"
+                android:text="@string/trip_list_empty_label_2" />
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
 
 </layout>
