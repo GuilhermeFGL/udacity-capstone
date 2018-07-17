@@ -272,8 +272,15 @@ public class TripActivity extends BaseActivity implements
                     DateFormatterHelper.stringToDate(
                             mBinding.tripDate.getText().toString(), this));
             mPresenter.setTitle(mBinding.tripTitle.getText().toString());
-            mPresenter.setDuration(mBinding.tripDuration.getText().toString());
-            mPresenter.setDistance(mBinding.tripDuration.getText().toString());
+            mPresenter.setDuration(mBinding.tripDuration.getText().toString()
+                    .concat(" ")
+                    .concat(mBinding.tripDurationType.getSelectedItem().toString()));
+            if (!mBinding.tripDistance.getText().toString()
+                    .equals(getString(R.string.trip_distance_hint))) {
+                mPresenter.setDistance(mBinding.tripDistance.getText().toString());
+            } else {
+                mPresenter.setDistance(null);
+            }
             mPresenter.save();
             mBinding.tripProgress.setVisibility(View.VISIBLE);
         } catch (UnsupportedOperationException e) {
