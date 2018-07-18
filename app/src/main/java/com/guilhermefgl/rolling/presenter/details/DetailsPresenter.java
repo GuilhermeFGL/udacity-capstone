@@ -7,11 +7,16 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.guilhermefgl.rolling.helper.FirebaseHelper;
 import com.guilhermefgl.rolling.model.Trip;
 import com.guilhermefgl.rolling.model.User;
 import com.guilhermefgl.rolling.view.details.DetailsViewContract;
+
+import java.util.ArrayList;
 
 public class DetailsPresenter implements DetailsPresenterContract {
 
@@ -24,6 +29,8 @@ public class DetailsPresenter implements DetailsPresenterContract {
     @NonNull
     private final DetailsViewContract mView;
 
+    private final ValueEventListener mUserDatabaseListener;
+
     @Nullable
     private Trip mTrip;
 
@@ -32,17 +39,54 @@ public class DetailsPresenter implements DetailsPresenterContract {
         mUserDataBase = FirebaseHelper.getUserDatabaseInstance();
         mAuth = FirebaseHelper.getAuthInstance();
         mView = view;
+
+        mUserDatabaseListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                boolean isTripMarked = false;
+                ArrayList<User> users = new ArrayList<>();
+
+                if (mAuth.getCurrentUser() != null) {
+                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                        User user = postSnapshot.getValue(User.class);
+                        users.add(user);
+                        if (user != null && user.getUserId() != null &&
+                                user.getUserId().equals(mAuth.getCurrentUser().getUid())) {
+                            isTripMarked = true;
+                        }
+                    }
+                }
+
+                mView.onLoadUsersSuccess(users);
+                mView.onLoadMarkedTripSuccess(isTripMarked);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                mView.onLoadUserFailure();
+                mView.onLoadMarkedTripFailure();
+            }
+        };
+
         mView.setPresenter(this);
     }
 
     @Override
-    public void start() { }
+    public void start() {
+        if (mTrip != null) {
+            mUserDataBase.child(mTrip.getTripId()).addValueEventListener(mUserDatabaseListener);
+        }
+    }
 
     @Override
-    public void stop() { }
+    public void stop() {
+        if (mTrip != null) {
+            mUserDataBase.child(mTrip.getTripId()).removeEventListener(mUserDatabaseListener);
+        }
+    }
 
     @Override
-    public void setTrip(Trip trip) {
+    public void setTrip(@NonNull Trip trip) {
         mTrip = trip;
     }
 

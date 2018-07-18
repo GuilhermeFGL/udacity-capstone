@@ -32,16 +32,19 @@ public class TripListPresenter implements TripListPresenterContract, ValueEventL
     }
 
     @Override
-    public void setFilterAndGetTrips(Filters filter) {
+    public void setFilter(Filters filter) {
         mFilter = filter;
+    }
+
+    @Override
+    public void start() {
         mDataBase.addValueEventListener(this);
     }
 
     @Override
-    public void start() { }
-
-    @Override
-    public void stop() { }
+    public void stop() {
+        mDataBase.removeEventListener(this);
+    }
 
     @Override
     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

@@ -4,7 +4,7 @@ import com.guilhermefgl.rolling.presenter.BasePresenter;
 
 public interface TripListPresenterContract extends BasePresenter {
 
-    void setFilterAndGetTrips(Filters filter);
+    void setFilter(Filters filter);
 
     enum Filters {
         ALL,

@@ -19,6 +19,7 @@ import com.guilhermefgl.rolling.presenter.details.DetailsPresenter;
 import com.guilhermefgl.rolling.presenter.details.DetailsPresenterContract;
 import com.guilhermefgl.rolling.view.BaseActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DetailsActivity extends BaseActivity implements DetailsViewContract,
@@ -28,6 +29,7 @@ public class DetailsActivity extends BaseActivity implements DetailsViewContract
 
     private Trip mTrip;
     private ActivityDetailsBinding mBinding;
+    private DetailsPageAdapter mPageAdapter;
     private DetailsPresenterContract mPresenter;
     private MenuItem mMarkerMenuItem;
     private Boolean mIsMarked;
@@ -64,9 +66,17 @@ public class DetailsActivity extends BaseActivity implements DetailsViewContract
     }
 
     @Override
+    protected void onDestroy() {
+        mPresenter.stop();
+        super.onDestroy();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_details, menu);
         mMarkerMenuItem = menu.findItem(R.id.menu_trip_mark);
+        mMarkerMenuItem.setVisible(false);
+        setupMenu(mIsMarked);
         return true;
     }
 
@@ -79,6 +89,7 @@ public class DetailsActivity extends BaseActivity implements DetailsViewContract
                 } else {
                     mPresenter.addTripAsMarked();
                 }
+                mMarkerMenuItem.setEnabled(false);
                 return true;
             case android.R.id.home:
                 supportFinishAfterTransition();
@@ -100,7 +111,6 @@ public class DetailsActivity extends BaseActivity implements DetailsViewContract
                 mBinding.fabShare.show();
                 break;
         }
-
     }
 
     @Override
@@ -112,6 +122,9 @@ public class DetailsActivity extends BaseActivity implements DetailsViewContract
     @Override
     public void onLoadTripSuccess(@NonNull Trip trip) {
         mTrip = trip;
+        if (isForeground()) {
+            mPageAdapter.updateTrip(trip);
+        }
     }
 
     @Override
@@ -123,6 +136,9 @@ public class DetailsActivity extends BaseActivity implements DetailsViewContract
 
     @Override
     public void onLoadUsersSuccess(@NonNull List<User> users) {
+        if (isForeground()) {
+            mPageAdapter.updateUserList((ArrayList<User>) users);
+        }
     }
 
     @Override
@@ -165,6 +181,7 @@ public class DetailsActivity extends BaseActivity implements DetailsViewContract
         mPresenter = presenter;
         if (mTrip != null) {
             mPresenter.setTrip(mTrip);
+            mPresenter.start();
         }
     }
 
@@ -179,9 +196,9 @@ public class DetailsActivity extends BaseActivity implements DetailsViewContract
 
         PicassoHelper.loadImage(mTrip.getTripBannerUrl(), mBinding.backdrop);
 
-        DetailsPageAdapter pageAdapter = new DetailsPageAdapter(getSupportFragmentManager());
-        pageAdapter.setup(this, mTrip);
-        mBinding.detailsPager.setAdapter(pageAdapter);
+        mPageAdapter = new DetailsPageAdapter(getSupportFragmentManager());
+        mPageAdapter.setup(this, mTrip);
+        mBinding.detailsPager.setAdapter(mPageAdapter);
         mBinding.tabbedTabLayout.setupWithViewPager(mBinding.detailsPager);
         mBinding.detailsPager.addOnPageChangeListener(this);
     }
@@ -189,10 +206,14 @@ public class DetailsActivity extends BaseActivity implements DetailsViewContract
     private void setupMenu(boolean isMarked) {
         mIsMarked = isMarked;
         if (mMarkerMenuItem != null) {
-            if (isMarked) {
-                mMarkerMenuItem.setIcon(R.drawable.ic_marked_white);
-            } else {
-                mMarkerMenuItem.setIcon(R.drawable.ic_unmarked);
+            mMarkerMenuItem.setVisible(true);
+            mMarkerMenuItem.setEnabled(true);
+            if (mMarkerMenuItem != null) {
+                if (isMarked) {
+                    mMarkerMenuItem.setIcon(R.drawable.ic_marked_white);
+                } else {
+                    mMarkerMenuItem.setIcon(R.drawable.ic_unmarked);
+                }
             }
         }
     }

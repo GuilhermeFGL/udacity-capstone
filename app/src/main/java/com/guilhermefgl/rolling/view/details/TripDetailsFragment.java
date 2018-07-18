@@ -12,11 +12,11 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.guilhermefgl.rolling.R;
-import com.guilhermefgl.rolling.helper.component.ScrollableMapView;
 import com.guilhermefgl.rolling.databinding.FragmentDetailsTripBinding;
 import com.guilhermefgl.rolling.helper.DateFormatterHelper;
 import com.guilhermefgl.rolling.helper.MapDrawerHelper;
 import com.guilhermefgl.rolling.helper.MapRouter;
+import com.guilhermefgl.rolling.helper.component.ScrollableMapView;
 import com.guilhermefgl.rolling.model.Place;
 import com.guilhermefgl.rolling.model.Trip;
 import com.guilhermefgl.rolling.view.BaseFragment;
@@ -25,7 +25,7 @@ import com.guilhermefgl.rolling.view.breakpoint.BreakPointAdapter;
 public class TripDetailsFragment extends BaseFragment implements
         BreakPointAdapter.BreakPointAdapterItemClick, OnMapReadyCallback {
 
-    private static final String BUNDLE_TRIP = "BUNDLE_FILTER";
+    private static final String BUNDLE_TRIP = "BUNDLE_TRIP";
 
     private FragmentDetailsTripBinding mBinding;
     private Trip mTrip;
@@ -82,34 +82,41 @@ public class TripDetailsFragment extends BaseFragment implements
         }});
     }
 
+    public void updateTrip(Trip trip) {
+        mTrip = trip;
+        setupView();
+    }
+
     private void setupView() {
-        mBinding.includeTrip.tripDistance.setText(mTrip.getTripDistance());
-        mBinding.includeTrip.tripTime.setText(mTrip.getTripDuration());
-        mBinding.includeTrip.tripStart.setText(mTrip.getPlaceStart().getPlaceName());
-        mBinding.includeTrip.tripDestination.setText(mTrip.getPlaceEnd().getPlaceName());
+        if (mTrip != null) {
+            mBinding.includeTrip.tripDistance.setText(mTrip.getTripDistance());
+            mBinding.includeTrip.tripTime.setText(mTrip.getTripDuration());
+            mBinding.includeTrip.tripStart.setText(mTrip.getPlaceStart().getPlaceName());
+            mBinding.includeTrip.tripDestination.setText(mTrip.getPlaceEnd().getPlaceName());
 
-        if (getContext() != null) {
-            mBinding.includeTrip.tripDate.setText(
-                    DateFormatterHelper.dateToString(mTrip.getTripDate(), getContext()));
-        }
-
-        if (!mTrip.getPlacesPoints().isEmpty()) {
-            mBinding.includeTrip.tripListBreakPoints
-                    .setAdapter(new BreakPointAdapter(mTrip.getPlacesPoints(), this));
-        } else {
-            mBinding.includeTrip.tripDivider1.setVisibility(View.GONE);
-            mBinding.includeTrip.tripBreakPointsLabel.setVisibility(View.GONE);
-            mBinding.includeTrip.tripListBreakPoints.setVisibility(View.GONE);
-        }
-
-        ScrollableMapView supportMapFragment = ((ScrollableMapView)
-                getChildFragmentManager().findFragmentById(R.id.include_trip_map_fragment));
-        supportMapFragment.getMapAsync(this);
-        supportMapFragment.setListener(new ScrollableMapView.OnTouchListener() {
-            @Override
-            public void onTouch() {
-                mBinding.tripScroll.requestDisallowInterceptTouchEvent(true);
+            if (getContext() != null) {
+                mBinding.includeTrip.tripDate.setText(
+                        DateFormatterHelper.dateToString(mTrip.getTripDate(), getContext()));
             }
-        });
+
+            if (!mTrip.getPlacesPoints().isEmpty()) {
+                mBinding.includeTrip.tripListBreakPoints
+                        .setAdapter(new BreakPointAdapter(mTrip.getPlacesPoints(), this));
+            } else {
+                mBinding.includeTrip.tripDivider1.setVisibility(View.GONE);
+                mBinding.includeTrip.tripBreakPointsLabel.setVisibility(View.GONE);
+                mBinding.includeTrip.tripListBreakPoints.setVisibility(View.GONE);
+            }
+
+            ScrollableMapView supportMapFragment = ((ScrollableMapView)
+                    getChildFragmentManager().findFragmentById(R.id.include_trip_map_fragment));
+            supportMapFragment.getMapAsync(this);
+            supportMapFragment.setListener(new ScrollableMapView.OnTouchListener() {
+                @Override
+                public void onTouch() {
+                    mBinding.tripScroll.requestDisallowInterceptTouchEvent(true);
+                }
+            });
+        }
     }
 }

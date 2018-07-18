@@ -8,6 +8,10 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import com.guilhermefgl.rolling.R;
 import com.guilhermefgl.rolling.model.Trip;
+import com.guilhermefgl.rolling.model.User;
+import com.guilhermefgl.rolling.view.BaseFragment;
+
+import java.util.ArrayList;
 
 public class DetailsPageAdapter extends FragmentPagerAdapter {
 
@@ -15,6 +19,9 @@ public class DetailsPageAdapter extends FragmentPagerAdapter {
     private Trip mTrip;
     @Nullable
     private Context mContext;
+
+    private TripDetailsFragment mTripPage;
+    private UserDetailsFragment mUserPage;
 
     DetailsPageAdapter(FragmentManager fm) {
         super(fm);
@@ -27,15 +34,20 @@ public class DetailsPageAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
+        BaseFragment pageFragment = null;
         if (mTrip != null) {
             switch (position) {
                 case 0:
-                    return TripDetailsFragment.newInstance(mTrip);
+                    pageFragment = TripDetailsFragment.newInstance(mTrip);
+                    mTripPage = (TripDetailsFragment) pageFragment;
+                    break;
                 case 1:
-                    return UserDetailsFragment.newInstance(mTrip);
+                    pageFragment = UserDetailsFragment.newInstance(new ArrayList<User>());
+                    mUserPage = (UserDetailsFragment) pageFragment;
+                    break;
             }
         }
-        return null;
+        return pageFragment;
     }
 
     @Nullable
@@ -50,5 +62,17 @@ public class DetailsPageAdapter extends FragmentPagerAdapter {
     public void setup(Context context, Trip trip) {
         mTrip = trip;
         mContext = context;
+    }
+
+    public void updateUserList(ArrayList<User> users) {
+        if (mUserPage != null) {
+            mUserPage.updateUserList(users);
+        }
+    }
+
+    public void updateTrip(Trip trip) {
+        if (mTripPage != null) {
+            mTripPage.updateTrip(trip);
+        }
     }
 }

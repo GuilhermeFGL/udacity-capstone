@@ -34,6 +34,7 @@ public class TripListFragment extends BaseFragment implements TripListViewContra
     private FragmentTripListBinding mBinding;
     private TripAdapter mAdapter;
     private String filterParam;
+    private TripListPresenterContract mPresenter;
 
     @NonNull
     public static TripListFragment newInstance(String filter) {
@@ -70,6 +71,12 @@ public class TripListFragment extends BaseFragment implements TripListViewContra
     }
 
     @Override
+    public void onDetach() {
+        mPresenter.stop();
+        super.onDetach();
+    }
+
+    @Override
     public void itemCLick(Trip trip, View transitionImageView) {
         if (getActivity() instanceof BaseActivity) {
             if (trip != null) {
@@ -84,16 +91,18 @@ public class TripListFragment extends BaseFragment implements TripListViewContra
 
     @Override
     public void setPresenter(@NonNull TripListPresenterContract presenter) {
+        mPresenter = presenter;
         mBinding.tripListProgress.setVisibility(View.VISIBLE);
         if (filterParam != null) {
             switch (filterParam) {
                 case BUNDLE_FILTER_ALL:
-                    presenter.setFilterAndGetTrips(TripListPresenterContract.Filters.ALL);
+                    mPresenter.setFilter(TripListPresenterContract.Filters.ALL);
                     break;
                 case BUNDLE_FILTER_USER:
-                    presenter.setFilterAndGetTrips(TripListPresenterContract.Filters.MARKED);
+                    mPresenter.setFilter(TripListPresenterContract.Filters.MARKED);
                     break;
             }
+            mPresenter.start();
         }
     }
 
