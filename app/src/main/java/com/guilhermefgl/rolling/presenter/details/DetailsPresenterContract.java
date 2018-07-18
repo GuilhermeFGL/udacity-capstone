@@ -12,4 +12,6 @@ public interface DetailsPresenterContract extends BasePresenter {
     void addTripAsMarked();
 
     void removeTripAsMarked();
+
+    void addTripAsCurrent();
 }

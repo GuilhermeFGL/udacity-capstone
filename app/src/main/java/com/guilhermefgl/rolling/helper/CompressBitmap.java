@@ -12,6 +12,8 @@ public class CompressBitmap {
     private final static Integer MAX_HEIGHT = 1024;
     private final static Integer QUALITY = 50;
 
+    private CompressBitmap() { }
+
     public static Bitmap compress(Bitmap original) {
 
         // resize

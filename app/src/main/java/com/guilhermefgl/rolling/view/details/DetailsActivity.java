@@ -8,6 +8,7 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.guilhermefgl.rolling.R;
@@ -75,7 +76,6 @@ public class DetailsActivity extends BaseActivity implements DetailsViewContract
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_details, menu);
         mMarkerMenuItem = menu.findItem(R.id.menu_trip_mark);
-        mMarkerMenuItem.setVisible(false);
         setupMenu(mIsMarked);
         return true;
     }
@@ -177,6 +177,20 @@ public class DetailsActivity extends BaseActivity implements DetailsViewContract
     }
 
     @Override
+    public void onUpdateCurrentSuccess() {
+        if (isForeground()) {
+            Toast.makeText(this, R.string.details_current_success, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onUpdateCurrentFailure() {
+        if (isForeground()) {
+            Toast.makeText(this, R.string.error_update_trip, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
     public void setPresenter(@NonNull DetailsPresenterContract presenter) {
         mPresenter = presenter;
         if (mTrip != null) {
@@ -201,12 +215,20 @@ public class DetailsActivity extends BaseActivity implements DetailsViewContract
         mBinding.detailsPager.setAdapter(mPageAdapter);
         mBinding.tabbedTabLayout.setupWithViewPager(mBinding.detailsPager);
         mBinding.detailsPager.addOnPageChangeListener(this);
+
+        mBinding.fabCurrent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mPresenter != null) {
+                    mPresenter.addTripAsCurrent();
+                }
+            }
+        });
     }
 
     private void setupMenu(boolean isMarked) {
         mIsMarked = isMarked;
         if (mMarkerMenuItem != null) {
-            mMarkerMenuItem.setVisible(true);
             mMarkerMenuItem.setEnabled(true);
             if (mMarkerMenuItem != null) {
                 if (isMarked) {

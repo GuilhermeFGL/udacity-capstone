@@ -26,4 +26,8 @@ public interface DetailsViewContract extends BaseView<DetailsPresenterContract> 
     void onUpdateMarkedTripSuccess(@NonNull Boolean isMarked);
 
     void onUpdateMarkedTripFailure();
+
+    void onUpdateCurrentSuccess();
+
+    void onUpdateCurrentFailure();
 }

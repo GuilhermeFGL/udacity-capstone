@@ -82,6 +82,7 @@
     <string name="details_banner">trip banner</string>
     <string name="details_item_person_avatar">person avatar</string>
     <string name="details_person_resume">%d persons confirm participation</string>
+    <string name="details_current_success">Trip marked as current</string>
     <string-array name="details_tab_titles">
         <item>Trip</item>
         <item>Persons</item>

@@ -12,6 +12,8 @@ import java.util.Locale;
 
 public class DateFormatterHelper {
 
+    private DateFormatterHelper() { }
+
     public static String dateToString(@NonNull Date date, @NonNull Context context) {
         return new SimpleDateFormat(context.getString(R.string.date_time_format), Locale.getDefault())
                 .format(date);

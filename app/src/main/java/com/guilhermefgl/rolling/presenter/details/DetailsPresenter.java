@@ -25,6 +25,8 @@ public class DetailsPresenter implements DetailsPresenterContract {
     @NonNull
     private final DatabaseReference mUserDataBase;
     @NonNull
+    private final DatabaseReference mCurrentDataBase;
+    @NonNull
     private final FirebaseAuth mAuth;
     @NonNull
     private final DetailsViewContract mView;
@@ -37,6 +39,7 @@ public class DetailsPresenter implements DetailsPresenterContract {
     public DetailsPresenter(@NonNull DetailsViewContract view) {
         mTripDataBase = FirebaseHelper.getTripDatabaseInstance();
         mUserDataBase = FirebaseHelper.getUserDatabaseInstance();
+        mCurrentDataBase = FirebaseHelper.getCurrentDatabaseInstance();
         mAuth = FirebaseHelper.getAuthInstance();
         mView = view;
 
@@ -139,6 +142,25 @@ public class DetailsPresenter implements DetailsPresenterContract {
                     });
         } else {
             mView.onUpdateMarkedTripFailure();
+        }
+    }
+
+    @Override
+    public void addTripAsCurrent() {
+        if (mTrip != null && mAuth.getCurrentUser() != null) {
+            mCurrentDataBase.child(mAuth.getCurrentUser().getUid()).setValue(mTrip.getTripId())
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                mView.onUpdateCurrentSuccess();
+                            } else {
+                                mView.onUpdateCurrentFailure();
+                            }
+                        }
+                    });
+        } else {
+            mView.onUpdateCurrentFailure();
         }
     }
 }
