@@ -99,6 +99,7 @@ public class ProfileFragment extends BasePickImageFragment
     @Override
     public void getUserImage(Bitmap image) {
         mPresenter.changeAvatar(image);
+        mBinding.profileAvatar.setImageBitmap(image);
         mBinding.profileProgress.setVisibility(View.VISIBLE);
     }
 

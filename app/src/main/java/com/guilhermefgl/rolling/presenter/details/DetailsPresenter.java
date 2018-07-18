@@ -1,6 +1,7 @@
 package com.guilhermefgl.rolling.presenter.details;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -8,6 +9,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.guilhermefgl.rolling.helper.FirebaseHelper;
+import com.guilhermefgl.rolling.model.Trip;
 import com.guilhermefgl.rolling.model.User;
 import com.guilhermefgl.rolling.view.details.DetailsViewContract;
 
@@ -21,6 +23,9 @@ public class DetailsPresenter implements DetailsPresenterContract {
     private final FirebaseAuth mAuth;
     @NonNull
     private final DetailsViewContract mView;
+
+    @Nullable
+    private Trip mTrip;
 
     public DetailsPresenter(@NonNull DetailsViewContract view) {
         mTripDataBase = FirebaseHelper.getTripDatabaseInstance();
@@ -37,8 +42,13 @@ public class DetailsPresenter implements DetailsPresenterContract {
     public void stop() { }
 
     @Override
+    public void setTrip(Trip trip) {
+        mTrip = trip;
+    }
+
+    @Override
     public void addTripAsMarked() {
-        if (mAuth.getCurrentUser() != null) {
+        if (mTrip != null && mAuth.getCurrentUser() != null) {
             FirebaseUser firebaseUser = mAuth.getCurrentUser();
             User user = new User();
             user.setUserId(firebaseUser.getUid());
@@ -48,12 +58,14 @@ public class DetailsPresenter implements DetailsPresenterContract {
                 user.setUserAvatarUrl(firebaseUser.getPhotoUrl().toString());
             }
 
-            mUserDataBase.child(user.getUserId()).setValue(user).addOnCompleteListener(
+            mUserDataBase
+                    .child(mTrip.getTripId())
+                    .child(user.getUserId()).setValue(user).addOnCompleteListener(
                     new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
-                                mView.onUpdateMarkedTripSucess(true);
+                                mView.onUpdateMarkedTripSuccess(true);
                             } else {
                                 mView.onUpdateMarkedTripFailure();
                             }
@@ -67,18 +79,22 @@ public class DetailsPresenter implements DetailsPresenterContract {
 
     @Override
     public void removeTripAsMarked() {
-        if (mAuth.getCurrentUser() != null) {
-            mUserDataBase.child(mAuth.getCurrentUser().getUid()).removeValue().addOnCompleteListener(
+        if (mTrip != null && mAuth.getCurrentUser() != null) {
+            mUserDataBase
+                    .child(mTrip.getTripId())
+                    .child(mAuth.getCurrentUser().getUid()).removeValue().addOnCompleteListener(
                     new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
-                                mView.onUpdateMarkedTripSucess(false);
+                                mView.onUpdateMarkedTripSuccess(false);
                             } else {
                                 mView.onUpdateMarkedTripFailure();
                             }
                         }
                     });
+        } else {
+            mView.onUpdateMarkedTripFailure();
         }
     }
 }

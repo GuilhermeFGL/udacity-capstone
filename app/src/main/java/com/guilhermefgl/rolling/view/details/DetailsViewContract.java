@@ -1,5 +1,7 @@
 package com.guilhermefgl.rolling.view.details;
 
+import android.support.annotation.NonNull;
+
 import com.guilhermefgl.rolling.model.Trip;
 import com.guilhermefgl.rolling.model.User;
 import com.guilhermefgl.rolling.presenter.details.DetailsPresenterContract;
@@ -9,19 +11,19 @@ import java.util.List;
 
 public interface DetailsViewContract extends BaseView<DetailsPresenterContract> {
 
-    void onLoadTripSucess(Trip trip);
+    void onLoadTripSuccess(@NonNull Trip trip);
 
     void onLoadTripFailure();
 
-    void onLoadUsersSucess(List<User> users);
+    void onLoadUsersSuccess(@NonNull List<User> users);
 
     void onLoadUserFailure();
 
-    void onLoadMarkedTripSucess(Boolean isMarked);
+    void onLoadMarkedTripSuccess(@NonNull Boolean isMarked);
 
     void onLoadMarkedTripFailure();
 
-    void onUpdateMarkedTripSucess(Boolean isMarked);
+    void onUpdateMarkedTripSuccess(@NonNull Boolean isMarked);
 
     void onUpdateMarkedTripFailure();
 }

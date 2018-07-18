@@ -9,6 +9,9 @@
     <string name="error_login">Unable to login</string>
     <string name="error_image">Unable to load image</string>
     <string name="error_network">Unable to connect</string>
+    <string name="error_load_trip">Unable to load trip</string>
+    <string name="error_load_user">Unable to load users</string>
+    <string name="error_update_trip">Unable to update trip</string>
     <string name="error_update_profile">Unable to update profile</string>
     <string name="error_google_autocomplete_widget">Cannot open Google Places</string>
 

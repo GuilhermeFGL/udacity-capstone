@@ -9,6 +9,7 @@ import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.StorageReference;
@@ -17,6 +18,7 @@ import com.guilhermefgl.rolling.helper.FirebaseHelper;
 import com.guilhermefgl.rolling.helper.MapRouter;
 import com.guilhermefgl.rolling.model.Place;
 import com.guilhermefgl.rolling.model.Trip;
+import com.guilhermefgl.rolling.model.User;
 import com.guilhermefgl.rolling.view.trip.TripViewContract;
 
 import java.io.ByteArrayOutputStream;
@@ -25,7 +27,9 @@ import java.util.Date;
 public class TripPresenter implements TripPresenterContract {
 
     @NonNull
-    private final DatabaseReference mDataBase;
+    private final DatabaseReference mTripDataBase;
+    @NonNull
+    private final DatabaseReference mUserDataBase;
     @NonNull
     private final StorageReference mStorage;
     @NonNull
@@ -40,7 +44,8 @@ public class TripPresenter implements TripPresenterContract {
     private Bitmap mBannerBitmap;
 
     public TripPresenter(@NonNull TripViewContract view) {
-        mDataBase = FirebaseHelper.getTripDatabaseInstance();
+        mTripDataBase = FirebaseHelper.getTripDatabaseInstance();
+        mUserDataBase = FirebaseHelper.getUserDatabaseInstance();
         mStorage = FirebaseHelper.getBannerStorageInstance();
         mAuth = FirebaseHelper.getAuthInstance();
         mTrip = new Trip();
@@ -173,17 +178,28 @@ public class TripPresenter implements TripPresenterContract {
 
     @Override
     public void saveTrip() throws UnsupportedOperationException {
-        mDataBase.child(mTrip.getTripId())
-                .setValue(mTrip, new DatabaseReference.CompletionListener(){
-                    @Override
-                    public void onComplete(@Nullable DatabaseError databaseError,
-                                           @NonNull DatabaseReference databaseReference) {
-                        if (databaseError == null || databaseError.getMessage().isEmpty()) {
-                            mView.onSaveTripSuccess();
-                        } else {
-                            mView.onSaveTripFailure();
+        if (mAuth.getCurrentUser() != null) {
+            FirebaseUser firebaseUser = mAuth.getCurrentUser();
+            User user = new User();
+            user.setUserId(firebaseUser.getUid());
+            user.setUserName(firebaseUser.getDisplayName());
+            user.setUserEmail(firebaseUser.getEmail());
+            if (firebaseUser.getPhotoUrl() != null) {
+                user.setUserAvatarUrl(firebaseUser.getPhotoUrl().toString());
+            }
+            mUserDataBase.child(mTrip.getTripId()).child(user.getUserId()).setValue(user);
+            mTripDataBase.child(mTrip.getTripId())
+                    .setValue(mTrip, new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(@Nullable DatabaseError databaseError,
+                                               @NonNull DatabaseReference databaseReference) {
+                            if (databaseError == null || databaseError.getMessage().isEmpty()) {
+                                mView.onSaveTripSuccess();
+                            } else {
+                                mView.onSaveTripFailure();
+                            }
                         }
-                    }
-                });
+                    });
+        }
     }
 }
