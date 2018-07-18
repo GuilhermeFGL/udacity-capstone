@@ -11,6 +11,7 @@ public class FirebaseHelper {
 
     private static final String PROVIDER_PASSWORD = "password";
     private static final String DATABASE_TRIPS = "trips/";
+    private static final String DATABASE_USERS = "trip_has_user/";
     private static final String STORAGE_AVATAR = "avatar/";
     private static final String STORAGE_BANNER = "banner/";
 
@@ -23,6 +24,13 @@ public class FirebaseHelper {
     public static DatabaseReference getTripDatabaseInstance() {
         FirebaseDatabase databaseInstance = FirebaseDatabase.getInstance();
         DatabaseReference databaseReference = databaseInstance.getReference(DATABASE_TRIPS);
+        databaseReference.keepSynced(true);
+        return databaseReference;
+    }
+
+    public static DatabaseReference getUserDatabaseInstance() {
+        FirebaseDatabase databaseInstance = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = databaseInstance.getReference(DATABASE_USERS);
         databaseReference.keepSynced(true);
         return databaseReference;
     }
