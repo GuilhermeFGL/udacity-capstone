@@ -2,6 +2,7 @@ package com.guilhermefgl.rolling.view.main;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -24,6 +25,7 @@ import android.widget.Toast;
 import com.firebase.ui.auth.AuthUI;
 import com.guilhermefgl.rolling.R;
 import com.guilhermefgl.rolling.databinding.ActivityMainBinding;
+import com.guilhermefgl.rolling.helper.CompressBitmap;
 import com.guilhermefgl.rolling.helper.PicassoHelper;
 import com.guilhermefgl.rolling.helper.contracts.PickImageInteractionListener;
 import com.guilhermefgl.rolling.model.User;
@@ -106,11 +108,11 @@ public class MainActivity extends BaseActivity
             Fragment currentFragment = getCurrentFragment();
             if (currentFragment instanceof BasePickImageFragment) {
                 try {
-                    ((BasePickImageFragment) currentFragment)
-                            .getUserImage(
-                                    MediaStore.Images.Media.getBitmap(
-                                            this.getContentResolver(),
-                                            data.getData()));
+                    Bitmap userImage = MediaStore.Images.Media.getBitmap(
+                            this.getContentResolver(),
+                            data.getData());
+                    userImage = CompressBitmap.compress(userImage);
+                    ((BasePickImageFragment) currentFragment).getUserImage(userImage);
                 } catch (IOException e) {
                     Toast.makeText(this, R.string.error_image, Toast.LENGTH_SHORT).show();
                 }

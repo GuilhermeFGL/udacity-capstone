@@ -18,6 +18,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.guilhermefgl.rolling.R;
 import com.guilhermefgl.rolling.databinding.ActivityTripBinding;
+import com.guilhermefgl.rolling.helper.CompressBitmap;
 import com.guilhermefgl.rolling.helper.DateFormatterHelper;
 import com.guilhermefgl.rolling.helper.MapDrawerHelper;
 import com.guilhermefgl.rolling.helper.MapRouter;
@@ -133,6 +134,7 @@ public class TripActivity extends BaseActivity implements
                 try {
                     Bitmap bannerBitmap = MediaStore.Images.Media.getBitmap(
                             this.getContentResolver(), data.getData());
+                    bannerBitmap = CompressBitmap.compress(bannerBitmap);
                     mBinding.tripImage.setImageBitmap(bannerBitmap);
                     mPresenter.setBanner(bannerBitmap);
                 } catch (IOException e) {
