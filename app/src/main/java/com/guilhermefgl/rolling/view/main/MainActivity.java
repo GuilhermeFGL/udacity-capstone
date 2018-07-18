@@ -95,8 +95,8 @@ public class MainActivity extends BaseActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == REQUEST_LOGIN ) {
-            if (resultCode != RESULT_OK) {
+        if (requestCode == REQUEST_LOGIN) {
+            if (resultCode == RESULT_OK) {
                 mPresenter.refresh();
             } else {
                 Toast.makeText(this, R.string.error_login, Toast.LENGTH_SHORT).show();
