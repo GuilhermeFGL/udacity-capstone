@@ -11,6 +11,8 @@ import com.guilhermefgl.rolling.helper.FirebaseHelper;
 import com.guilhermefgl.rolling.model.Trip;
 import com.guilhermefgl.rolling.view.current.CurrentViewContract;
 
+import java.util.HashMap;
+
 public class CurrentPresenter implements CurrentPresenterContract {
 
     @NonNull
@@ -71,7 +73,7 @@ public class CurrentPresenter implements CurrentPresenterContract {
         mTripDataBase.child(tripId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                mView.setCurrentTrip((Trip) dataSnapshot.getValue());
+                mView.setCurrentTrip(dataSnapshot.getValue(Trip.class));
             }
 
             @Override

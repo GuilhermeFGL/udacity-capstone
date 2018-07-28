@@ -3,7 +3,6 @@ package com.guilhermefgl.rolling.view.current;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,12 +14,12 @@ import android.widget.Toast;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.guilhermefgl.rolling.R;
-import com.guilhermefgl.rolling.helper.component.ScrollableMapView;
 import com.guilhermefgl.rolling.databinding.FragmentCurrentBinding;
 import com.guilhermefgl.rolling.helper.DateFormatterHelper;
 import com.guilhermefgl.rolling.helper.MapDrawerHelper;
 import com.guilhermefgl.rolling.helper.MapRouter;
 import com.guilhermefgl.rolling.helper.PicassoHelper;
+import com.guilhermefgl.rolling.helper.component.ScrollableMapView;
 import com.guilhermefgl.rolling.model.Place;
 import com.guilhermefgl.rolling.model.Trip;
 import com.guilhermefgl.rolling.presenter.current.CurrentPresenter;
@@ -45,8 +44,6 @@ public class CurrentFragment extends BaseFragment implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
-        new CurrentPresenter(this);
     }
 
     @Override
@@ -54,13 +51,10 @@ public class CurrentFragment extends BaseFragment implements
                              Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(
                 inflater, R.layout.fragment_current, container, false);
-        return mBinding.getRoot();
-    }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        setupView();
+        new CurrentPresenter(this);
+
+        return mBinding.getRoot();
     }
 
     @Override
@@ -101,23 +95,27 @@ public class CurrentFragment extends BaseFragment implements
 
     @Override
     public void setCurrentTrip(Trip trip) {
-        if (isActive()) {
+        if (isAdded()) {
             mTrip = trip;
             setupView();
             drawnMap();
+            mBinding.tripCurrentProgress.setVisibility(View.GONE);
         }
     }
 
     @Override
     public void onGetCurrentTripFailure() {
-        if (isActive()) {
+        if (isAdded()) {
             Toast.makeText(getActivity(), R.string.error_load_trip, Toast.LENGTH_SHORT).show();
+            mBinding.tripCurrentProgress.setVisibility(View.GONE);
         }
     }
 
     @Override
     public void setPresenter(@NonNull CurrentPresenterContract presenter) {
         mPresenter = presenter;
+        mPresenter.getCurrentTrip();
+        mBinding.tripCurrentProgress.setVisibility(View.VISIBLE);
     }
 
     private void setupView() {
