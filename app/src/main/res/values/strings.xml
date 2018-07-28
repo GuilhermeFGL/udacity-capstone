@@ -79,6 +79,7 @@
     <string name="menu_current_remove">Remove as Current</string>
     <string name="trip_current_empty_label_1">Create a shortcut to your\n\'Current Trip\'\nby clinking</string>
     <string name="trip_current_empty_label_2">at the trip details page</string>
+    <string name="trip_current_removed">Trip removed as current</string>
 
     <!-- TRIP DETAILS ACTIVITY -->
     <string name="details_banner">trip banner</string>

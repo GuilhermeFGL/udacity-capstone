@@ -1,5 +1,6 @@
 package com.guilhermefgl.rolling.view.current;
 
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -35,6 +36,7 @@ public class CurrentFragment extends BaseFragment implements
     private CurrentPresenterContract mPresenter;
     private GoogleMap mMap;
     private MenuItem mItemMenu;
+    private CurrentFragmentInteractionListener mListener;
 
     public static CurrentFragment newInstance() {
         return new CurrentFragment();
@@ -58,6 +60,16 @@ public class CurrentFragment extends BaseFragment implements
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof CurrentFragmentInteractionListener) {
+            mListener = (CurrentFragmentInteractionListener) context;
+        } else {
+            throw new UnsupportedOperationException();
+        }
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
         inflater.inflate(R.menu.menu_trip_current, menu);
@@ -73,6 +85,9 @@ public class CurrentFragment extends BaseFragment implements
         switch (item.getItemId()) {
             case R.id.menu_current_remove:
                 mPresenter.removeCurrentTrip();
+                mListener.onRemoveCurrentTrip();
+                Toast.makeText(getActivity(), R.string.trip_current_removed, Toast.LENGTH_SHORT)
+                        .show();
                 break;
             default:
                 return super.onOptionsItemSelected(item);
@@ -175,5 +190,10 @@ public class CurrentFragment extends BaseFragment implements
                 }
             }});
         }
+    }
+
+    public interface CurrentFragmentInteractionListener {
+
+        void onRemoveCurrentTrip();
     }
 }

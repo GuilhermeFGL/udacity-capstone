@@ -45,7 +45,8 @@ import java.util.List;
 public class MainActivity extends BaseActivity
         implements MainViewContract, NavigationView.OnNavigationItemSelectedListener, DrawerLayout.DrawerListener,
         TripPageFragment.TripListFragmentInteractionListener, PickImageInteractionListener,
-        ViewPager.OnPageChangeListener, ProfileFragment.ProfileFragmentInteractionListener {
+        ViewPager.OnPageChangeListener, ProfileFragment.ProfileFragmentInteractionListener,
+        CurrentFragment.CurrentFragmentInteractionListener {
 
     private static final Integer REQUEST_LOGIN = 1001;
 
@@ -211,6 +212,11 @@ public class MainActivity extends BaseActivity
     @Override
     public void refreshUser() {
         mPresenter.refresh();
+    }
+
+    @Override
+    public void onRemoveCurrentTrip() {
+        goToDefaultFragment();
     }
 
     @Override
