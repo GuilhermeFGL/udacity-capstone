@@ -5,6 +5,7 @@
     <item
         android:id="@+id/menu_current_remove"
         android:title="@string/menu_current_remove"
+        android:visible="false"
         app:showAsAction="never" />
 
 </menu>

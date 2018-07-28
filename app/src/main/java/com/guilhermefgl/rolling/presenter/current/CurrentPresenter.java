@@ -43,7 +43,11 @@ public class CurrentPresenter implements CurrentPresenterContract {
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            getTrip((String) dataSnapshot.getValue());
+                            if (dataSnapshot.exists()) {
+                                getTrip((String) dataSnapshot.getValue());
+                            } else {
+                                mView.setCurrentTrip(null);
+                            }
                         }
 
                         @Override
