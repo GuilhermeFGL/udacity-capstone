@@ -6,12 +6,19 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.widget.RemoteViews;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.guilhermefgl.rolling.R;
+import com.guilhermefgl.rolling.helper.FirebaseHelper;
 import com.guilhermefgl.rolling.model.Trip;
-import com.guilhermefgl.rolling.service.taks.SelectCurrentWidgetTripTask;
 import com.guilhermefgl.rolling.view.details.DetailsActivity;
 import com.guilhermefgl.rolling.view.splash.SplashActivity;
 
@@ -32,14 +39,64 @@ public class TripWidgetProvider extends AppWidgetProvider {
     public void onUpdate(final Context context,
                          final AppWidgetManager appWidgetManager,
                          final int[] appWidgetIds) {
-        new SelectCurrentWidgetTripTask(context, new SelectCurrentWidgetTripTask.SelectTripCallBack() {
-            @Override
-            public void onSelect(Trip trip) {
-                for (int appWidgetId : appWidgetIds) {
-                    updateAppWidget(context, appWidgetManager, appWidgetId, trip);
-                }
-            }
-        }).execute();
+
+        final DatabaseReference currentDataBase = FirebaseHelper.getCurrentDatabaseInstance();
+        final DatabaseReference tripDataBase = FirebaseHelper.getTripDatabaseInstance();
+        final FirebaseAuth auth = FirebaseHelper.getAuthInstance();
+
+        if (auth.getCurrentUser() != null) {
+            currentDataBase.child(auth.getCurrentUser().getUid())
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()) {
+                                String tripId = (String) dataSnapshot.getValue();
+                                if (tripId != null) {
+                                    tripDataBase.child(tripId).addListenerForSingleValueEvent(
+                                            new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(
+                                                        @NonNull DataSnapshot dataSnapshot) {
+                                                    Trip trip = dataSnapshot.getValue(Trip.class);
+                                                    createUpdateAppWidget(context, appWidgetManager,
+                                                            appWidgetIds, trip);
+                                                }
+
+                                                @Override
+                                                public void onCancelled(
+                                                        @NonNull DatabaseError databaseError) {
+                                                    createUpdateAppWidget(context, appWidgetManager,
+                                                            appWidgetIds, null);
+                                                }
+                                            });
+                                } else {
+                                    createUpdateAppWidget(context, appWidgetManager,
+                                            appWidgetIds, null);
+                                }
+                            } else {
+                                createUpdateAppWidget(context, appWidgetManager,
+                                        appWidgetIds, null);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            createUpdateAppWidget(context, appWidgetManager,
+                                    appWidgetIds, null);
+                        }
+                    });
+        } else {
+            createUpdateAppWidget(context, appWidgetManager, appWidgetIds, null);
+        }
+    }
+
+    private void createUpdateAppWidget(final Context context,
+                                       final AppWidgetManager appWidgetManager,
+                                       final int[] appWidgetIds,
+                                       Trip trip) {
+        for (int appWidgetId : appWidgetIds) {
+            updateAppWidget(context, appWidgetManager, appWidgetId, trip);
+        }
     }
 
     private void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
@@ -56,6 +113,7 @@ public class TripWidgetProvider extends AppWidgetProvider {
             extras.putParcelable(DetailsActivity.BUNDLE_TRIP, trip);
             Intent appIntent = new Intent(context, DetailsActivity.class);
             appIntent.putExtras(extras);
+            appIntent.setData(Uri.parse(appIntent.toUri(Intent.URI_INTENT_SCHEME)));
             PendingIntent appPendingIntent = PendingIntent
                     .getActivity(context, INTENT_REQUEST_CODE, appIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             views.setOnClickPendingIntent(R.id.widget_trip_layout, appPendingIntent);

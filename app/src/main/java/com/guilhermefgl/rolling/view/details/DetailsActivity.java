@@ -19,6 +19,7 @@ import com.guilhermefgl.rolling.model.User;
 import com.guilhermefgl.rolling.presenter.details.DetailsPresenter;
 import com.guilhermefgl.rolling.presenter.details.DetailsPresenterContract;
 import com.guilhermefgl.rolling.view.BaseActivity;
+import com.guilhermefgl.rolling.view.widget.TripWidgetProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -122,70 +123,71 @@ public class DetailsActivity extends BaseActivity implements DetailsViewContract
     @Override
     public void onLoadTripSuccess(@NonNull Trip trip) {
         mTrip = trip;
-        if (isForeground()) {
+        if (!isDestroyed()) {
             mPageAdapter.updateTrip(trip);
         }
     }
 
     @Override
     public void onLoadTripFailure() {
-        if (isForeground()) {
+        if (!isDestroyed()) {
             Toast.makeText(this, R.string.error_load_trip, Toast.LENGTH_LONG).show();
         }
     }
 
     @Override
     public void onLoadUsersSuccess(@NonNull List<User> users) {
-        if (isForeground()) {
+        if (!isDestroyed()) {
             mPageAdapter.updateUserList((ArrayList<User>) users);
         }
     }
 
     @Override
     public void onLoadUserFailure() {
-        if (isForeground()) {
+        if (!isDestroyed()) {
             Toast.makeText(this, R.string.error_load_user, Toast.LENGTH_LONG).show();
         }
     }
 
     @Override
     public void onLoadMarkedTripSuccess(@NonNull Boolean isMarked) {
-        if (isForeground()) {
+        if (!isDestroyed()) {
             setupMenu(isMarked);
         }
     }
 
     @Override
     public void onLoadMarkedTripFailure() {
-        if (isForeground()) {
+        if (!isDestroyed()) {
             Toast.makeText(this, R.string.error_load_trip, Toast.LENGTH_LONG).show();
         }
     }
 
     @Override
     public void onUpdateMarkedTripSuccess(@NonNull Boolean isMarked) {
-        if (isForeground()) {
+        if (!isDestroyed()) {
             setupMenu(isMarked);
         }
     }
 
     @Override
     public void onUpdateMarkedTripFailure() {
-        if (isForeground()) {
+        if (!isDestroyed()) {
             Toast.makeText(this, R.string.error_update_trip, Toast.LENGTH_LONG).show();
         }
     }
 
     @Override
     public void onUpdateCurrentSuccess() {
-        if (isForeground()) {
+        if (!isDestroyed()) {
+            TripWidgetProvider.update(getApplicationContext());
             Toast.makeText(this, R.string.details_current_success, Toast.LENGTH_LONG).show();
         }
     }
 
     @Override
     public void onUpdateCurrentFailure() {
-        if (isForeground()) {
+        if (!isDestroyed()) {
             Toast.makeText(this, R.string.error_update_trip, Toast.LENGTH_LONG).show();
         }
     }

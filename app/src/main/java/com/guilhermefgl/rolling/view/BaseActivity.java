@@ -11,8 +11,4 @@ public abstract class BaseActivity extends AppCompatActivity {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
-    protected boolean isForeground() {
-        return !(isFinishing() || isDestroyed());
-    }
-
 }

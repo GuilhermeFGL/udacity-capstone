@@ -27,6 +27,7 @@ import com.guilhermefgl.rolling.presenter.current.CurrentPresenter;
 import com.guilhermefgl.rolling.presenter.current.CurrentPresenterContract;
 import com.guilhermefgl.rolling.view.BaseFragment;
 import com.guilhermefgl.rolling.view.breakpoint.BreakPointAdapter;
+import com.guilhermefgl.rolling.view.widget.TripWidgetProvider;
 
 public class CurrentFragment extends BaseFragment implements
         BreakPointAdapter.BreakPointAdapterItemClick, OnMapReadyCallback, CurrentViewContract {
@@ -84,10 +85,7 @@ public class CurrentFragment extends BaseFragment implements
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_current_remove:
-                mPresenter.removeCurrentTrip();
-                mListener.onRemoveCurrentTrip();
-                Toast.makeText(getActivity(), R.string.trip_current_removed, Toast.LENGTH_SHORT)
-                        .show();
+                removeAsCurrent();
                 break;
             default:
                 return super.onOptionsItemSelected(item);
@@ -189,6 +187,16 @@ public class CurrentFragment extends BaseFragment implements
                     addBreakPlace(breakPoint);
                 }
             }});
+        }
+    }
+
+    private void removeAsCurrent() {
+        mPresenter.removeCurrentTrip();
+        mListener.onRemoveCurrentTrip();
+        Toast.makeText(getActivity(), R.string.trip_current_removed, Toast.LENGTH_SHORT)
+                .show();
+        if (getActivity() != null) {
+            TripWidgetProvider.update(getActivity().getApplicationContext());
         }
     }
 
