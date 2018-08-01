@@ -76,8 +76,10 @@ public class TripDetailsFragment extends BaseFragment implements
         new MapDrawerHelper(getActivity(), null).drawnMap(googleMap, new MapRouter(){{
             setStartPoint(mTrip.getPlaceStart());
             setEndPoint(mTrip.getPlaceEnd());
-            for (Place breakPoint : mTrip.getPlacesPoints()) {
-                addBreakPlace(breakPoint);
+            if (mTrip.getPlacesPoints() != null && !mTrip.getPlacesPoints().isEmpty()) {
+                for (Place breakPoint : mTrip.getPlacesPoints()) {
+                    addBreakPlace(breakPoint);
+                }
             }
         }});
     }
@@ -99,7 +101,7 @@ public class TripDetailsFragment extends BaseFragment implements
                         DateFormatterHelper.dateToString(mTrip.getTripDate(), getContext()));
             }
 
-            if (!mTrip.getPlacesPoints().isEmpty()) {
+            if (mTrip.getPlacesPoints() != null && !mTrip.getPlacesPoints().isEmpty()) {
                 mBinding.includeTrip.tripListBreakPoints
                         .setAdapter(new BreakPointAdapter(mTrip.getPlacesPoints(), this));
             } else {

@@ -4,98 +4,105 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".view.current.CurrentFragment">
 
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/trip_scroll"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <RelativeLayout
+        <ProgressBar
+            android:id="@+id/trip_current_progress"
+            android:layout_marginTop="-6dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="gone"
+            style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal" />
+
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/trip_scroll"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ProgressBar
-                android:id="@+id/trip_current_progress"
-                android:layout_marginTop="-6dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:indeterminate="true"
-                android:visibility="gone"
-                style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal" />
-
             <RelativeLayout
-                android:id="@+id/current_trip_content"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
 
-                <ImageView
-                    android:id="@+id/trip_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="275dp"
-                    android:scaleType="centerCrop"
-                    android:background="@color/primary_light"
-                    android:contentDescription="@string/trip_action_add_image" />
-
-                <TextView
-                    android:id="@id/trip_title"
-                    android:layout_alignBottom="@+id/trip_image"
+                <RelativeLayout
+                    android:id="@+id/current_trip_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="16dp"
-                    android:textSize="22sp"
-                    android:textColor="@color/icons"
-                    android:background="@color/background_transparent"
-                    tools:text="Trip Title" />
+                    android:visibility="gone">
 
-                <include
-                    android:id="@+id/include_trip"
-                    android:layout_below="@+id/trip_image"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    layout="@layout/include_trip_navigation" />
+                    <ImageView
+                        android:id="@+id/trip_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="275dp"
+                        android:scaleType="centerCrop"
+                        android:background="@color/primary_light"
+                        android:contentDescription="@string/trip_action_add_image" />
+
+                    <TextView
+                        android:id="@id/trip_title"
+                        android:layout_alignBottom="@+id/trip_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:textSize="22sp"
+                        android:textColor="@color/icons"
+                        android:background="@color/background_transparent"
+                        tools:text="Trip Title" />
+
+                    <include
+                        android:id="@+id/include_trip"
+                        android:layout_below="@+id/trip_image"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        layout="@layout/include_trip_navigation" />
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/current_trip_empty"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    android:layout_centerInParent="true">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:textSize="16sp"
+                        android:gravity="center"
+                        android:textColor="@color/secondary_text"
+                        android:text="@string/trip_current_empty_label_1" />
+
+                    <ImageView
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:padding="8dp"
+                        android:background="@color/accent"
+                        android:foreground="@drawable/shape_round"
+                        android:contentDescription="@string/navigation_trip_current"
+                        android:tint="@color/icons"
+                        app:srcCompat="@drawable/ic_trip_current" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:textSize="16sp"
+                        android:gravity="center"
+                        android:textColor="@color/secondary_text"
+                        android:text="@string/trip_current_empty_label_2" />
+
+                </LinearLayout>
 
             </RelativeLayout>
 
-            <LinearLayout
-                android:id="@+id/current_trip_empty"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:visibility="gone"
-                android:layout_centerInParent="true">
+        </android.support.v4.widget.NestedScrollView>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="16dp"
-                    android:textSize="16sp"
-                    android:gravity="center"
-                    android:textColor="@color/secondary_text"
-                    android:text="@string/trip_current_empty_label_1" />
-
-                <ImageView
-                    android:layout_width="42dp"
-                    android:layout_height="42dp"
-                    android:padding="8dp"
-                    android:background="@color/accent"
-                    android:foreground="@drawable/shape_round"
-                    android:contentDescription="@string/navigation_trip_current"
-                    android:tint="@color/icons"
-                    app:srcCompat="@drawable/ic_trip_current" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="16dp"
-                    android:textSize="16sp"
-                    android:gravity="center"
-                    android:textColor="@color/secondary_text"
-                    android:text="@string/trip_current_empty_label_2" />
-
-            </LinearLayout>
-
-        </RelativeLayout>
-
-    </android.support.v4.widget.NestedScrollView>
+    </RelativeLayout>
 
 </layout>

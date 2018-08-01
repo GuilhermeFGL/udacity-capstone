@@ -42,12 +42,12 @@ public class MapDrawerHelper {
         mDistance = 0d;
     }
 
-    public void drawnMap(GoogleMap map, MapRouter mapRouter) {
+    public void drawnMap(final GoogleMap map, MapRouter mapRouter) {
         mMap = map;
         mMap.clear();
 
         ArrayList<LatLng> positions = new ArrayList<>();
-        LatLngBounds.Builder markerBuilder = new LatLngBounds.Builder();
+        final LatLngBounds.Builder markerBuilder = new LatLngBounds.Builder();
 
         if (mapRouter.getStartPoint() != null) {
             MarkerOptions marker = createMarker(mapRouter.getStartPoint(), BitmapDescriptorFactory.HUE_AZURE);
@@ -71,7 +71,13 @@ public class MapDrawerHelper {
         }
 
         if (!positions.isEmpty()) {
-            mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(markerBuilder.build(), MAP_PADDING));
+            mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+                @Override
+                public void onMapLoaded() {
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(
+                            markerBuilder.build(), MAP_PADDING));
+                }
+            });
             requestMapService(positions);
         } else {
             if (mCallBack != null) {
