@@ -23,7 +23,7 @@ import com.guilhermefgl.rolling.view.BaseFragment;
 import com.guilhermefgl.rolling.view.breakpoint.BreakPointAdapter;
 
 public class TripDetailsFragment extends BaseFragment implements
-        BreakPointAdapter.BreakPointAdapterItemClick, OnMapReadyCallback {
+        BreakPointAdapter.BreakPointAdapterItemClick, OnMapReadyCallback, View.OnClickListener {
 
     private static final String BUNDLE_TRIP = "BUNDLE_TRIP";
 
@@ -57,6 +57,9 @@ public class TripDetailsFragment extends BaseFragment implements
                 .findFragmentById(R.id.include_trip_map_fragment))
                 .getMapAsync(this);
 
+        mBinding.includeTrip.tripStart.setOnClickListener(this);
+        mBinding.includeTrip.tripDestination.setOnClickListener(this);
+
         return mBinding.getRoot();
     }
 
@@ -67,8 +70,19 @@ public class TripDetailsFragment extends BaseFragment implements
     }
 
     @Override
-    public void onBreakPointItemCLick(Place place) {
+    public void onClick(View v) {
+        if (mTrip != null) {
+            if (v.getId() == R.id.trip_start) {
+                startActivity(MapRouterHelper.createNavigationIntent(mTrip.getPlaceStart()));
+            } else if (v.getId() == R.id.trip_destination) {
+                startActivity(MapRouterHelper.createNavigationIntent(mTrip.getPlaceEnd()));
+            }
+        }
+    }
 
+    @Override
+    public void onBreakPointItemCLick(Place place) {
+        startActivity(MapRouterHelper.createNavigationIntent(place));
     }
 
     @Override
