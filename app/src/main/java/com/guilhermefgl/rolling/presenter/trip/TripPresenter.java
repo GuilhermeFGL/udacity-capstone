@@ -15,7 +15,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.guilhermefgl.rolling.helper.FirebaseHelper;
-import com.guilhermefgl.rolling.helper.MapRouter;
+import com.guilhermefgl.rolling.helper.MapRouterHelper;
 import com.guilhermefgl.rolling.model.Place;
 import com.guilhermefgl.rolling.model.Trip;
 import com.guilhermefgl.rolling.model.User;
@@ -37,7 +37,7 @@ public class TripPresenter implements TripPresenterContract {
     @NonNull
     private final Trip mTrip;
     @NonNull
-    private final MapRouter mRoute;
+    private final MapRouterHelper mRoute;
     @NonNull
     private final TripViewContract mView;
     @Nullable
@@ -49,7 +49,7 @@ public class TripPresenter implements TripPresenterContract {
         mStorage = FirebaseHelper.getBannerStorageInstance();
         mAuth = FirebaseHelper.getAuthInstance();
         mTrip = new Trip();
-        mRoute = new MapRouter();
+        mRoute = new MapRouterHelper();
         mView = view;
         mView.setPresenter(this);
     }

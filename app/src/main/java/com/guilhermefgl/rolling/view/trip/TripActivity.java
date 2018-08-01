@@ -21,7 +21,7 @@ import com.guilhermefgl.rolling.databinding.ActivityTripBinding;
 import com.guilhermefgl.rolling.helper.CompressBitmap;
 import com.guilhermefgl.rolling.helper.DateFormatterHelper;
 import com.guilhermefgl.rolling.helper.MapDrawerHelper;
-import com.guilhermefgl.rolling.helper.MapRouter;
+import com.guilhermefgl.rolling.helper.MapRouterHelper;
 import com.guilhermefgl.rolling.helper.DateTimeEditText;
 import com.guilhermefgl.rolling.helper.component.ProgressDialog;
 import com.guilhermefgl.rolling.helper.component.ScrollableMapView;
@@ -176,12 +176,12 @@ public class TripActivity extends BaseActivity implements
     }
 
     @Override
-    public void drawMap(MapRouter mapRouter) {
+    public void drawMap(MapRouterHelper mapRouterHelper) {
         mBinding.tripProgress.setVisibility(View.VISIBLE);
         mBinding.tripStart.setEnabled(false);
         mBinding.tripDestination.setEnabled(false);
         mBinding.tripListBreakPoints.setEnabled(false);
-        mMapDrawerHelper.drawnMap(mMap, mapRouter);
+        mMapDrawerHelper.drawnMap(mMap, mapRouterHelper);
     }
 
     @Override

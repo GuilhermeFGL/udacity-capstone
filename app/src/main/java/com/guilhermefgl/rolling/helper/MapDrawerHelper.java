@@ -42,29 +42,29 @@ public class MapDrawerHelper {
         mDistance = 0d;
     }
 
-    public void drawnMap(final GoogleMap map, MapRouter mapRouter) {
+    public void drawnMap(final GoogleMap map, MapRouterHelper mapRouterHelper) {
         mMap = map;
         mMap.clear();
 
         ArrayList<LatLng> positions = new ArrayList<>();
         final LatLngBounds.Builder markerBuilder = new LatLngBounds.Builder();
 
-        if (mapRouter.getStartPoint() != null) {
-            MarkerOptions marker = createMarker(mapRouter.getStartPoint(), BitmapDescriptorFactory.HUE_AZURE);
+        if (mapRouterHelper.getStartPoint() != null) {
+            MarkerOptions marker = createMarker(mapRouterHelper.getStartPoint(), BitmapDescriptorFactory.HUE_AZURE);
             mMap.addMarker(marker);
             positions.add(marker.getPosition());
             markerBuilder.include(marker.getPosition());
         }
-        if (mapRouter.getBreakPlaces() != null && !mapRouter.getBreakPlaces().isEmpty()) {
-            for (Place place : mapRouter.getBreakPlaces()) {
+        if (mapRouterHelper.getBreakPlaces() != null && !mapRouterHelper.getBreakPlaces().isEmpty()) {
+            for (Place place : mapRouterHelper.getBreakPlaces()) {
                 MarkerOptions marker = createMarker(place, BitmapDescriptorFactory.HUE_CYAN);
                 mMap.addMarker(marker);
                 positions.add(marker.getPosition());
                 markerBuilder.include(marker.getPosition());
             }
         }
-        if (mapRouter.getEndPlace() != null) {
-            MarkerOptions marker = createMarker(mapRouter.getEndPlace(), BitmapDescriptorFactory.HUE_RED);
+        if (mapRouterHelper.getEndPlace() != null) {
+            MarkerOptions marker = createMarker(mapRouterHelper.getEndPlace(), BitmapDescriptorFactory.HUE_RED);
             mMap.addMarker(marker);
             positions.add(marker.getPosition());
             markerBuilder.include(marker.getPosition());

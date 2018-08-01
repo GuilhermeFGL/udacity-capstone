@@ -15,7 +15,7 @@ import com.guilhermefgl.rolling.R;
 import com.guilhermefgl.rolling.databinding.FragmentDetailsTripBinding;
 import com.guilhermefgl.rolling.helper.DateFormatterHelper;
 import com.guilhermefgl.rolling.helper.MapDrawerHelper;
-import com.guilhermefgl.rolling.helper.MapRouter;
+import com.guilhermefgl.rolling.helper.MapRouterHelper;
 import com.guilhermefgl.rolling.helper.component.ScrollableMapView;
 import com.guilhermefgl.rolling.model.Place;
 import com.guilhermefgl.rolling.model.Trip;
@@ -73,7 +73,7 @@ public class TripDetailsFragment extends BaseFragment implements
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        new MapDrawerHelper(getActivity(), null).drawnMap(googleMap, new MapRouter(){{
+        new MapDrawerHelper(getActivity(), null).drawnMap(googleMap, new MapRouterHelper(){{
             setStartPoint(mTrip.getPlaceStart());
             setEndPoint(mTrip.getPlaceEnd());
             if (mTrip.getPlacesPoints() != null && !mTrip.getPlacesPoints().isEmpty()) {

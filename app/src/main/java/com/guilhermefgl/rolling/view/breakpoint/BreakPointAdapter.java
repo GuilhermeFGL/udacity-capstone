@@ -102,7 +102,7 @@ public class BreakPointAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         public void bind(final Place place, final BreakPointAdapterItemClick mAdapterItemClick) {
             mBinding.itemBreakPointText.setText(place.getPlaceName());
-            mBinding.getRoot().setOnClickListener(new View.OnClickListener() {
+            mBinding.itemBreakPointText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mAdapterItemClick.onBreakPointItemCLick(place);

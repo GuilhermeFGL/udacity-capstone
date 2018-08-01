@@ -18,7 +18,7 @@ import com.guilhermefgl.rolling.R;
 import com.guilhermefgl.rolling.databinding.FragmentCurrentBinding;
 import com.guilhermefgl.rolling.helper.DateFormatterHelper;
 import com.guilhermefgl.rolling.helper.MapDrawerHelper;
-import com.guilhermefgl.rolling.helper.MapRouter;
+import com.guilhermefgl.rolling.helper.MapRouterHelper;
 import com.guilhermefgl.rolling.helper.PicassoHelper;
 import com.guilhermefgl.rolling.helper.component.ScrollableMapView;
 import com.guilhermefgl.rolling.model.Place;
@@ -30,7 +30,8 @@ import com.guilhermefgl.rolling.view.breakpoint.BreakPointAdapter;
 import com.guilhermefgl.rolling.view.widget.TripWidgetProvider;
 
 public class CurrentFragment extends BaseFragment implements
-        BreakPointAdapter.BreakPointAdapterItemClick, OnMapReadyCallback, CurrentViewContract {
+        BreakPointAdapter.BreakPointAdapterItemClick, OnMapReadyCallback, CurrentViewContract,
+        View.OnClickListener {
 
     private Trip mTrip;
     private FragmentCurrentBinding mBinding;
@@ -54,6 +55,9 @@ public class CurrentFragment extends BaseFragment implements
                              Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(
                 inflater, R.layout.fragment_current, container, false);
+
+        mBinding.includeTrip.tripStart.setOnClickListener(this);
+        mBinding.includeTrip.tripDestination.setOnClickListener(this);
 
         new CurrentPresenter(this);
 
@@ -94,8 +98,19 @@ public class CurrentFragment extends BaseFragment implements
     }
 
     @Override
-    public void onBreakPointItemCLick(Place place) {
+    public void onClick(View v) {
+        if (mTrip != null) {
+            if (v.getId() == R.id.trip_start) {
+                startActivity(MapRouterHelper.createNavigationIntent(mTrip.getPlaceStart()));
+            } else if (v.getId() == R.id.trip_destination) {
+                startActivity(MapRouterHelper.createNavigationIntent(mTrip.getPlaceEnd()));
+            }
+        }
+    }
 
+    @Override
+    public void onBreakPointItemCLick(Place place) {
+        startActivity(MapRouterHelper.createNavigationIntent(place));
     }
 
     @Override
@@ -180,7 +195,7 @@ public class CurrentFragment extends BaseFragment implements
 
     private void drawnMap() {
         if (mMap != null && mTrip != null) {
-            new MapDrawerHelper(getActivity(), null).drawnMap(mMap, new MapRouter() {{
+            new MapDrawerHelper(getActivity(), null).drawnMap(mMap, new MapRouterHelper() {{
                 setStartPoint(mTrip.getPlaceStart());
                 setEndPoint(mTrip.getPlaceEnd());
                 for (Place breakPoint : mTrip.getPlacesPoints()) {

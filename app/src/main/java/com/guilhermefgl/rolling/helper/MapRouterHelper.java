@@ -1,5 +1,7 @@
 package com.guilhermefgl.rolling.helper;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -7,9 +9,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.guilhermefgl.rolling.model.Place;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class MapRouter {
+public class MapRouterHelper {
+
+    private static final String LOCATION_FORMATTER = "geo:0,0?q=%f,%f (%s)";
 
     @Nullable
     private Place mStartPlace;
@@ -18,7 +23,7 @@ public class MapRouter {
     @NonNull
     private ArrayList<Place> mBreakPlaces;
 
-    public MapRouter() {
+    public MapRouterHelper() {
         mBreakPlaces = new ArrayList<>();
     }
 
@@ -68,5 +73,11 @@ public class MapRouter {
             positions.add(new LatLng(place.getPlaceLatitude(), place.getPlaceLongitude()));
         }
         return positions;
+    }
+
+    public static Intent createNavigationIntent(Place place) {
+        return new Intent(android.content.Intent.ACTION_VIEW,
+                Uri.parse(String.format(Locale.getDefault(), LOCATION_FORMATTER,
+                        place.getPlaceLatitude(), place.getPlaceLongitude(), place.getPlaceName())));
     }
 }
