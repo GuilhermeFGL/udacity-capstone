@@ -28,7 +28,9 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:host="@string/host" android:scheme="@string/schema" />
+                <data android:host="@string/host"
+                    android:scheme="@string/schema"
+                    android:path="@string/path_main" />
             </intent-filter>
         </activity>
         <activity

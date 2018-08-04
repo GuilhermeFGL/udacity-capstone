@@ -2,7 +2,6 @@ package com.guilhermefgl.rolling.view.details;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -33,7 +32,7 @@ public class DetailsActivity extends BaseActivity implements DetailsViewContract
     private static final String BUNDLE_TRIP_ID = "id";
     private static final String LINK_SHARE;
     static {
-        LINK_SHARE = "%s\n%s?"+ BUNDLE_TRIP_ID + "=%s";
+        LINK_SHARE = "%s\n%s://%s%s?"+ BUNDLE_TRIP_ID + "=%s";
     }
 
     private Trip mTrip;
@@ -69,12 +68,10 @@ public class DetailsActivity extends BaseActivity implements DetailsViewContract
 
         if (mTrip != null) {
             setupView();
-        } else {
-            if (getIntent().getData() != null) {
-                mTripID = getIntent().getData().getQueryParameter(BUNDLE_TRIP_ID);
-                if (mTripID == null) {
-                    finish();
-                }
+        } else if (getIntent().getData() != null) {
+            mTripID = getIntent().getData().getQueryParameter(BUNDLE_TRIP_ID);
+            if (mTripID == null) {
+                finish();
             }
         }
 
@@ -161,7 +158,8 @@ public class DetailsActivity extends BaseActivity implements DetailsViewContract
     public void onLoadTripSuccess(@NonNull Trip trip) {
         mTrip = trip;
         if (!isDestroyed()) {
-            mPageAdapter.updateTrip(trip);
+            setupView();
+            mBinding.tripDetailsProgress.setVisibility(View.GONE);
         }
     }
 
@@ -169,12 +167,13 @@ public class DetailsActivity extends BaseActivity implements DetailsViewContract
     public void onLoadTripFailure() {
         if (!isDestroyed()) {
             Toast.makeText(this, R.string.error_load_trip, Toast.LENGTH_LONG).show();
+            finish();
         }
     }
 
     @Override
     public void onLoadUsersSuccess(@NonNull List<User> users) {
-        if (!isDestroyed()) {
+        if (!isDestroyed() && mPageAdapter != null) {
             mPageAdapter.updateUserList((ArrayList<User>) users);
         }
     }
@@ -240,6 +239,7 @@ public class DetailsActivity extends BaseActivity implements DetailsViewContract
         } else if (mTripID != null) {
             mPresenter.getTrip(mTripID);
             mPresenter.start();
+            mBinding.tripDetailsProgress.setVisibility(View.VISIBLE);
         }
     }
 
@@ -312,7 +312,9 @@ public class DetailsActivity extends BaseActivity implements DetailsViewContract
             shareIntent.putExtra(Intent.EXTRA_TEXT,
                     String.format(LINK_SHARE,
                             mTrip.getTripName(),
+                            getString(R.string.schema),
                             getString(R.string.host),
+                            getString(R.string.path_details),
                             mTrip.getTripId()));
 
             startActivity(Intent.createChooser(shareIntent, getString(R.string.share_title)));

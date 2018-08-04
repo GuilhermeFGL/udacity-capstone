@@ -98,6 +98,7 @@
     <!-- SHARE -->
     <string name="schema">http</string>
     <string name="host">rolling.app</string>
+    <string name="path_main">/</string>
     <string name="path_details">/trip</string>
     <string name="share_title">Share a trip</string>
 

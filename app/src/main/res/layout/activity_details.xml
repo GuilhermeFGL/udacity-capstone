@@ -54,6 +54,16 @@
 
         </android.support.design.widget.AppBarLayout>
 
+        <ProgressBar
+            android:id="@+id/trip_details_progress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="gone"
+            app:layout_anchor="@+id/details_pager"
+            app:layout_anchorGravity="top|center"
+            style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal" />
+
         <android.support.v4.view.ViewPager
             android:id="@+id/details_pager"
             android:layout_width="match_parent"
