@@ -49,12 +49,18 @@ public class DetailsPresenter implements DetailsPresenterContract {
         mTripDatabaseListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
+                Trip trip = dataSnapshot.getValue(Trip.class);
+                if (trip != null) {
+                    setTrip(trip);
+                    mView.onLoadTripSuccess(trip);
+                } else {
+                    mView.onLoadTripFailure();
+                }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                mView.onLoadTripFailure();
             }
         };
 
@@ -96,7 +102,7 @@ public class DetailsPresenter implements DetailsPresenterContract {
         if (mTrip != null) {
             mUserDataBase.child(mTrip.getTripId()).addValueEventListener(mUserDatabaseListener);
         } else if (mTripId != null) {
-            mTripDataBase.child(mTripId).addValueEventListener(mTripDatabaseListener);
+            mTripDataBase.child(mTripId).addListenerForSingleValueEvent(mTripDatabaseListener);
         }
     }
 
@@ -117,6 +123,11 @@ public class DetailsPresenter implements DetailsPresenterContract {
     @Override
     public void setTrip(@NonNull Trip trip) {
         mTrip = trip;
+        if (mTripId != null) {
+            mTripDataBase.child(mTripId).removeEventListener(mTripDatabaseListener);
+            mUserDataBase.child(mTrip.getTripId()).addValueEventListener(mUserDatabaseListener);
+            mTripId = null;
+        }
     }
 
     @Override
