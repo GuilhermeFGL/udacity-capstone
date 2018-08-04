@@ -41,7 +41,8 @@
             android:name=".view.trip.TripActivity"
             android:windowSoftInputMode="stateVisible|adjustPan"
             android:screenOrientation="portrait" />
-        <activity android:name=".view.details.DetailsActivity">
+        <activity android:name=".view.details.DetailsActivity"
+            android:launchMode="singleTask">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>

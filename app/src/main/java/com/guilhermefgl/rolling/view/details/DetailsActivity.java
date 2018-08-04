@@ -128,7 +128,7 @@ public class DetailsActivity extends BaseActivity implements DetailsViewContract
 
     @Override
     public void onPageSelected(int position) {
-        if (mIsLogged != null && mIsLogged) {
+        if (mIsLogged != null && mIsLogged && mTrip != null) {
             switch (position) {
                 case 0:
                     mBinding.fabCurrent.show();
@@ -240,6 +240,8 @@ public class DetailsActivity extends BaseActivity implements DetailsViewContract
             mPresenter.getTrip(mTripID);
             mPresenter.start();
             mBinding.tripDetailsProgress.setVisibility(View.VISIBLE);
+            mBinding.fabCurrent.setVisibility(View.GONE);
+            mBinding.fabShare.setVisibility(View.GONE);
         }
     }
 
@@ -264,24 +266,26 @@ public class DetailsActivity extends BaseActivity implements DetailsViewContract
     }
 
     private void setupIsLoggedView() {
-        if (mIsLogged == null || !mIsLogged) {
-            mBinding.fabCurrent.hide();
-            mBinding.fabShare.hide();
-        } else {
-            if (mBinding.detailsPager.getCurrentItem() == 0) {
-                mBinding.fabCurrent.show();
-                mBinding.fabShare.hide();
-            } else if (mBinding.detailsPager.getCurrentItem() == 1) {
-                mBinding.fabCurrent.show();
-                mBinding.fabShare.hide();
-            }
-        }
-
-        if (mMarkerMenuItem != null) {
+        if (mTrip != null) {
             if (mIsLogged == null || !mIsLogged) {
-                mMarkerMenuItem.setVisible(false);
+                mBinding.fabCurrent.hide();
+                mBinding.fabShare.hide();
             } else {
-                mMarkerMenuItem.setVisible(true);
+                if (mBinding.detailsPager.getCurrentItem() == 0) {
+                    mBinding.fabCurrent.show();
+                    mBinding.fabShare.hide();
+                } else if (mBinding.detailsPager.getCurrentItem() == 1) {
+                    mBinding.fabCurrent.show();
+                    mBinding.fabShare.hide();
+                }
+            }
+
+            if (mMarkerMenuItem != null) {
+                if (mIsLogged == null || !mIsLogged) {
+                    mMarkerMenuItem.setVisible(false);
+                } else {
+                    mMarkerMenuItem.setVisible(true);
+                }
             }
         }
     }
