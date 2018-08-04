@@ -49,14 +49,15 @@ public class DetailsPresenter implements DetailsPresenterContract {
                 boolean isTripMarked = false;
                 ArrayList<User> users = new ArrayList<>();
 
-                if (mAuth.getCurrentUser() != null) {
-                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                        User user = postSnapshot.getValue(User.class);
-                        users.add(user);
-                        if (user != null && user.getUserId() != null &&
-                                user.getUserId().equals(mAuth.getCurrentUser().getUid())) {
-                            isTripMarked = true;
-                        }
+                String currentUserID = mAuth.getCurrentUser() != null ?
+                        mAuth.getCurrentUser().getUid() : "";
+
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    User user = postSnapshot.getValue(User.class);
+                    users.add(user);
+                    if (user != null && user.getUserId() != null
+                            && user.getUserId().equals(currentUserID)) {
+                        isTripMarked = true;
                     }
                 }
 
@@ -72,6 +73,7 @@ public class DetailsPresenter implements DetailsPresenterContract {
         };
 
         mView.setPresenter(this);
+        mView.setUserIsLogged(mAuth.getCurrentUser() != null);
     }
 
     @Override

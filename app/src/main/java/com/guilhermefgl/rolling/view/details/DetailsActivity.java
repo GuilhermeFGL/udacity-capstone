@@ -35,6 +35,7 @@ public class DetailsActivity extends BaseActivity implements DetailsViewContract
     private DetailsPresenterContract mPresenter;
     private MenuItem mMarkerMenuItem;
     private Boolean mIsMarked;
+    private Boolean mIsLogged;
 
     public static void startActivity(BaseActivity activity, Trip trip, ActivityOptionsCompat options) {
         Bundle bundle = new Bundle();
@@ -63,6 +64,15 @@ public class DetailsActivity extends BaseActivity implements DetailsViewContract
         } else {
             setupView();
         }
+
+        mBinding.fabCurrent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mPresenter != null) {
+                    mPresenter.addTripAsCurrent();
+                }
+            }
+        });
 
         new DetailsPresenter(this);
     }
@@ -102,15 +112,17 @@ public class DetailsActivity extends BaseActivity implements DetailsViewContract
 
     @Override
     public void onPageSelected(int position) {
-        switch (position) {
-            case 0:
-                mBinding.fabCurrent.show();
-                mBinding.fabShare.hide();
-                break;
-            case 1:
-                mBinding.fabCurrent.hide();
-                mBinding.fabShare.show();
-                break;
+        if (mIsLogged != null && mIsLogged) {
+            switch (position) {
+                case 0:
+                    mBinding.fabCurrent.show();
+                    mBinding.fabShare.hide();
+                    break;
+                case 1:
+                    mBinding.fabCurrent.hide();
+                    mBinding.fabShare.show();
+                    break;
+            }
         }
     }
 
@@ -119,6 +131,12 @@ public class DetailsActivity extends BaseActivity implements DetailsViewContract
 
     @Override
     public void onPageScrollStateChanged(int state) { }
+
+    @Override
+    public void setUserIsLogged(boolean isLogged) {
+        mIsLogged = isLogged;
+        setupIsLoggedView();
+    }
 
     @Override
     public void onLoadTripSuccess(@NonNull Trip trip) {
@@ -160,6 +178,7 @@ public class DetailsActivity extends BaseActivity implements DetailsViewContract
     public void onLoadMarkedTripFailure() {
         if (!isDestroyed()) {
             Toast.makeText(this, R.string.error_load_trip, Toast.LENGTH_LONG).show();
+            mMarkerMenuItem.setVisible(false);
         }
     }
 
@@ -174,6 +193,7 @@ public class DetailsActivity extends BaseActivity implements DetailsViewContract
     public void onUpdateMarkedTripFailure() {
         if (!isDestroyed()) {
             Toast.makeText(this, R.string.error_update_trip, Toast.LENGTH_LONG).show();
+            mMarkerMenuItem.setEnabled(true);
         }
     }
 
@@ -218,26 +238,45 @@ public class DetailsActivity extends BaseActivity implements DetailsViewContract
         mBinding.tabbedTabLayout.setupWithViewPager(mBinding.detailsPager);
         mBinding.detailsPager.addOnPageChangeListener(this);
 
-        mBinding.fabCurrent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mPresenter != null) {
-                    mPresenter.addTripAsCurrent();
-                }
+        setupIsLoggedView();
+    }
+
+    private void setupIsLoggedView() {
+        if (mIsLogged == null || !mIsLogged) {
+            mBinding.fabCurrent.hide();
+            mBinding.fabShare.hide();
+        } else {
+            if (mBinding.detailsPager.getCurrentItem() == 0) {
+                mBinding.fabCurrent.show();
+                mBinding.fabShare.hide();
+            } else if (mBinding.detailsPager.getCurrentItem() == 1) {
+                mBinding.fabCurrent.show();
+                mBinding.fabShare.hide();
             }
-        });
+        }
+
+        if (mMarkerMenuItem != null) {
+            if (mIsLogged == null || !mIsLogged) {
+                mMarkerMenuItem.setVisible(false);
+            } else {
+                mMarkerMenuItem.setVisible(true);
+            }
+        }
     }
 
     private void setupMenu(boolean isMarked) {
         mIsMarked = isMarked;
         if (mMarkerMenuItem != null) {
             mMarkerMenuItem.setEnabled(true);
-            if (mMarkerMenuItem != null) {
-                if (isMarked) {
-                    mMarkerMenuItem.setIcon(R.drawable.ic_marked_white);
-                } else {
-                    mMarkerMenuItem.setIcon(R.drawable.ic_unmarked);
-                }
+            if (isMarked) {
+                mMarkerMenuItem.setIcon(R.drawable.ic_marked_white);
+            } else {
+                mMarkerMenuItem.setIcon(R.drawable.ic_unmarked);
+            }
+            if (mIsLogged == null || !mIsLogged) {
+                mMarkerMenuItem.setVisible(false);
+            } else {
+                mMarkerMenuItem.setVisible(true);
             }
         }
     }

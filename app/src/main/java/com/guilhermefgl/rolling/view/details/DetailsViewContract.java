@@ -11,6 +11,8 @@ import java.util.List;
 
 public interface DetailsViewContract extends BaseView<DetailsPresenterContract> {
 
+    void  setUserIsLogged(boolean isLogged);
+
     void onLoadTripSuccess(@NonNull Trip trip);
 
     void onLoadTripFailure();
