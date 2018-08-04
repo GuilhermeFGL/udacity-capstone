@@ -31,10 +31,13 @@ public class DetailsPresenter implements DetailsPresenterContract {
     @NonNull
     private final DetailsViewContract mView;
 
+    private final ValueEventListener mTripDatabaseListener;
     private final ValueEventListener mUserDatabaseListener;
 
     @Nullable
     private Trip mTrip;
+    @Nullable
+    private String mTripId;
 
     public DetailsPresenter(@NonNull DetailsViewContract view) {
         mTripDataBase = FirebaseHelper.getTripDatabaseInstance();
@@ -42,6 +45,18 @@ public class DetailsPresenter implements DetailsPresenterContract {
         mCurrentDataBase = FirebaseHelper.getCurrentDatabaseInstance();
         mAuth = FirebaseHelper.getAuthInstance();
         mView = view;
+
+        mTripDatabaseListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
 
         mUserDatabaseListener = new ValueEventListener() {
             @Override
@@ -80,6 +95,8 @@ public class DetailsPresenter implements DetailsPresenterContract {
     public void start() {
         if (mTrip != null) {
             mUserDataBase.child(mTrip.getTripId()).addValueEventListener(mUserDatabaseListener);
+        } else if (mTripId != null) {
+            mTripDataBase.child(mTripId).addValueEventListener(mTripDatabaseListener);
         }
     }
 
@@ -87,7 +104,14 @@ public class DetailsPresenter implements DetailsPresenterContract {
     public void stop() {
         if (mTrip != null) {
             mUserDataBase.child(mTrip.getTripId()).removeEventListener(mUserDatabaseListener);
+        } else if (mTripId != null) {
+            mTripDataBase.child(mTripId).removeEventListener(mTripDatabaseListener);
         }
+    }
+
+    @Override
+    public void getTrip(@NonNull String tripId) {
+        mTripId = tripId;
     }
 
     @Override

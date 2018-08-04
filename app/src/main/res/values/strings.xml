@@ -95,6 +95,12 @@
     <string name="widget_default_title">Current Trip</string>
     <string name="widget_empty_label">Mark a Trip as Current clicking at the button</string>
 
+    <!-- SHARE -->
+    <string name="schema">http</string>
+    <string name="host">rolling.app</string>
+    <string name="path_details">/trip</string>
+    <string name="share_title">Share a trip</string>
+
     <!-- OTHERS -->
     <string name="transition_details" translatable="false">transition details</string>
 

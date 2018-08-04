@@ -2,6 +2,7 @@ package com.guilhermefgl.rolling.view.details;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -29,7 +30,14 @@ public class DetailsActivity extends BaseActivity implements DetailsViewContract
 
     public static final String BUNDLE_TRIP = "BUNDLE_TRIP";
 
+    private static final String BUNDLE_TRIP_ID = "id";
+    private static final String LINK_SHARE;
+    static {
+        LINK_SHARE = "%s\n%s?"+ BUNDLE_TRIP_ID + "=%s";
+    }
+
     private Trip mTrip;
+    private String mTripID;
     private ActivityDetailsBinding mBinding;
     private DetailsPageAdapter mPageAdapter;
     private DetailsPresenterContract mPresenter;
@@ -59,10 +67,15 @@ public class DetailsActivity extends BaseActivity implements DetailsViewContract
             mTrip = getIntent().getParcelableExtra(BUNDLE_TRIP);
         }
 
-        if (mTrip == null) {
-            finish();
-        } else {
+        if (mTrip != null) {
             setupView();
+        } else {
+            if (getIntent().getData() != null) {
+                mTripID = getIntent().getData().getQueryParameter(BUNDLE_TRIP_ID);
+                if (mTripID == null) {
+                    finish();
+                }
+            }
         }
 
         mBinding.fabCurrent.setOnClickListener(new View.OnClickListener() {
@@ -71,6 +84,12 @@ public class DetailsActivity extends BaseActivity implements DetailsViewContract
                 if (mPresenter != null) {
                     mPresenter.addTripAsCurrent();
                 }
+            }
+        });
+        mBinding.fabShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                share();
             }
         });
 
@@ -218,6 +237,9 @@ public class DetailsActivity extends BaseActivity implements DetailsViewContract
         if (mTrip != null) {
             mPresenter.setTrip(mTrip);
             mPresenter.start();
+        } else if (mTripID != null) {
+            mPresenter.getTrip(mTripID);
+            mPresenter.start();
         }
     }
 
@@ -278,6 +300,22 @@ public class DetailsActivity extends BaseActivity implements DetailsViewContract
             } else {
                 mMarkerMenuItem.setVisible(true);
             }
+        }
+    }
+
+    private void share() {
+        if (mTrip != null) {
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.setType(ACTION_TEXT);
+            shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
+
+            shareIntent.putExtra(Intent.EXTRA_TEXT,
+                    String.format(LINK_SHARE,
+                            mTrip.getTripName(),
+                            getString(R.string.host),
+                            mTrip.getTripId()));
+
+            startActivity(Intent.createChooser(shareIntent, getString(R.string.share_title)));
         }
     }
 }

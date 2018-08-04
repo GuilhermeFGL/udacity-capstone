@@ -22,8 +22,13 @@
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:host="@string/host" android:scheme="@string/schema" />
             </intent-filter>
         </activity>
         <activity
@@ -34,7 +39,16 @@
             android:name=".view.trip.TripActivity"
             android:windowSoftInputMode="stateVisible|adjustPan"
             android:screenOrientation="portrait" />
-        <activity android:name=".view.details.DetailsActivity" />
+        <activity android:name=".view.details.DetailsActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:host="@string/host"
+                    android:scheme="@string/schema"
+                    android:path="@string/path_details" />
+            </intent-filter>
+        </activity>
 
         <receiver android:name=".view.widget.TripWidgetProvider">
             <intent-filter>

@@ -9,6 +9,8 @@ public interface DetailsPresenterContract extends BasePresenter {
 
     void setTrip(@NonNull Trip trip);
 
+    void getTrip(@NonNull String tripId);
+
     void addTripAsMarked();
 
     void removeTripAsMarked();
