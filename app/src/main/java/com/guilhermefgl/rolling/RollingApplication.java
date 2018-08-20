@@ -12,8 +12,8 @@ public class RollingApplication extends Application {
 
         if (BuildConfig.DEBUG) {
             Picasso picasso = Picasso.get();
-            picasso.setIndicatorsEnabled(true); // cache indicator
-            picasso.setLoggingEnabled(true);    // logger
+            picasso.setIndicatorsEnabled(true);
+            picasso.setLoggingEnabled(true);
         }
 
     }

@@ -13,7 +13,7 @@ android {
         vectorDrawables.useSupportLibrary true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-        resValue "string", "my_google_api_key", "AIzaSyD9iaUWGbxMezfNGpUV9WlzuwoTsuA60gI"
+        resValue "string", "my_google_api_key", "AIzaSyBY48EAGVeQ7sUdtOyN_kIVQdKFS4Uc0Z0"
     }
 
     dataBinding {
@@ -40,12 +40,13 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:16.0.1'
     implementation 'com.google.firebase:firebase-database:16.0.1'
     implementation 'com.google.firebase:firebase-storage:16.0.1'
-    implementation 'com.google.firebase:firebase-auth:16.0.2'
+    implementation 'com.google.firebase:firebase-auth:16.0.3'
     implementation 'com.firebaseui:firebase-ui-auth:3.3.1'
     implementation 'com.google.android.gms:play-services-maps:15.0.1'
     implementation 'com.google.android.gms:play-services-places:15.0.1'
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.9.0'
 
     testImplementation 'junit:junit:4.12'
 
