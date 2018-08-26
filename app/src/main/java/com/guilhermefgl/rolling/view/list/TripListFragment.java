@@ -108,11 +108,16 @@ public class TripListFragment extends BaseFragment implements TripListViewContra
         mBinding.tripListProgress.setVisibility(View.GONE);
         mAdapter.setTripList(trips);
         if (!trips.isEmpty()) {
+            mBinding.tripListEmpty.setVisibility(View.GONE);
             mBinding.tripListMarkedEmpty.setVisibility(View.GONE);
             mBinding.tripListRecycleView.setVisibility(View.VISIBLE);
-        } else if (filterParam.equals(BUNDLE_FILTER_USER)) {
-            mBinding.tripListMarkedEmpty.setVisibility(View.VISIBLE);
+        } else {
             mBinding.tripListRecycleView.setVisibility(View.GONE);
+            if (filterParam.equals(BUNDLE_FILTER_ALL)) {
+                mBinding.tripListEmpty.setVisibility(View.VISIBLE);
+            } else if (filterParam.equals(BUNDLE_FILTER_USER)) {
+                mBinding.tripListMarkedEmpty.setVisibility(View.VISIBLE);
+            }
         }
     }
 

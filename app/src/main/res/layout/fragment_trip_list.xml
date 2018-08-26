@@ -28,6 +28,7 @@
             android:id="@+id/trip_list_marked_empty"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:paddingBottom="148dp"
             android:gravity="center"
             android:orientation="vertical"
             android:visibility="gone">
@@ -61,6 +62,25 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/trip_list_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="148dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:textSize="16sp"
+                android:gravity="center"
+                android:textColor="@color/secondary_text"
+                android:text="@string/trip_list_empty_label_3" />
+
+        </LinearLayout>
 
     </RelativeLayout>
 
