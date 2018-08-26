@@ -4,7 +4,6 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,9 +79,7 @@ public class TripListFragment extends BaseFragment implements TripListViewContra
     public void itemCLick(Trip trip, View transitionImageView) {
         if (getActivity() instanceof BaseActivity) {
             if (trip != null) {
-                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                        getActivity(), transitionImageView, getString(R.string.transition_details));
-                DetailsActivity.startActivity(((BaseActivity) getActivity()), trip, options);
+                DetailsActivity.startActivity(((BaseActivity) getActivity()), trip);
             } else {
                 TripActivity.startActivity((BaseActivity) getActivity());
             }
@@ -122,5 +119,9 @@ public class TripListFragment extends BaseFragment implements TripListViewContra
     @Override
     public void onDatabaseErrorListener() {
         Toast.makeText(getActivity(), R.string.error_network, Toast.LENGTH_SHORT).show();
+    }
+
+    public void setQuery(String query) {
+        mPresenter.setQuery(query);
     }
 }

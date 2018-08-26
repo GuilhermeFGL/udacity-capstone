@@ -23,7 +23,6 @@
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
                 android:contentDescription="@string/trip_item_image_description"
-                android:transitionName="@string/transition_details"
                 tools:layout_height="250dp"
                 tools:ignore="UnusedAttribute" />
 

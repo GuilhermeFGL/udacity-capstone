@@ -6,6 +6,8 @@ public interface TripListPresenterContract extends BasePresenter {
 
     void setFilter(Filters filter);
 
+    void setQuery(String query);
+
     enum Filters {
         ALL,
         MARKED

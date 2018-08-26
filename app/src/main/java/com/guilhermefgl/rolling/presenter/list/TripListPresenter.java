@@ -9,6 +9,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.guilhermefgl.rolling.helper.FirebaseHelper;
+import com.guilhermefgl.rolling.model.Place;
 import com.guilhermefgl.rolling.model.Trip;
 import com.guilhermefgl.rolling.view.list.TripListViewContract;
 
@@ -29,6 +30,7 @@ public class TripListPresenter implements TripListPresenterContract, ValueEventL
     private List<Trip> mTrips;
     private List<String> mTripsIds;
     private Filters mFilter;
+    private String mQuery;
     private final ValueEventListener mUserHasTripEventListener;
 
     public TripListPresenter(@NonNull TripListViewContract view) {
@@ -74,6 +76,12 @@ public class TripListPresenter implements TripListPresenterContract, ValueEventL
     }
 
     @Override
+    public void setQuery(String query) {
+        mQuery = query.toLowerCase();
+        setTrip();
+    }
+
+    @Override
     public void start() {
         mTripDataBase.addValueEventListener(this);
         if (mUserHasTripDataBase != null)  {
@@ -105,12 +113,12 @@ public class TripListPresenter implements TripListPresenterContract, ValueEventL
     }
 
     private void setTrip() {
+        List<Trip> trips = new ArrayList<>();
+
         if (mTrips != null) {
-            List<Trip> trips;
             if (mFilter == Filters.ALL) {
                 trips = new ArrayList<>(mTrips);
                 trips.add(0, null);
-                mView.setList(trips);
             } else if (mFilter == Filters.MARKED && mTripsIds != null && !mTripsIds.isEmpty()) {
                 trips = new ArrayList<>();
                 for (Trip trip : mTrips) {
@@ -118,8 +126,32 @@ public class TripListPresenter implements TripListPresenterContract, ValueEventL
                         trips.add(trip);
                     }
                 }
-                mView.setList(trips);
             }
         }
+
+        if (mQuery != null && !mQuery.isEmpty()) {
+            List<Trip> queryTrips = new ArrayList<>();
+            for (Trip trip : trips) {
+                if (trip != null) {
+                    if (trip.getTripName().toLowerCase().contains(mQuery)
+                            || trip.getPlaceStart().getPlaceName().toLowerCase().contains(mQuery)
+                            || trip.getPlaceEnd().getPlaceName().toLowerCase().contains(mQuery)) {
+                        queryTrips.add(trip);
+                    } else {
+                        if (trip.getPlacesPoints() != null && !trip.getPlacesPoints().isEmpty()) {
+                            for (Place place : trip.getPlacesPoints()) {
+                                if (place.getPlaceName().toLowerCase().contains(mQuery)) {
+                                    queryTrips.add(trip);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            trips = new ArrayList<>(queryTrips);
+        }
+
+        mView.setList(trips);
     }
 }

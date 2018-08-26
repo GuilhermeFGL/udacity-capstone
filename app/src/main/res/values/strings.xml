@@ -43,14 +43,14 @@
     <string name="profile_password_placeholder">Password</string>
     <string name="profile_password_action">CHANGE PASSWORD</string>
     <string name="profile_avatar_description">profile avatar</string>
-    <string name="profile_avatar_chooser_title">Select a image as your avatar</string>
+    <string name="profile_avatar_chooser_title">Select an image as your avatar</string>
     <string name="profile_dialog_password_title">Change password</string>
     <string name="profile_dialog_password_label">Confirm your old password</string>
 
     <!-- TRIP ACTIVITY -->
     <string name="trip_title">New Trip</string>
     <string name="menu_trip_save">SAVE</string>
-    <string name="trip_distance_hint">Provide start and end point</string>
+    <string name="trip_distance_hint">Provide start and endpoint</string>
     <string name="trip_distance_format">%1$,.2f Km</string>
     <string name="trip_break_point_remove">Remove</string>
     <string name="menu_trip_marked">Add as My Trip</string>
@@ -69,9 +69,9 @@
     <string name="trip_hour_picker_placeholder">Set hour</string>
     <string name="trip_hint_start">Starter point</string>
     <string name="trip_hint_destination">Destination</string>
-    <string name="trip_break_point_label">Break Points</string>
+    <string name="trip_break_point_label">Breakpoints</string>
     <string name="trip_map_label">Map</string>
-    <string name="trip_break_point_remove_action">remove break point</string>
+    <string name="trip_break_point_remove_action">remove breakpoint</string>
     <string name="trip_item_break_point_create">Add a Break Point</string>
     <string name="menu_save">save</string>
 
@@ -101,8 +101,5 @@
     <string name="path_main">/</string>
     <string name="path_details">/trip</string>
     <string name="share_title">Share a trip</string>
-
-    <!-- OTHERS -->
-    <string name="transition_details" translatable="false">transition details</string>
 
 </resources>

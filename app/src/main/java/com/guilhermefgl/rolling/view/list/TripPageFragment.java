@@ -23,6 +23,7 @@ import com.guilhermefgl.rolling.view.BaseFragment;
 public class TripPageFragment extends BaseFragment implements
         BottomNavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener {
 
+    private TripPageAdapter mPageAdapter;
     private FragmentTripPageBinding mBinding;
     private TripListFragmentInteractionListener mListener;
 
@@ -49,7 +50,8 @@ public class TripPageFragment extends BaseFragment implements
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mBinding.mainViewPager.setAdapter(new TripPageAdapter(getChildFragmentManager()));
+        mPageAdapter = new TripPageAdapter(getChildFragmentManager());
+        mBinding.mainViewPager.setAdapter(mPageAdapter);
         if (mListener != null) {
             mBinding.mainViewPager.addOnPageChangeListener(mListener.getOnPageChangeListener());
         }
@@ -100,11 +102,17 @@ public class TripPageFragment extends BaseFragment implements
 
     @Override
     public boolean onQueryTextSubmit(String query) {
+        if (mPageAdapter != null) {
+            mPageAdapter.setTripQuery(query);
+        }
         return false;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
+        if (mPageAdapter != null) {
+            mPageAdapter.setTripQuery(newText);
+        }
         return false;
     }
 

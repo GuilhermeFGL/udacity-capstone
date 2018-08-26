@@ -44,16 +44,10 @@ public class DetailsActivity extends BaseActivity implements DetailsViewContract
     private Boolean mIsMarked;
     private Boolean mIsLogged;
 
-    public static void startActivity(BaseActivity activity, Trip trip, ActivityOptionsCompat options) {
+    public static void startActivity(BaseActivity activity, Trip trip) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(BUNDLE_TRIP, trip);
-        if (options != null) {
-            activity.startActivity(
-                    new Intent(activity, DetailsActivity.class).putExtras(bundle),
-                    options.toBundle());
-        } else {
-            activity.startActivity(new Intent(activity, DetailsActivity.class).putExtras(bundle));
-        }
+        activity.startActivity(new Intent(activity, DetailsActivity.class).putExtras(bundle));
     }
 
     @Override

@@ -29,7 +29,6 @@
                     android:scaleType="centerCrop"
                     android:fitsSystemWindows="true"
                     android:contentDescription="@string/details_banner"
-                    android:transitionName="@string/transition_details"
                     tools:ignore="UnusedAttribute"
                     app:layout_collapseMode="parallax" />
 
