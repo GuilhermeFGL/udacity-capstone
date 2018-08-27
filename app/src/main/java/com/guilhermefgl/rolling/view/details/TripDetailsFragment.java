@@ -98,11 +98,6 @@ public class TripDetailsFragment extends BaseFragment implements
         }});
     }
 
-    public void updateTrip(Trip trip) {
-        mTrip = trip;
-        setupView();
-    }
-
     private void setupView() {
         if (mTrip != null) {
             mBinding.includeTrip.tripDistance.setText(mTrip.getTripDistance());

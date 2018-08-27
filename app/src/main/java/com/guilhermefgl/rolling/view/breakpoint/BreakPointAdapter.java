@@ -24,7 +24,7 @@ public class BreakPointAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Nullable
     private List<Place> mBreakPoints;
     @NonNull
-    private BreakPointAdapterItemClick mAdapterItemClick;
+    private final BreakPointAdapterItemClick mAdapterItemClick;
 
     public BreakPointAdapter(@Nullable List<Place> placesPoints, @NonNull BreakPointAdapterItemClick adapterItemClick) {
         mBreakPoints = placesPoints;
@@ -91,16 +91,15 @@ public class BreakPointAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         @NonNull
         private final ItemBreakPointBinding mBinding;
         @NonNull
-        private final View mViewBackground, mViewForeground;
+        private final View mViewForeground;
 
         ItemViewHolder(@NonNull ItemBreakPointBinding binding) {
             super(binding.getRoot());
             mBinding = binding;
             mViewForeground = mBinding.itemBreakPointForeground;
-            mViewBackground = mBinding.itemBreakPointBackground;
         }
 
-        public void bind(final Place place, final BreakPointAdapterItemClick mAdapterItemClick) {
+        void bind(final Place place, final BreakPointAdapterItemClick mAdapterItemClick) {
             mBinding.itemBreakPointText.setText(place.getPlaceName());
             mBinding.itemBreakPointText.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -112,10 +111,6 @@ public class BreakPointAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         public View getViewForeground() {
             return mViewForeground;
-        }
-
-        public View getViewBackground() {
-            return mViewBackground;
         }
     }
 
@@ -130,7 +125,7 @@ public class BreakPointAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         }
 
-        public void bind(final BreakPointAdapterItemClick adapterItemClick) {
+        void bind(final BreakPointAdapterItemClick adapterItemClick) {
             mBinding.getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

@@ -20,7 +20,6 @@ public class DetailsPageAdapter extends FragmentPagerAdapter {
     @Nullable
     private Context mContext;
 
-    private TripDetailsFragment mTripPage;
     private UserDetailsFragment mUserPage;
 
     DetailsPageAdapter(FragmentManager fm) {
@@ -39,7 +38,6 @@ public class DetailsPageAdapter extends FragmentPagerAdapter {
             switch (position) {
                 case 0:
                     pageFragment = TripDetailsFragment.newInstance(mTrip);
-                    mTripPage = (TripDetailsFragment) pageFragment;
                     break;
                 case 1:
                     pageFragment = UserDetailsFragment.newInstance(new ArrayList<User>());
@@ -67,12 +65,6 @@ public class DetailsPageAdapter extends FragmentPagerAdapter {
     public void updateUserList(ArrayList<User> users) {
         if (mUserPage != null) {
             mUserPage.updateUserList(users);
-        }
-    }
-
-    public void updateTrip(Trip trip) {
-        if (mTripPage != null) {
-            mTripPage.updateTrip(trip);
         }
     }
 }

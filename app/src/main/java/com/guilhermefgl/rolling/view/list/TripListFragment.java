@@ -76,7 +76,7 @@ public class TripListFragment extends BaseFragment implements TripListViewContra
     }
 
     @Override
-    public void itemCLick(Trip trip, View transitionImageView) {
+    public void itemCLick(Trip trip) {
         if (getActivity() instanceof BaseActivity) {
             if (trip != null) {
                 DetailsActivity.startActivity(((BaseActivity) getActivity()), trip);

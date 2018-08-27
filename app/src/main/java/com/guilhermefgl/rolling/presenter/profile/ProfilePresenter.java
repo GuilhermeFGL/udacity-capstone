@@ -50,7 +50,7 @@ public class ProfilePresenter implements ProfilePresenterContract {
     @Override
     public void changePassword(final String userPassword, final String oldPassword) {
         final FirebaseUser user = mAuth.getCurrentUser();
-        if (user == null || !FirebaseHelper.isUserPasswordProvider()) {
+        if (user == null || user.getEmail() == null || !FirebaseHelper.isUserPasswordProvider()) {
             return;
         }
 

@@ -17,7 +17,7 @@ import java.util.List;
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     @Nullable
-    private List<User> mUsers;
+    private final List<User> mUsers;
 
     UserAdapter(@Nullable List<User> users) {
         mUsers = users;
@@ -42,11 +42,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         return mUsers != null ? mUsers.size() : 0;
     }
 
-    void setUsers(List<User> users) {
-        mUsers = users;
-        notifyDataSetChanged();
-    }
-
     class ViewHolder extends RecyclerView.ViewHolder {
 
         @NonNull
@@ -57,7 +52,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             mBinding = binding;
         }
 
-        public void bind(User user) {
+        void bind(User user) {
             mBinding.itemPersonName.setText(user.getUserName());
             PicassoHelper.loadImage(user.getUserAvatarUrl(), mBinding.itemPersonAvatar);
         }

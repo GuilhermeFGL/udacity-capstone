@@ -32,9 +32,9 @@ public class MapDrawerHelper {
     private static final Integer GOOGLE_DISTANCE_SCALE = 1000;
 
     private final Activity mActivity;
+    private final MapDrawnCallBack mCallBack;
     private GoogleMap mMap;
     private Double mDistance;
-    private MapDrawnCallBack mCallBack;
 
     public MapDrawerHelper(Activity activity, MapDrawnCallBack callBack) {
         mActivity = activity;

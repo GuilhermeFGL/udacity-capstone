@@ -11,8 +11,8 @@ import com.guilhermefgl.rolling.view.main.MainViewContract;
 
 public class MainPresenter implements MainPresenterContract {
 
-    private FirebaseAuth mAuth;
-    private MainViewContract mView;
+    private final FirebaseAuth mAuth;
+    private final MainViewContract mView;
     private Boolean mSmartLockEnabled;
 
     public MainPresenter(@NonNull MainViewContract view) {

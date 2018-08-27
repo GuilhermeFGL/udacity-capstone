@@ -25,7 +25,7 @@ public class TripAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Nullable
     private List<Trip> mTrips;
     @NonNull
-    private TripAdapterItemClick mAdapterItemClick;
+    private final TripAdapterItemClick mAdapterItemClick;
 
 
     TripAdapter(@Nullable List<Trip> trips, @NonNull TripAdapterItemClick adapterItemClick) {
@@ -82,7 +82,7 @@ public class TripAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mBinding = binding;
         }
 
-        public void bind(final Trip trip, final TripAdapterItemClick adapterItemClick) {
+        void bind(final Trip trip, final TripAdapterItemClick adapterItemClick) {
             PicassoHelper.loadImage(trip.getTripBannerUrl(), mBinding.itemTripImage);
             mBinding.itemTripTitle.setText(trip.getTripName());
             mBinding.itemTripDistance.setText(trip.getTripDistance());
@@ -94,7 +94,7 @@ public class TripAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mBinding.itemTripContent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    adapterItemClick.itemCLick(trip, mBinding.itemTripImage);
+                    adapterItemClick.itemCLick(trip);
                 }
             });
         }
@@ -110,17 +110,17 @@ public class TripAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mBinding = binding;
         }
 
-        public void bind(final TripAdapterItemClick adapterItemClick) {
+        void bind(final TripAdapterItemClick adapterItemClick) {
             mBinding.itemTripAddContent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    adapterItemClick.itemCLick(null, null);
+                    adapterItemClick.itemCLick(null);
                 }
             });
         }
     }
 
     interface TripAdapterItemClick {
-        void itemCLick(Trip trip, View transitionImageView);
+        void itemCLick(Trip trip);
     }
 }

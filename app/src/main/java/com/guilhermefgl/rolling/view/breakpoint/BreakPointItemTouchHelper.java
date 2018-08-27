@@ -6,7 +6,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 
 public class BreakPointItemTouchHelper extends ItemTouchHelper.SimpleCallback {
 
-    private BreakPointItemTouchListener mListener;
+    private final BreakPointItemTouchListener mListener;
  
     public BreakPointItemTouchHelper(int dragDirs, int swipeDirs,
                                      BreakPointItemTouchListener listener) {
@@ -63,11 +63,6 @@ public class BreakPointItemTouchHelper extends ItemTouchHelper.SimpleCallback {
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
         mListener.onBreakPointItemSwiped(viewHolder.getAdapterPosition());
-    }
- 
-    @Override
-    public int convertToAbsoluteDirection(int flags, int layoutDirection) {
-        return super.convertToAbsoluteDirection(flags, layoutDirection);
     }
  
     public interface BreakPointItemTouchListener {

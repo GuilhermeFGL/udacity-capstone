@@ -13,8 +13,6 @@ import com.guilhermefgl.rolling.R;
 
 public class ProgressDialog extends DialogFragment {
 
-    public ProgressDialog() { }
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

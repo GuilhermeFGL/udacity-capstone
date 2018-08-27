@@ -30,7 +30,6 @@
     <string name="navigation_marked">My Trips</string>
     <string name="menu_search">Search trip…</string>
     <string name="trip_item_image_description">trip placeholder image</string>
-    <string name="trip_item_description">%s \n %s</string>
     <string name="trip_item_create">Create a new Trip</string>
     <string name="trip_item_start_label">from</string>
     <string name="trip_item_end_label">to</string>
@@ -66,15 +65,11 @@
     <string name="trip_duration_placeholder">Trip Duration</string>
     <string name="trip_distance_placeholder">Trip Distance</string>
     <string name="trip_date_placeholder">Date and hour of Trip</string>
-    <string name="trip_date_picker_placeholder">Set date</string>
-    <string name="trip_hour_picker_placeholder">Set hour</string>
     <string name="trip_hint_start">Starter point</string>
     <string name="trip_hint_destination">Destination</string>
     <string name="trip_break_point_label">Breakpoints</string>
     <string name="trip_map_label">Map</string>
-    <string name="trip_break_point_remove_action">remove breakpoint</string>
     <string name="trip_item_break_point_create">Add a Break Point</string>
-    <string name="menu_save">save</string>
 
     <!-- CURRENT TRIP FRAGMENT -->
     <string name="menu_current_remove">Remove as Current</string>
@@ -85,8 +80,11 @@
     <!-- TRIP DETAILS ACTIVITY -->
     <string name="details_banner">trip banner</string>
     <string name="details_item_person_avatar">person avatar</string>
-    <string name="details_person_resume">%d persons confirm participation</string>
     <string name="details_current_success">Trip marked as current</string>
+    <plurals name="details_resume_persons">
+        <item quantity="one">%d person confirm participation</item>
+        <item quantity="other">%d persons confirm participation</item>
+    </plurals>
     <string-array name="details_tab_titles">
         <item>Trip</item>
         <item>Persons</item>

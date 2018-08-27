@@ -222,23 +222,27 @@ public class TripActivity extends BaseActivity implements
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.trip_start) {
-            openSearchPlaceWidget(RESULT_START);
-        } else if (v.getId() == R.id.trip_destination) {
-            openSearchPlaceWidget(RESULT_END);
-        } else if (v.getId() == R.id.trip_image) {
-            Intent libraryIntent = new Intent(Intent.ACTION_GET_CONTENT);
-            libraryIntent.setType(AVATAR_FILE_TYPE);
+        switch (v.getId()) {
+            case R.id.trip_start:
+                openSearchPlaceWidget(RESULT_START);
+                break;
+            case R.id.trip_destination:
+                openSearchPlaceWidget(RESULT_END);
+                break;
+            case R.id.trip_image:
+                Intent libraryIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                libraryIntent.setType(AVATAR_FILE_TYPE);
 
-            Intent cameraIntent = new Intent(Intent.ACTION_PICK,
-                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            cameraIntent.setType(AVATAR_FILE_TYPE);
+                Intent cameraIntent = new Intent(Intent.ACTION_PICK,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                cameraIntent.setType(AVATAR_FILE_TYPE);
 
-            Intent chooserIntent = Intent.createChooser(libraryIntent,
-                    getString(R.string.profile_avatar_chooser_title));
-            chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {cameraIntent});
+                Intent chooserIntent = Intent.createChooser(libraryIntent,
+                        getString(R.string.profile_avatar_chooser_title));
+                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{cameraIntent});
 
-            startActivityForResult(chooserIntent, REQUEST_IMAGE);
+                startActivityForResult(chooserIntent, REQUEST_IMAGE);
+                break;
         }
     }
 

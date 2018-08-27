@@ -59,9 +59,11 @@ public class UserDetailsFragment extends BaseFragment {
     }
 
     private void setupView() {
-        if (mUsers != null) {
+        if (mUsers != null && getContext() != null) {
             mBinding.tripPersonsResume.setText(
-                    getString(R.string.details_person_resume, mUsers.size()));
+                    String.format(getContext().getResources().getQuantityString(
+                            R.plurals.details_resume_persons, mUsers.size()),
+                            mUsers.size()));
             mBinding.detailsPersonList.setAdapter(new UserAdapter(mUsers));
         }
     }

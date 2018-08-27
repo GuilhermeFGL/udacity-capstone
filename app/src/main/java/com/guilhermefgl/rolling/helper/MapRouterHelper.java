@@ -21,7 +21,7 @@ public class MapRouterHelper {
     @Nullable
     private Place mEndPlace;
     @NonNull
-    private ArrayList<Place> mBreakPlaces;
+    private final ArrayList<Place> mBreakPlaces;
 
     public MapRouterHelper() {
         mBreakPlaces = new ArrayList<>();

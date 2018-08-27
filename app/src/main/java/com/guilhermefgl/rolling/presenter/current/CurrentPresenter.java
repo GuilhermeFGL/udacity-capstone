@@ -11,8 +11,6 @@ import com.guilhermefgl.rolling.helper.FirebaseHelper;
 import com.guilhermefgl.rolling.model.Trip;
 import com.guilhermefgl.rolling.view.current.CurrentViewContract;
 
-import java.util.HashMap;
-
 public class CurrentPresenter implements CurrentPresenterContract {
 
     @NonNull
