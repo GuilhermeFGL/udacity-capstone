@@ -81,6 +81,11 @@
     <string name="details_banner">trip banner</string>
     <string name="details_item_person_avatar">person avatar</string>
     <string name="details_current_success">Trip marked as current</string>
+    <string name="details_description_share">share trip</string>
+    <string name="details_description_current">mark trip as current</string>
+    <string name="success_create_trip">Trip successfully created</string>
+    <string name="error_create_trip">Unable to crate Trip</string>
+    <string name="error_create_trip_date">Invalid date and time</string>
     <plurals name="details_resume_persons">
         <item quantity="one">%d person confirm participation</item>
         <item quantity="other">%d persons confirm participation</item>

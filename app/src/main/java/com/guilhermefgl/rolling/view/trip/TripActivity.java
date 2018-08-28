@@ -192,7 +192,8 @@ public class TripActivity extends BaseActivity implements
     @Override
     public void onSaveTripSuccess() {
         if (!(isFinishing() || isDestroyed())) {
-            Toast.makeText(this, "Trip created with success", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.success_create_trip), Toast.LENGTH_LONG)
+                    .show();
             mProgressDialog.dismiss();
             finish();
         }
@@ -203,7 +204,8 @@ public class TripActivity extends BaseActivity implements
         if (!(isFinishing() || isDestroyed())) {
             mBinding.tripProgress.setVisibility(View.GONE);
             mProgressDialog.dismiss();
-            Toast.makeText(this, "Unable to crate Trip", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.error_create_trip), Toast.LENGTH_LONG)
+                    .show();
         }
     }
 
@@ -295,7 +297,8 @@ public class TripActivity extends BaseActivity implements
         } catch (UnsupportedOperationException e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
         } catch (ParseException e) {
-            Toast.makeText(this, "Invalid date and time", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.error_create_trip_date), Toast.LENGTH_LONG)
+                    .show();
         }
     }
 }

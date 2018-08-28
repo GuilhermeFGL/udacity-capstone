@@ -61,7 +61,8 @@ public class ListWidgetFactoryService extends RemoteViewsService {
                                                         if (trip != null) {
                                                             mPlaces = new ArrayList<>();
                                                             mPlaces.add(trip.getPlaceStart());
-                                                            if (!trip.getPlacesPoints().isEmpty()) {
+                                                            if (trip.getPlacesPoints() != null &&
+                                                                    !trip.getPlacesPoints().isEmpty()) {
                                                                 mPlaces.addAll(trip.getPlacesPoints());
                                                             }
                                                             mPlaces.add(trip.getPlaceEnd());

@@ -75,6 +75,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:layout_gravity="end|bottom"
+            android:contentDescription="@string/details_description_share"
             app:srcCompat="@drawable/ic_share"
             app:fabSize="normal" />
 
@@ -85,6 +86,7 @@
             android:layout_margin="16dp"
             android:layout_gravity="end|bottom"
             android:tint="@color/icons"
+            android:contentDescription="@string/details_description_current"
             app:srcCompat="@drawable/ic_trip_current"
             app:fabSize="normal" />
 
