@@ -194,8 +194,10 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void setupTripListFragment(BottomNavigationView.OnNavigationItemSelectedListener listener) {
-        mBinding.mainBottomNavigation.setVisibility(View.VISIBLE);
-        mBinding.mainBottomNavigation.setOnNavigationItemSelectedListener(listener);
+        if (mBinding != null) {
+            mBinding.mainBottomNavigation.setVisibility(View.VISIBLE);
+            mBinding.mainBottomNavigation.setOnNavigationItemSelectedListener(listener);
+        }
     }
 
     @Override

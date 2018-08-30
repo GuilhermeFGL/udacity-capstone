@@ -35,12 +35,10 @@
         </activity>
         <activity
             android:name=".view.main.MainActivity"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
+            android:launchMode="singleTop" />
         <activity
             android:name=".view.trip.TripActivity"
-            android:windowSoftInputMode="stateVisible|adjustPan"
-            android:screenOrientation="portrait" />
+            android:windowSoftInputMode="stateVisible|adjustPan" />
         <activity android:name=".view.details.DetailsActivity"
             android:launchMode="singleTask">
             <intent-filter>

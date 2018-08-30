@@ -42,6 +42,7 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 android:layout_gravity="bottom"
+                android:background="@color/primary"
                 app:itemBackground="@color/primary"
                 app:itemIconTint="@color/icons"
                 app:itemTextColor="@color/icons"
