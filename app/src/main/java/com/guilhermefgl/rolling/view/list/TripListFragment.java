@@ -1,9 +1,11 @@
 package com.guilhermefgl.rolling.view.list;
 
+import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +28,8 @@ public class TripListFragment extends BaseFragment implements TripListViewContra
         TripAdapter.TripAdapterItemClick {
 
     private static final String BUNDLE_FILTER = "BUNDLE_FILTER";
+    private static final Integer GRID_COUNT_PORTRAIT = 1;
+    private static final Integer GRID_COUNT_LANDSCAPE = 2;
 
     public static final String BUNDLE_FILTER_ALL = "BUNDLE_FILTER_ALL";
     public static final String BUNDLE_FILTER_USER = "BUNDLE_FILTER_USER";
@@ -63,6 +67,13 @@ public class TripListFragment extends BaseFragment implements TripListViewContra
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        mBinding.tripListRecycleView.setLayoutManager(
+                new GridLayoutManager(
+                        getContext(),
+                        getResources().getConfiguration().orientation
+                                == Configuration.ORIENTATION_PORTRAIT ?
+                                GRID_COUNT_PORTRAIT: GRID_COUNT_LANDSCAPE));
 
         mAdapter = new TripAdapter(new ArrayList<Trip>(), this);
         mBinding.tripListRecycleView.setAdapter(mAdapter);

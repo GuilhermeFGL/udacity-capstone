@@ -1,6 +1,7 @@
 package com.guilhermefgl.rolling.view.main;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -49,6 +50,8 @@ public class MainActivity extends BaseActivity
         CurrentFragment.CurrentFragmentInteractionListener {
 
     private static final Integer REQUEST_LOGIN = 1001;
+    private static final Float VERTICAL_OFFSET_PORTRAIT = 1f;
+    private static final Float VERTICAL_OFFSET_LANDSCAPE = 1.15f;
 
     private ActivityMainBinding mBinding;
     private FragmentManager mFragmentManager;
@@ -83,12 +86,22 @@ public class MainActivity extends BaseActivity
         mBinding.mainAppBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                mBinding.mainBottomNavigation.setTranslationY(verticalOffset*-1);
+                float offset = getResources().getConfiguration().orientation
+                        == Configuration.ORIENTATION_PORTRAIT ?
+                        VERTICAL_OFFSET_PORTRAIT : VERTICAL_OFFSET_LANDSCAPE;
+                mBinding.mainBottomNavigation.setTranslationY(verticalOffset * -offset);
             }
         });
 
         if(getSupportFragmentManager().getFragments().isEmpty()) {
             goToDefaultFragment();
+        } else {
+            Fragment initialFragment = mFragmentManager.findFragmentByTag(
+                    generateFragmentTag(R.id.navigation_trip_list));
+            if (initialFragment != null) {
+                setupTripListFragment(
+                        (BottomNavigationView.OnNavigationItemSelectedListener) initialFragment);
+            }
         }
 
         new MainPresenter(this);
