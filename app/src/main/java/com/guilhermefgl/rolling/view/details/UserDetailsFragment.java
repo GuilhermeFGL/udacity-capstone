@@ -34,7 +34,7 @@ public class UserDetailsFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
+        if (getArguments() != null && mUsers == null) {
             mUsers = getArguments().getParcelableArrayList(BUNDLE_USERS);
         }
     }

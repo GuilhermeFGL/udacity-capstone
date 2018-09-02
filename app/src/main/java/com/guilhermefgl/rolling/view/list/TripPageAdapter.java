@@ -64,7 +64,6 @@ public class TripPageAdapter extends FragmentPagerAdapter {
         return ((Fragment) fragment).getView() == view;
     }
 
-
     public void setTripQuery(String query) {
         for (TripListFragment fragment : mFragments) {
             fragment.setQuery(query);
