@@ -38,6 +38,7 @@ public class TripListFragment extends BaseFragment implements TripListViewContra
     private TripAdapter mAdapter;
     private String filterParam;
     private TripListPresenterContract mPresenter;
+    private String mQuery;
 
     @NonNull
     public static TripListFragment newInstance(String filter) {
@@ -101,6 +102,11 @@ public class TripListFragment extends BaseFragment implements TripListViewContra
     public void setPresenter(@NonNull TripListPresenterContract presenter) {
         mPresenter = presenter;
         mBinding.tripListProgress.setVisibility(View.VISIBLE);
+
+        if (mQuery != null) {
+            mPresenter.setQuery(mQuery);
+        }
+
         if (filterParam != null) {
             switch (filterParam) {
                 case BUNDLE_FILTER_ALL:
@@ -138,6 +144,9 @@ public class TripListFragment extends BaseFragment implements TripListViewContra
     }
 
     public void setQuery(String query) {
-        mPresenter.setQuery(query);
+        mQuery = query;
+        if (mPresenter != null) {
+            mPresenter.setQuery(query);
+        }
     }
 }

@@ -23,9 +23,12 @@ import com.guilhermefgl.rolling.view.BaseFragment;
 public class TripPageFragment extends BaseFragment implements
         BottomNavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener {
 
+    private static final String STATE_QUERY = "state_query";
+
     private TripPageAdapter mPageAdapter;
     private FragmentTripPageBinding mBinding;
     private TripListFragmentInteractionListener mListener;
+    private String mQuery;
 
     @NonNull
     public static TripPageFragment newInstance() {
@@ -55,6 +58,10 @@ public class TripPageFragment extends BaseFragment implements
         if (mListener != null) {
             mBinding.mainViewPager.addOnPageChangeListener(mListener.getOnPageChangeListener());
         }
+
+        if (savedInstanceState != null) {
+            mQuery = savedInstanceState.getString(STATE_QUERY);
+        }
     }
 
     @Override
@@ -77,6 +84,14 @@ public class TripPageFragment extends BaseFragment implements
     }
 
     @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (mQuery != null) {
+            outState.putString(STATE_QUERY, mQuery);
+        }
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
         inflater.inflate(R.menu.menu_trip_list, menu);
@@ -85,12 +100,17 @@ public class TripPageFragment extends BaseFragment implements
             SearchManager searchManager = (SearchManager)
                     getActivity().getSystemService(Context.SEARCH_SERVICE);
             if (searchManager != null) {
-                SearchView mSearchView = (SearchView)
+                SearchView searchView = (SearchView)
                         menu.findItem(R.id.menu_trip_list_search).getActionView();
-                mSearchView.setSearchableInfo(
+                searchView.setSearchableInfo(
                         searchManager.getSearchableInfo(
                                 getActivity().getComponentName()));
-                mSearchView.setOnQueryTextListener(this);
+                searchView.setOnQueryTextListener(this);
+                if (mQuery != null && !mQuery.isEmpty()) {
+                    searchView.setQuery(mQuery, true);
+                    searchView.setIconified(false);
+                    searchView.clearFocus();
+                }
             }
         }
     }
@@ -102,6 +122,7 @@ public class TripPageFragment extends BaseFragment implements
 
     @Override
     public boolean onQueryTextSubmit(String query) {
+        mQuery = query;
         if (mPageAdapter != null) {
             mPageAdapter.setTripQuery(query);
         }
@@ -110,6 +131,7 @@ public class TripPageFragment extends BaseFragment implements
 
     @Override
     public boolean onQueryTextChange(String newText) {
+        mQuery = newText;
         if (mPageAdapter != null) {
             mPageAdapter.setTripQuery(newText);
         }

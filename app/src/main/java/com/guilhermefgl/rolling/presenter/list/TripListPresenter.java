@@ -78,7 +78,9 @@ public class TripListPresenter implements TripListPresenterContract, ValueEventL
     @Override
     public void setQuery(String query) {
         mQuery = query.toLowerCase();
-        setTrip();
+        if (mTrips != null) {
+            setTrip();
+        }
     }
 
     @Override
