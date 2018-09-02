@@ -50,17 +50,18 @@ public class ProfileFragment extends BasePickImageFragment
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mBinding.profileAvatar.setOnClickListener(new View.OnClickListener() {
+        mBinding.includeProfile.profileAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 updateAvatar();
             }
         });
-        mBinding.profilePasswordAction.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updatePassword();
-            }
+        mBinding.includeProfile.includeProfileInput.profilePasswordAction.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                public void onClick(View v) {
+                    updatePassword();
+                }
         });
 
         new ProfilePresenter(this);
@@ -86,15 +87,17 @@ public class ProfileFragment extends BasePickImageFragment
     public void onDetach() {
         super.onDetach();
         if (mUser != null
-                && !mUser.getUserName().equals(mBinding.profileNameInput.getText().toString())) {
-            mPresenter.changeName(mBinding.profileNameInput.getText().toString());
+                && !mUser.getUserName().equals(
+                        mBinding.includeProfile.includeProfileInput.profileNameInput.getText().toString())) {
+            mPresenter.changeName(
+                    mBinding.includeProfile.includeProfileInput.profileNameInput.getText().toString());
         }
     }
 
     @Override
     public void getUserImage(Bitmap image) {
         mPresenter.changeAvatar(image);
-        mBinding.profileAvatar.setImageBitmap(image);
+        mBinding.includeProfile.profileAvatar.setImageBitmap(image);
         mBinding.profileProgress.setVisibility(View.VISIBLE);
     }
 
@@ -107,14 +110,17 @@ public class ProfileFragment extends BasePickImageFragment
     public void setUser(User user, boolean isPasswordProvider) {
         mUser = user;
         if (user != null) {
-            PicassoHelper.loadImage(user.getUserAvatarUrl(), mBinding.profileAvatar);
-            mBinding.profileEmail.setText(user.getUserEmail());
-            mBinding.profileNameInput.setText(user.getUserName());
+            PicassoHelper.loadImage(user.getUserAvatarUrl(), mBinding.includeProfile.profileAvatar);
+            mBinding.includeProfile.includeProfileInput.profileEmail.setText(user.getUserEmail());
+            mBinding.includeProfile.includeProfileInput.profileNameInput.setText(user.getUserName());
 
             if (!isPasswordProvider) {
-                mBinding.profilePasswordAction.setVisibility(View.GONE);
-                mBinding.profilePasswordInput.setVisibility(View.GONE);
-                mBinding.profilePasswordPlaceholder.setVisibility(View.GONE);
+                mBinding.includeProfile.includeProfileInput.profilePasswordAction
+                        .setVisibility(View.GONE);
+                mBinding.includeProfile.includeProfileInput.profilePasswordInput
+                        .setVisibility(View.GONE);
+                mBinding.includeProfile.includeProfileInput.profilePasswordPlaceholder
+                        .setVisibility(View.GONE);
             }
         }
     }
@@ -136,7 +142,9 @@ public class ProfileFragment extends BasePickImageFragment
     @Override
     public void onSubmitPassword(String oldPassword) {
         mBinding.profileProgress.setVisibility(View.VISIBLE);
-        mPresenter.changePassword(mBinding.profilePasswordInput.getText().toString(), oldPassword);
+        mPresenter.changePassword(
+                mBinding.includeProfile.includeProfileInput.profilePasswordInput.getText().toString(),
+                oldPassword);
     }
 
     private void updateAvatar() {
