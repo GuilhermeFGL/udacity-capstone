@@ -134,12 +134,12 @@
             android:textColor="@color/secondary_text"
             android:text="@string/trip_map_label" />
 
-        <fragment
-            android:id="@+id/include_trip_map_fragment"
+        <include
+            android:id="@+id/include_map"
             android:layout_below="@+id/trip_map_label"
-            android:layout_width="match_parent"
-            android:layout_height="500dp"
-            android:name="com.guilhermefgl.rolling.helper.component.ScrollableMapView" />
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            layout="@layout/include_map" />
 
     </RelativeLayout>
 

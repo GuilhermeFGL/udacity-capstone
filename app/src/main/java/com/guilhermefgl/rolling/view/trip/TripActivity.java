@@ -85,7 +85,7 @@ public class TripActivity extends BaseActivity implements
                         getResources().getStringArray(R.array.trip_duration_types)));
 
         ScrollableMapView supportMapFragment = ((ScrollableMapView)
-                getSupportFragmentManager().findFragmentById(R.id.trip_map_fragment));
+                getSupportFragmentManager().findFragmentById(R.id.include_trip_map_fragment));
         supportMapFragment.getMapAsync(this);
         supportMapFragment.setListener(new ScrollableMapView.OnTouchListener() {
             @Override

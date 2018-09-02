@@ -203,12 +203,12 @@
                     android:layout_marginBottom="16dp"
                     android:hint="@string/trip_distance_hint" />
 
-                <fragment
-                    android:id="@+id/trip_map_fragment"
+                <include
+                    android:id="@+id/include_map"
                     android:layout_below="@+id/trip_distance"
-                    android:layout_width="match_parent"
-                    android:layout_height="500dp"
-                    android:name="com.guilhermefgl.rolling.helper.component.ScrollableMapView" />
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    layout="@layout/include_map" />
 
             </RelativeLayout>
 
