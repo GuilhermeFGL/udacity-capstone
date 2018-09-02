@@ -87,7 +87,9 @@ public class MainActivity extends BaseActivity
             }
         });
 
-        goToDefaultFragment();
+        if(getSupportFragmentManager().getFragments().isEmpty()) {
+            goToDefaultFragment();
+        }
 
         new MainPresenter(this);
     }
