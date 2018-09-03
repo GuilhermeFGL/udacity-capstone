@@ -9,6 +9,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.guilhermefgl.rolling.model.Place;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 @SuppressWarnings({"unused", "WeakerAccess"})
@@ -49,6 +50,12 @@ public class MapRouterHelper {
 
     public void removeBreakPlace(int position) {
         mBreakPlaces.remove(position - 1);
+    }
+
+    public void addBreakPlace(List<Place> breakPlaces) {
+        if (breakPlaces != null) {
+            mBreakPlaces.addAll(breakPlaces);
+        }
     }
 
     public ArrayList<Place> getBreakPlaces() {

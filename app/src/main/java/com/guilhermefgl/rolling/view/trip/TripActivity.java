@@ -20,12 +20,13 @@ import com.guilhermefgl.rolling.R;
 import com.guilhermefgl.rolling.databinding.ActivityTripBinding;
 import com.guilhermefgl.rolling.helper.CompressBitmap;
 import com.guilhermefgl.rolling.helper.DateFormatterHelper;
+import com.guilhermefgl.rolling.helper.DateTimeEditText;
 import com.guilhermefgl.rolling.helper.MapDrawerHelper;
 import com.guilhermefgl.rolling.helper.MapRouterHelper;
-import com.guilhermefgl.rolling.helper.DateTimeEditText;
 import com.guilhermefgl.rolling.helper.component.ProgressDialog;
 import com.guilhermefgl.rolling.helper.component.ScrollableMapView;
 import com.guilhermefgl.rolling.model.Place;
+import com.guilhermefgl.rolling.model.Trip;
 import com.guilhermefgl.rolling.presenter.trip.TripPresenter;
 import com.guilhermefgl.rolling.presenter.trip.TripPresenterContract;
 import com.guilhermefgl.rolling.view.BaseActivity;
@@ -33,8 +34,8 @@ import com.guilhermefgl.rolling.view.breakpoint.BreakPointAdapter;
 import com.guilhermefgl.rolling.view.breakpoint.BreakPointItemTouchHelper;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class TripActivity extends BaseActivity implements
         BreakPointAdapter.BreakPointAdapterItemClick, OnMapReadyCallback, View.OnClickListener,
@@ -46,6 +47,8 @@ public class TripActivity extends BaseActivity implements
     private static final Integer RESULT_BREAK_POINT = 1003;
     private static final Integer REQUEST_IMAGE = 1004;
     private static final String FRAGMENT_PROGRESS_TAG = "FRAGMENT_PROGRESS_TAG";
+    private static final String STATE_TRIP = "STATE_TRIP";
+    private static final String STATE_BANNER = "STATE_BANNER";
 
     private ActivityTripBinding mBinding;
     private BreakPointAdapter mAdapter;
@@ -53,6 +56,8 @@ public class TripActivity extends BaseActivity implements
     private MapDrawerHelper mMapDrawerHelper;
     private TripPresenterContract mPresenter;
     private ProgressDialog mProgressDialog;
+    private Trip mTripState;
+    private Bitmap mBannerState;
 
     public static void startActivity(BaseActivity activity) {
         activity.startActivity(
@@ -97,12 +102,26 @@ public class TripActivity extends BaseActivity implements
         mBinding.tripStart.setOnClickListener(this);
         mBinding.tripDestination.setOnClickListener(this);
         mBinding.tripImage.setOnClickListener(this);
-        mBinding.tripDate.addTextChangedListener(DateTimeEditText.mask(mBinding.tripDate));
 
         mMapDrawerHelper = new MapDrawerHelper(this, this);
         mProgressDialog = new ProgressDialog();
 
+        if (savedInstanceState != null) {
+            mTripState = savedInstanceState.getParcelable(STATE_TRIP);
+            mBannerState = savedInstanceState.getParcelable(STATE_BANNER);
+        }
+
         new TripPresenter(this);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        try {
+            setTripState();
+        } catch (Exception ignored) { }
+        savedInstanceState.putParcelable(STATE_TRIP, mPresenter.getTripState());
+        savedInstanceState.putParcelable(STATE_BANNER, mPresenter.getBannerState());
     }
 
     @Override
@@ -168,20 +187,65 @@ public class TripActivity extends BaseActivity implements
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        if (mPresenter != null) {
+            mPresenter.drawnMap();
+        }
     }
 
     @Override
     public void setPresenter(@NonNull TripPresenterContract presenter) {
         mPresenter = presenter;
+
+        if (mTripState != null) {
+            mPresenter.setTripState(mTripState);
+            mBinding.tripTitle.setText(mTripState.getTripName());
+            mBinding.tripDistance.setText(mTripState.getTripDistance());
+
+            if (mTripState.getPlaceStart() != null) {
+                mBinding.tripStart.setText(mTripState.getPlaceStart().getPlaceName());
+            }
+            if (mTripState.getPlaceEnd() != null) {
+                mBinding.tripDestination.setText(mTripState.getPlaceEnd().getPlaceName());
+            }
+            if (mTripState.getPlacesPoints() != null && !mTripState.getPlacesPoints().isEmpty()) {
+                if (mTripState.getPlacesPoints().get(0) != null) {
+                    mTripState.getPlacesPoints().add(0, null);
+                }
+                mAdapter.setBreakPoints(mTripState.getPlacesPoints());
+            }
+
+            if (mTripState.getTripDuration() != null) {
+                String[] durationInfo = mTripState.getTripDuration().split(" ");
+                if (durationInfo.length == 2) {
+                    mBinding.tripDuration.setText(durationInfo[0]);
+                    mBinding.tripDurationType.setSelection(
+                            Arrays.asList(getResources().getStringArray(R.array.trip_duration_types))
+                                    .indexOf(durationInfo[1]));
+                }
+            }
+
+            try {
+                mBinding.tripDate.setText(DateFormatterHelper.dateToString(
+                        mTripState.getTripDate(), this));
+            } catch (Exception ignored) { }
+        }
+        if (mBannerState != null) {
+            mPresenter.setBanner(mBannerState);
+            mBinding.tripImage.setImageBitmap(mBannerState);
+        }
+
+        mBinding.tripDate.addTextChangedListener(DateTimeEditText.mask(mBinding.tripDate));
     }
 
     @Override
     public void drawMap(MapRouterHelper mapRouterHelper) {
-        mBinding.tripProgress.setVisibility(View.VISIBLE);
-        mBinding.tripStart.setEnabled(false);
-        mBinding.tripDestination.setEnabled(false);
-        mBinding.tripListBreakPoints.setEnabled(false);
-        mMapDrawerHelper.drawnMap(mMap, mapRouterHelper);
+        if (mMap != null) {
+            mBinding.tripProgress.setVisibility(View.VISIBLE);
+            mBinding.tripStart.setEnabled(false);
+            mBinding.tripDestination.setEnabled(false);
+            mBinding.tripListBreakPoints.setEnabled(false);
+            mMapDrawerHelper.drawnMap(mMap, mapRouterHelper);
+        }
     }
 
     @Override
@@ -276,27 +340,29 @@ public class TripActivity extends BaseActivity implements
         }
     }
 
+    private void setTripState() throws Exception {
+        mPresenter.setTitle(mBinding.tripTitle.getText().toString());
+        mPresenter.setDuration(mBinding.tripDuration.getText().toString()
+                .concat(" ")
+                .concat(mBinding.tripDurationType.getSelectedItem().toString()));
+        if (!mBinding.tripDistance.getText().toString()
+                .equals(getString(R.string.trip_distance_hint))) {
+            mPresenter.setDistance(mBinding.tripDistance.getText().toString());
+        } else {
+            mPresenter.setDistance(null);
+        }
+        mPresenter.setDate(
+                DateFormatterHelper.stringToDate(
+                        mBinding.tripDate.getText().toString(), this));
+    }
+
     private void save() {
         try {
-            mPresenter.setDate(
-                    DateFormatterHelper.stringToDate(
-                            mBinding.tripDate.getText().toString(), this));
-            mPresenter.setTitle(mBinding.tripTitle.getText().toString());
-            mPresenter.setDuration(mBinding.tripDuration.getText().toString()
-                    .concat(" ")
-                    .concat(mBinding.tripDurationType.getSelectedItem().toString()));
-            if (!mBinding.tripDistance.getText().toString()
-                    .equals(getString(R.string.trip_distance_hint))) {
-                mPresenter.setDistance(mBinding.tripDistance.getText().toString());
-            } else {
-                mPresenter.setDistance(null);
-            }
+            setTripState();
             mPresenter.save();
             mBinding.tripProgress.setVisibility(View.VISIBLE);
             mProgressDialog.show(getSupportFragmentManager(), FRAGMENT_PROGRESS_TAG);
-        } catch (UnsupportedOperationException e) {
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-        } catch (ParseException e) {
+        } catch (Exception e) {
             Toast.makeText(this, getString(R.string.error_create_trip_date), Toast.LENGTH_LONG)
                     .show();
         }

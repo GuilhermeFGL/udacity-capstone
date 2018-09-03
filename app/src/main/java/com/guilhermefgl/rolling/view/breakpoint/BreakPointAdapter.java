@@ -67,8 +67,10 @@ public class BreakPointAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     public void setBreakPoints(List<Place> breakPoints) {
-        mBreakPoints = breakPoints;
-        notifyDataSetChanged();
+        if (breakPoints != null) {
+            mBreakPoints = breakPoints;
+            notifyDataSetChanged();
+        }
     }
 
     public void addBreakPoints(Place breakPoint) {

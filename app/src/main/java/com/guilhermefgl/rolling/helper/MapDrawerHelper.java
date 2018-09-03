@@ -43,6 +43,10 @@ public class MapDrawerHelper {
     }
 
     public void drawnMap(final GoogleMap map, MapRouterHelper mapRouterHelper) {
+        if (map == null) {
+            return;
+        }
+
         mMap = map;
         mMap.clear();
 

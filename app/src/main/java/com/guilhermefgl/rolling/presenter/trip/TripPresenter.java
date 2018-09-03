@@ -202,4 +202,40 @@ public class TripPresenter implements TripPresenterContract {
                     });
         }
     }
+
+    @Override
+    public Trip getTripState() {
+        mTrip.setPlaceStart(mRoute.getStartPoint());
+        mTrip.setPlaceEnd(mRoute.getEndPlace());
+        mTrip.setPlacesPoints(mRoute.getBreakPlaces());
+        return mTrip;
+    }
+
+    @Override
+    public void setTripState(Trip tripState) {
+        if (tripState != null) {
+            mTrip.setTripName(tripState.getTripName());
+            mTrip.setTripDate(tripState.getTripDate());
+            mTrip.setTripDistance(tripState.getTripDistance());
+            mTrip.setTripBannerUrl(tripState.getTripBannerUrl());
+            mTrip.setUserOwner(tripState.getUserOwner());
+            mTrip.setTripId(tripState.getTripId());
+            mTrip.setTripDuration(tripState.getTripDuration());
+
+            mRoute.addBreakPlace(tripState.getPlacesPoints());
+            mRoute.setEndPoint(tripState.getPlaceEnd());
+            mRoute.setStartPoint(tripState.getPlaceStart());
+            mView.drawMap(mRoute);
+        }
+    }
+
+    @Override
+    public Bitmap getBannerState() {
+        return mBannerBitmap;
+    }
+
+    @Override
+    public void drawnMap() {
+        mView.drawMap(mRoute);
+    }
 }
