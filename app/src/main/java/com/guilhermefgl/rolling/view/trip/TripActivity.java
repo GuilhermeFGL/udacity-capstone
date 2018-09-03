@@ -359,7 +359,7 @@ public class TripActivity extends BaseActivity implements
     private void save() {
         try {
             setTripState();
-            mPresenter.save();
+            mPresenter.save(this);
             mBinding.tripProgress.setVisibility(View.VISIBLE);
             mProgressDialog.show(getSupportFragmentManager(), FRAGMENT_PROGRESS_TAG);
         } catch (Exception e) {

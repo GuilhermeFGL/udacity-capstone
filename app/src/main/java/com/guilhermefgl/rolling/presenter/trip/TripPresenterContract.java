@@ -1,5 +1,6 @@
 package com.guilhermefgl.rolling.presenter.trip;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 
 import com.guilhermefgl.rolling.model.Place;
@@ -28,9 +29,9 @@ public interface TripPresenterContract extends BasePresenter {
 
     void removeBreakPlace(int position);
 
-    boolean isValid() throws UnsupportedOperationException;
+    boolean isValid(Context context) throws UnsupportedOperationException;
 
-    void save() throws UnsupportedOperationException;
+    void save(Context context) throws UnsupportedOperationException;
 
     void saveTrip() throws UnsupportedOperationException;
 

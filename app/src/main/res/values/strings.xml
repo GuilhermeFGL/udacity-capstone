@@ -54,6 +54,13 @@
     <string name="trip_distance_format">%1$,.2f Km</string>
     <string name="trip_break_point_remove">Remove</string>
     <string name="menu_trip_marked">Add as My Trip</string>
+    <string name="error_save_trip_title">Invalid title</string>
+    <string name="error_save_trip_date">Invalid date</string>
+    <string name="error_save_trip_start">Invalid starter place</string>
+    <string name="error_save_trip_end">Invalid destination place</string>
+    <string name="error_save_trip_distance">Invalid distance</string>
+    <string name="error_save_trip_duration">Invalid duration</string>
+    <string name="error_save_trip">Invalid trip</string>
     <string-array name="trip_duration_types">
         <item>days</item>
         <item>hours</item>

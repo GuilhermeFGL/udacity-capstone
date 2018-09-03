@@ -1,5 +1,6 @@
 package com.guilhermefgl.rolling.presenter.trip;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -14,6 +15,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.guilhermefgl.rolling.R;
 import com.guilhermefgl.rolling.helper.FirebaseHelper;
 import com.guilhermefgl.rolling.helper.MapRouterHelper;
 import com.guilhermefgl.rolling.model.Place;
@@ -109,36 +111,36 @@ public class TripPresenter implements TripPresenterContract {
     }
 
     @Override
-    public boolean isValid() throws UnsupportedOperationException {
+    public boolean isValid(Context context) throws UnsupportedOperationException {
         if (mTrip.getTripName() == null || mTrip.getTripName().isEmpty()) {
-            throw new UnsupportedOperationException("Invalid title");
+            throw new UnsupportedOperationException(context.getString(R.string.error_save_trip_title));
         }
         if (mTrip.getTripDate().before(new Date())) {
-            throw new UnsupportedOperationException("Invalid date");
+            throw new UnsupportedOperationException(context.getString(R.string.error_save_trip_date));
         }
         if (mTrip.getPlaceStart() == null) {
-            throw new UnsupportedOperationException("Invalid starter place");
+            throw new UnsupportedOperationException(context.getString(R.string.error_save_trip_start));
         }
         if (mTrip.getPlaceEnd() == null) {
-            throw new UnsupportedOperationException("Invalid destination place");
+            throw new UnsupportedOperationException(context.getString(R.string.error_save_trip_end));
         }
-        if (mTrip.getTripDistance() == null || mTrip.getTripDistance().equals("0")) {
-            throw new UnsupportedOperationException("Invalid distance");
+        if (mTrip.getTripDistance() == null) {
+            throw new UnsupportedOperationException(context.getString(R.string.error_save_trip_distance));
         }
         if (mTrip.getTripDuration() == null) {
-            throw new UnsupportedOperationException("Invalid duration");
+            throw new UnsupportedOperationException(context.getString(R.string.error_save_trip_duration));
         }
         return true;
     }
 
     @Override
-    public void save() throws UnsupportedOperationException {
+    public void save(Context context) throws UnsupportedOperationException {
         String uId = FirebaseHelper.createUniqueId();
         mTrip.setTripId(uId);
         mTrip.setPlaceStart(mRoute.getStartPoint());
         mTrip.setPlaceEnd(mRoute.getEndPlace());
         mTrip.setPlacesPoints(mRoute.getBreakPlaces());
-        if (isValid() && mAuth.getCurrentUser() != null) {
+        if (isValid(context) && mAuth.getCurrentUser() != null) {
             mTrip.setUserOwner(mAuth.getCurrentUser().getUid());
 
             if (mBannerBitmap != null) {
@@ -172,7 +174,7 @@ public class TripPresenter implements TripPresenterContract {
                 saveTrip();
             }
         } else {
-            throw new UnsupportedOperationException("Invalid trip");
+            throw new UnsupportedOperationException(context.getString(R.string.error_save_trip));
         }
     }
 
