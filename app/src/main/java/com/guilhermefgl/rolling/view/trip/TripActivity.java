@@ -363,7 +363,7 @@ public class TripActivity extends BaseActivity implements
             mBinding.tripProgress.setVisibility(View.VISIBLE);
             mProgressDialog.show(getSupportFragmentManager(), FRAGMENT_PROGRESS_TAG);
         } catch (Exception e) {
-            Toast.makeText(this, getString(R.string.error_create_trip_date), Toast.LENGTH_LONG)
+            Toast.makeText(this, getString(R.string.error_create_trip), Toast.LENGTH_LONG)
                     .show();
         }
     }
